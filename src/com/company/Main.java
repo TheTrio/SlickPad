@@ -34,6 +34,7 @@ public class Main extends Application{
     private TextArea text;
     private int font = 12;
     private Menu FileMenu;
+    private String name = "";
     public static void main(String[] args) {
         launch(args);
     }
@@ -122,6 +123,21 @@ public class Main extends Application{
         MenuItem f30 = new MenuItem("30px");
         MenuItem f45 = new MenuItem("45px");
         MenuItem custom = new MenuItem("Custom");
+        window.setOnCloseRequest(e-> {
+            if(name!=""){
+                ReadFile readFile = new ReadFile();
+                readFile.OpenFile(name);
+                readFile.GetFiles();
+                String s = readFile.GiveFiles();
+                readFile.CloseFile();
+
+                if(s.equals(text.getText())){
+
+                }else {
+
+                }
+            }
+        });
         custom.setOnAction(e-> {
             try{
                 font = Integer.parseInt(JOptionPane.showInputDialog("Enter Font Value"));
@@ -171,12 +187,14 @@ public class Main extends Application{
         openFile.setOnAction(e->{
             FileChooser fileChooser = new FileChooser();
 
+
             //Set extension filter
-            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
-            fileChooser.getExtensionFilters().add(extFilter);
+            //FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("All files (*.*)", "*.*");
+            //fileChooser.getExtensionFilters().add(extFilter);
 
             //Show save file dialog
             File file = fileChooser.showOpenDialog(primaryStage);
+            name = file.getAbsolutePath();
             ReadFile readFile = new ReadFile();
             readFile.OpenFile(file.getAbsolutePath());
             readFile.GetFiles();
@@ -188,7 +206,40 @@ public class Main extends Application{
         newFile.setOnAction(e->{
             text.setText("");
         });
-        MenuItem saveFile = new MenuItem("Save File");
+        MenuItem saveFile = new MenuItem("Save As");
+        MenuItem SaveNorm = new MenuItem("Save File");
+        SaveNorm.setOnAction(e->{
+            String s = text.getText();
+            if(name==""){
+                FileChooser fileChooser = new FileChooser();
+
+                //Set extension filter
+                FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+                fileChooser.getExtensionFilters().add(extFilter);
+
+                //Show save file dialog
+                File file = fileChooser.showSaveDialog(primaryStage);
+                name = file.getAbsolutePath();
+                WriteFile wr = new WriteFile();
+                try{
+                    wr.OpenFile(text.getText(), file.getAbsolutePath());
+                    wr.WriteFile();
+                    wr.CloseFile();
+                }catch (Exception eff){
+
+                }
+            }else {
+                File file = new File(name);
+                WriteFile wr = new WriteFile();
+                try {
+                    wr.OpenFile(text.getText(), file.getAbsolutePath());
+                    wr.WriteFile();
+                    wr.CloseFile();
+                } catch (Exception eff) {
+
+                }
+            }
+        });
         saveFile.setOnAction(e-> {
             FileChooser fileChooser = new FileChooser();
 
@@ -198,6 +249,7 @@ public class Main extends Application{
 
             //Show save file dialog
             File file = fileChooser.showSaveDialog(primaryStage);
+            name = file.getAbsolutePath();
             WriteFile wr = new WriteFile();
             try{
                 wr.OpenFile(text.getText(), file.getAbsolutePath());
@@ -225,7 +277,7 @@ public class Main extends Application{
         exit.setOnAction(e-> {
            window.close();
         });
-        FileMenu.getItems().addAll(openFile,saveFile, newFile,FullScreen, exit);
+        FileMenu.getItems().addAll(openFile,SaveNorm,saveFile, newFile,FullScreen, exit);
         mb.getMenus().addAll(FileMenu, Edit, Prefer);
 
         text.setStyle("-fx-text-inner-color: " + color + ";");
