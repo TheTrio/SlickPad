@@ -10,6 +10,8 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -31,10 +33,11 @@ public class Main extends Application{
     private String color = "black";
     private boolean wrapSetting = false;
     private Scene editor;
-    private TextArea text;
+    private static TextArea text;
     private int font = 12;
     private Menu FileMenu;
     private String name = "";
+    static String textString = "";
     public static void main(String[] args) {
         launch(args);
     }
@@ -75,6 +78,10 @@ public class Main extends Application{
             SettingWindow std = new SettingWindow();
             std.MakeWindow();
         });
+        final Clipboard clipboard = Clipboard.getSystemClipboard();
+        final ClipboardContent content = new ClipboardContent();
+        content.putString(text.getText());
+        clipboard.setContent(content);
         Prefer.getItems().addAll(Setting);
         Menu Color = new Menu("Color");
         Menu BasicColor = new Menu("Default Colors");
@@ -183,6 +190,13 @@ public class Main extends Application{
 
         MenuItem newFile = new MenuItem("New File");
         MenuItem openFile = new MenuItem("Open File");
+        MenuItem ProgrammerWindow = new MenuItem("Programmer Window");
+        ProgrammerWindow.setOnAction(e-> {
+            Editor editor1 = new Editor();
+            editor1.code = text.getText();
+            editor1.start();
+
+        });
 
         openFile.setOnAction(e->{
             FileChooser fileChooser = new FileChooser();
@@ -244,7 +258,7 @@ public class Main extends Application{
             FileChooser fileChooser = new FileChooser();
 
             //Set extension filter
-            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("All Files (*.*)", "*.*");
             fileChooser.getExtensionFilters().add(extFilter);
 
             //Show save file dialog
@@ -277,7 +291,7 @@ public class Main extends Application{
         exit.setOnAction(e-> {
            window.close();
         });
-        FileMenu.getItems().addAll(openFile,SaveNorm,saveFile, newFile,FullScreen, exit);
+        FileMenu.getItems().addAll(openFile,SaveNorm,saveFile, newFile,FullScreen,ProgrammerWindow, exit);
         mb.getMenus().addAll(FileMenu, Edit, Prefer);
 
         text.setStyle("-fx-text-inner-color: " + color + ";");
@@ -325,6 +339,10 @@ public class Main extends Application{
                 (int)( color.getRed() * 255 ),
                 (int)( color.getGreen() * 255 ),
                 (int)( color.getBlue() * 255 ) );
+    }
+
+    public static void writeText(String s){
+        text.setText(s);
     }
 
     }
