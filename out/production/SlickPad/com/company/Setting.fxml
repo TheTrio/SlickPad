@@ -38,8 +38,8 @@
             </Pane>
             <Pane prefHeight="342.0" prefWidth="187.0">
                <children>
-                  <JFXToggleButton fx:id="Save" layoutX="36.0" layoutY="96.0" text="Disabled" />
-                  <JFXToggleButton fx:id="Screen" layoutX="36.0" layoutY="28.0" text="Disabled" />
+                  <JFXToggleButton fx:id="Save" layoutX="36.0" layoutY="96.0" />
+                  <JFXToggleButton fx:id="Screen" layoutX="36.0" layoutY="28.0" />
                   <JFXColorPicker fx:id="ColorID" editable="true" layoutX="56.0" layoutY="171.0" />
                   <JFXSlider fx:id="Size" blockIncrement="1.0" indicatorPosition="RIGHT" layoutX="24.0" layoutY="206.0" max="80.0" min="10.0" value="10.0">
                      <padding>

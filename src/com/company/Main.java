@@ -92,7 +92,8 @@ public class Main extends Application{
                     SettingWindows.showAndWait();
 
                 }catch (Exception er){
-                    System.out.println(er);
+
+
                 }
         });
 
@@ -126,8 +127,7 @@ public class Main extends Application{
         });
 
         text.setStyle("-fx-text-fill: #" + val[3].substring(2,8));
-
-        Menu generateColors = new Menu("Generate Colors");
+        System.out.println(val[2]);
         BasicColor.getItems().addAll(red, blue, pink, green);
         Color.getItems().addAll(BasicColor);
 
@@ -161,6 +161,7 @@ public class Main extends Application{
             }
         });
         */
+
         Font.getItems().addAll(f12, f15, f20, f30, f45, custom);
         Edit.getItems().addAll(Font, Wrap, Color);
         Color.getItems().addAll(Chooser);
@@ -229,13 +230,12 @@ public class Main extends Application{
                 String s = readFile.GiveFiles();
                 readFile.CloseFile();
 
-                System.out.println("File " + s);
-                System.out.println("Text " + text.getText());
 
 
                 if(s.equals(text.getText())){
 
                 }else{
+                    if(SettingWindow.bool_Notify){
                     Notifications notifications = Notifications.create()
                             .title("SlickPad Data Protection Service")
                             .text("It seems you havn't saved your file. Save your file, or click here to exit")
@@ -248,6 +248,8 @@ public class Main extends Application{
 
                     e.consume();
                     notifications.showInformation();
+                    }
+
                 }
 
             }
@@ -335,9 +337,7 @@ public class Main extends Application{
         });
         FileMenu.getItems().addAll(openFile,SaveNorm,saveFile, newFile,FullScreen,ProgrammerWindow, exit);
         mb.getMenus().addAll(FileMenu, Edit, Prefer);
-
-        //text.setStyle("-fx-text-inner-color: " + color + ";");
-        text.setFont(new Font(font));
+        text.setFont(new Font(Integer.parseInt(val[2])));
         bb.setTop(vb);
 
         text.setWrapText(wrapSetting);

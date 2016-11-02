@@ -5,7 +5,6 @@ import com.jfoenix.controls.JFXColorPicker;
 import com.jfoenix.controls.JFXSlider;
 import com.jfoenix.controls.JFXToggleButton;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.paint.Color;
 
 public class SettingWindow {
@@ -29,40 +28,38 @@ public class SettingWindow {
     public static boolean bool_Notify;
     private GetSetting gr;
     public void initialize() {
-
-
         getData();
-
         String rule = names[3];
         rule = rule.substring(2,8);
         ColorID.setValue(Color.valueOf(rule));
+        Size.setValue(Integer.parseInt(names[2]));
         if(names[0].equals("true")){
-            System.out.println(names[0]);
+            System.out.println("Full Screen - True");
             bool_Screen = true;
             Screen.setText("Enabled");
             Screen.setSelected(true);
         }else {
-            System.out.println(names[0]);
+            System.out.println("Full Screen - False");
             bool_Screen= false;
             Screen.setText("Disabled");
             Screen.setSelected(false);
         }
 
         if(names[1].equals("true")){
-            Screen.setText("Enabled");
-            System.out.println(names[1]);
+            System.out.println("Sound - true");
+            Save.setText("Enabled");
             bool_Notify = true;
             Save.setSelected(true);
         }else {
-            Screen.setText("Disabled");
-            System.out.println(names[1]);
+            System.out.println("Sound - false");
+            Save.setText("Disabled");
             bool_Notify= false;
             Save.setSelected(false);
         }
         Screen.setOnAction(e -> {
-            if(Screen.isSelected()){
+            if (Screen.isSelected()) {
                 Screen.setText("Enabled");
-            }else {
+            } else {
                 Screen.setText("Disabled");
             }
         });
@@ -97,10 +94,12 @@ public class SettingWindow {
         writeSetting.OpenFile();
         writeSetting.AddRecords(s);
         writeSetting.CloseFile();
+        names = s;
 
     }
 
     public void CloseAction(){
+
         Main.closeWindow();
     }
 
