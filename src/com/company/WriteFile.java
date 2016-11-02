@@ -19,7 +19,6 @@ public class WriteFile {
     }
 
     public void WriteFile(){
-        System.out.println(s);
         x.format("%s\n", s);
     }
 

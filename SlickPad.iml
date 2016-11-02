@@ -8,5 +8,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="richtextfx-fat-0.7-M1" level="application" />
+    <orderEntry type="library" name="jfoenix" level="application" />
+    <orderEntry type="library" name="controlsfx-8.40.12" level="application" />
   </component>
 </module>

@@ -1,53 +1,119 @@
 package com.company;
 
 
-import javafx.geometry.Insets;
-import javafx.scene.Scene;
+import com.jfoenix.controls.JFXColorPicker;
+import com.jfoenix.controls.JFXSlider;
+import com.jfoenix.controls.JFXToggleButton;
+import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-
-import java.awt.*;
+import javafx.scene.paint.Color;
 
 public class SettingWindow {
-    public void MakeWindow(){
-        Stage window = new Stage();
-        window.initModality(Modality.APPLICATION_MODAL);
+    @FXML
+    private JFXColorPicker ColorID;
 
-        window.setTitle("Settings");
+    @FXML
+    private JFXSlider Size;
 
-        BorderPane hbox = new BorderPane();
+    @FXML
+    private JFXToggleButton Screen;
 
-        VBox vb1 = new VBox();
-        VBox vb2 = new VBox();
-
-        vb1.setPadding(new Insets(20,20,20,20));
-        vb1.setSpacing(20);
-
-        Label Size = new Label("Default Size");
-
-        vb1.getChildren().addAll(Size);
-        vb2.setPadding(new Insets(20,20,20,20));
-        vb2.setSpacing(20);
-
-        TextField Size_t = new TextField();
-
-        hbox.setLeft(vb1);
-        hbox.setRight(vb2);
+    @FXML
+    private JFXToggleButton Save;
 
 
-        ScrollPane scrollPane = new ScrollPane(hbox);
-        scrollPane.setFitToHeight(true);
+    public static String color;
+    String names[];
+    public static int size;
+    public static boolean bool_Screen;
+    public static boolean bool_Notify;
+    private GetSetting gr;
+    public void initialize() {
 
 
-        Scene scene = new Scene(scrollPane, 400, 400);
-        window.setScene(scene);
-        window.show();
+        getData();
+
+        String rule = names[3];
+        rule = rule.substring(2,8);
+        ColorID.setValue(Color.valueOf(rule));
+        if(names[0].equals("true")){
+            System.out.println(names[0]);
+            bool_Screen = true;
+            Screen.setText("Enabled");
+            Screen.setSelected(true);
+        }else {
+            System.out.println(names[0]);
+            bool_Screen= false;
+            Screen.setText("Disabled");
+            Screen.setSelected(false);
+        }
+
+        if(names[1].equals("true")){
+            Screen.setText("Enabled");
+            System.out.println(names[1]);
+            bool_Notify = true;
+            Save.setSelected(true);
+        }else {
+            Screen.setText("Disabled");
+            System.out.println(names[1]);
+            bool_Notify= false;
+            Save.setSelected(false);
+        }
+        Screen.setOnAction(e -> {
+            if(Screen.isSelected()){
+                Screen.setText("Enabled");
+            }else {
+                Screen.setText("Disabled");
+            }
+        });
+
+        Save.setOnAction(e-> {
+            if(Save.isSelected()){
+                Save.setText("Enabled");
+            }else {
+                Save.setText("Disabled");
+            }
+        });
+    }
+
+    private void getData() {
+        GetSetting getSetting = new GetSetting();
+        getSetting.OpenFile();
+        String values[] = getSetting.GiveSetting();
+        getSetting.CloseFile();
+
+        names = values;
+    }
+
+    public void GiveData(){
+        javafx.scene.paint.Color c = ColorID.getValue();
+        color = c.toString();
+        size = (int) Size.getValue();
+        bool_Screen = Screen.isSelected();
+        bool_Notify = Save.isSelected();
+
+        String s[] = {String.valueOf(bool_Screen), String.valueOf(bool_Notify), String.valueOf(size), String.valueOf(color)};
+        WriteSetting writeSetting = new WriteSetting();
+        writeSetting.OpenFile();
+        writeSetting.AddRecords(s);
+        writeSetting.CloseFile();
 
     }
+
+    public void CloseAction(){
+        Main.closeWindow();
+    }
+
+    public void SaveAction(){
+        GiveData();
+        Main.closeWindow();
+    }
+
+    public void ApplyAction(){
+        GiveData();
+    }
+
+
+
+
 }

@@ -2,30 +2,25 @@ package com.company;
 
 import javafx.application.Application;
 import javafx.event.*;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
-import javafx.scene.input.Clipboard;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+import org.controlsfx.control.Notifications;
 
-import javax.swing.*;
-import javax.swing.plaf.MenuItemUI;
 import java.io.File;
-import java.util.Set;
-
 
 public class Main extends Application{
 
@@ -36,8 +31,11 @@ public class Main extends Application{
     private static TextArea text;
     private int font = 12;
     private Menu FileMenu;
+    private static Stage SettingWindows;
     private String name = "";
     static String textString = "";
+    private String temp;
+    String val[];
     public static void main(String[] args) {
         launch(args);
     }
@@ -46,6 +44,13 @@ public class Main extends Application{
     public void start(Stage primaryStage) throws Exception {
         MenuBar mb = new MenuBar();
         window = primaryStage;
+
+        GetSetting getSetting = new GetSetting();
+        getSetting.OpenFile();
+        String values[] = getSetting.GiveSetting();
+        getSetting.CloseFile();
+
+        val = values;
 
         BorderPane bb = new BorderPane();
         VBox vb = new VBox();
@@ -71,17 +76,27 @@ public class Main extends Application{
 
         text = new TextArea();
         FileMenu = new Menu("File");
+
         Menu Edit = new Menu("Edit");
         Menu Prefer = new Menu("Preferences");
         MenuItem Setting = new MenuItem("Setting");
         Setting.setOnAction(e-> {
-            SettingWindow std = new SettingWindow();
-            std.MakeWindow();
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Setting.fxml"));
+                try {
+                    Parent root1 = (Parent) fxmlLoader.load();
+                    SettingWindows = new Stage();
+                    SettingWindows.initModality(Modality.APPLICATION_MODAL);
+                    SettingWindows.setTitle("Settings");
+                    SettingWindows.setScene(new Scene(root1));
+                    SettingWindows.setResizable(false);
+                    SettingWindows.showAndWait();
+
+                }catch (Exception er){
+                    System.out.println(er);
+                }
         });
-        final Clipboard clipboard = Clipboard.getSystemClipboard();
-        final ClipboardContent content = new ClipboardContent();
-        content.putString(text.getText());
-        clipboard.setContent(content);
+
+
         Prefer.getItems().addAll(Setting);
         Menu Color = new Menu("Color");
         Menu BasicColor = new Menu("Default Colors");
@@ -110,6 +125,8 @@ public class Main extends Application{
             text.setStyle("-fx-text-inner-color: " + color + ";");
         });
 
+        text.setStyle("-fx-text-fill: #" + val[3].substring(2,8));
+
         Menu generateColors = new Menu("Generate Colors");
         BasicColor.getItems().addAll(red, blue, pink, green);
         Color.getItems().addAll(BasicColor);
@@ -130,22 +147,7 @@ public class Main extends Application{
         MenuItem f30 = new MenuItem("30px");
         MenuItem f45 = new MenuItem("45px");
         MenuItem custom = new MenuItem("Custom");
-        window.setOnCloseRequest(e-> {
-            if(name!=""){
-                ReadFile readFile = new ReadFile();
-                readFile.OpenFile(name);
-                readFile.GetFiles();
-                String s = readFile.GiveFiles();
-                readFile.CloseFile();
-
-                if(s.equals(text.getText())){
-
-                }else {
-
-                }
-            }
-        });
-        custom.setOnAction(e-> {
+        /*custom.setOnAction(e-> {
             try{
                 font = Integer.parseInt(JOptionPane.showInputDialog("Enter Font Value"));
                 if(font > 100){
@@ -158,6 +160,7 @@ public class Main extends Application{
                 text.setFont(new Font(font));
             }
         });
+        */
         Font.getItems().addAll(f12, f15, f20, f30, f45, custom);
         Edit.getItems().addAll(Font, Wrap, Color);
         Color.getItems().addAll(Chooser);
@@ -213,8 +216,41 @@ public class Main extends Application{
             readFile.OpenFile(file.getAbsolutePath());
             readFile.GetFiles();
             text.setText(readFile.GiveFiles());
+            temp = readFile.GiveFiles();
+
             readFile.CloseFile();
 
+        });
+        window.setOnCloseRequest(e-> {
+            if(name!=""){
+                ReadFile readFile = new ReadFile();
+                readFile.OpenFile(name);
+                readFile.GetFiles();
+                String s = readFile.GiveFiles();
+                readFile.CloseFile();
+
+                System.out.println("File " + s);
+                System.out.println("Text " + text.getText());
+
+
+                if(s.equals(text.getText())){
+
+                }else{
+                    Notifications notifications = Notifications.create()
+                            .title("SlickPad Data Protection Service")
+                            .text("It seems you havn't saved your file. Save your file, or click here to exit")
+                            .hideAfter(Duration.seconds(5))
+                            .position(Pos.BASELINE_RIGHT)
+                            .hideCloseButton()
+                            .onAction(evr->{
+                                window.close();
+                            });
+
+                    e.consume();
+                    notifications.showInformation();
+                }
+
+            }
         });
 
         newFile.setOnAction(e->{
@@ -225,6 +261,7 @@ public class Main extends Application{
         SaveNorm.setOnAction(e->{
             String s = text.getText();
             if(name==""){
+
                 FileChooser fileChooser = new FileChooser();
 
                 //Set extension filter
@@ -242,6 +279,7 @@ public class Main extends Application{
                 }catch (Exception eff){
 
                 }
+                temp = text.getText();
             }else {
                 File file = new File(name);
                 WriteFile wr = new WriteFile();
@@ -252,6 +290,7 @@ public class Main extends Application{
                 } catch (Exception eff) {
 
                 }
+                temp = text.getText();
             }
         });
         saveFile.setOnAction(e-> {
@@ -278,6 +317,9 @@ public class Main extends Application{
         vb.getChildren().addAll(mb);
         MenuItem exit = new MenuItem("Exit");
         MenuItem FullScreen = new MenuItem("Enable FullScreen");
+        if(window.isFullScreen()){
+            FullScreen.setText("Disable FullScreen");
+        }
         FullScreen.setOnAction(e-> {
             if(FullScreen.getText().equals("Enable FullScreen")) {
                 FullScreen.setText("Disable FullScreen");
@@ -294,7 +336,7 @@ public class Main extends Application{
         FileMenu.getItems().addAll(openFile,SaveNorm,saveFile, newFile,FullScreen,ProgrammerWindow, exit);
         mb.getMenus().addAll(FileMenu, Edit, Prefer);
 
-        text.setStyle("-fx-text-inner-color: " + color + ";");
+        //text.setStyle("-fx-text-inner-color: " + color + ";");
         text.setFont(new Font(font));
         bb.setTop(vb);
 
@@ -319,7 +361,6 @@ public class Main extends Application{
         colorPicker.setValue(javafx.scene.paint.Color.CORAL);
         box.setAlignment(Pos.CENTER);
 
-
         colorPicker.setOnAction(new EventHandler() {
             public void handle(javafx.event.Event t) {
                 Color c = colorPicker.getValue();
@@ -333,7 +374,7 @@ public class Main extends Application{
         stage.setScene(scene);
         stage.show();
     }
-    public static String toRGBCode( Color color )
+    public static String toRGBCode( Color color)
     {
         return String.format( "#%02X%02X%02X",
                 (int)( color.getRed() * 255 ),
@@ -341,9 +382,18 @@ public class Main extends Application{
                 (int)( color.getBlue() * 255 ) );
     }
 
+
     public static void writeText(String s){
         text.setText(s);
     }
 
+    public static void closeWindow() {
+        SettingWindows.close();
     }
+
+    public static void setColor(String color){
+        text.setStyle("-fx-text-fill: " + color);
+
+    }
+}
 
