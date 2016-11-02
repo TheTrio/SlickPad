@@ -17,9 +17,9 @@ In SlickPad, I have made use of various libraries build by many helping people o
 It's not possible to thank everyone, so I will just name the library and the link to their 
 Website.
 <ul>
-<li><a href="http://fxexperience.com/controlsfx/"></a>ControlsFx - 8.4.0.12</li>
-<li><a href="http://jfoenix.com/"></a>JFoenix</li>
-<li><a href="https://github.com/TomasMikula/RichTextFX"></a>RichTextFx-fat-0.7-M1 </li>
+<li><a href="http://fxexperience.com/controlsfx/">ControlsFx - 8.4.0.12</a></li>
+<li><a href="http://jfoenix.com/">JFoenix</a></li>
+<li><a href="https://github.com/TomasMikula/RichTextFX">RichTextFx-fat-0.7-M1</a> </li>
 </ul>
 </p>
 <hr />
