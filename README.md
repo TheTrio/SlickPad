@@ -1,5 +1,5 @@
 <h1>SlickPad</h1>
-<h3>v2.0.0</h3>
+<h3>v2.5.0</h3>
 <hr />
 <h2>About SlickPad</h2>
 <p>
@@ -25,7 +25,7 @@ Website.
 <hr />
 <h2>The Future</h2>
 <p>
-After the Success of Horizon, this project was just a coffee one, made for fun. I never intended to complete it though I feel that its pretty good now. In its Version 2.0.0, SlickPad might just break away. But the Future seems to be Bright, for I am aiming for Javafx Game Development. Feel free to download and edit the code. 
+After the Success of Horizon, this project was just a coffee one, made for fun. I never intended to complete it though I feel that its pretty good now. In its Version 2.5.0, SlickPad might just break away. But the Future seems to be Bright, for I am aiming for Javafx Game Development. Feel free to download and edit the code. 
 </p>
 <h7>Note: Feel free to download it and contribute to the community.</h7>
 <hr/>
