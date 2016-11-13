@@ -3,6 +3,7 @@ package com.company;
 import javafx.application.Application;
 import javafx.event.*;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -13,6 +14,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
@@ -21,6 +23,7 @@ import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
 
 import java.io.File;
+import java.nio.file.Path;
 
 public class Main extends Application{
 
@@ -33,6 +36,9 @@ public class Main extends Application{
     private Menu FileMenu;
     private static Stage SettingWindows;
     private String name = "";
+    private String[] spd = new String[10];
+    private Tab tab;
+    private TabPane tabs;
     static String textString = "";
     private String temp;
     String val[];
@@ -44,7 +50,7 @@ public class Main extends Application{
     public void start(Stage primaryStage) throws Exception {
         MenuBar mb = new MenuBar();
         window = primaryStage;
-
+        text = new TextArea();
         GetSetting getSetting = new GetSetting();
         getSetting.OpenFile();
         String values[] = getSetting.GiveSetting();
@@ -57,27 +63,44 @@ public class Main extends Application{
         window.setTitle("SlickPad");
         editor = new Scene(bb,628,532);
 
-        /*TabPane tabPane = new TabPane();
+        final AnchorPane root = new AnchorPane();
+        tabs = new TabPane();
+        final Button addButton = new Button("+");
 
-        BorderPane borderPane = new BorderPane();
-        for (int i = 0; i < 5; i++) {
-            Tab tab = new Tab();
-            tab.setText("Tab" + i);
-            HBox hbox = new HBox();
-            hbox.setAlignment(Pos.CENTER);
-            tab.setContent(hbox);
-            tabPane.getTabs().add(tab);
-        }
-*/
-        // bind to take available space
-        //bb.prefHeightProperty().bind(editor.heightProperty());
-        //bb.prefWidthProperty().bind(editor.widthProperty());
+        AnchorPane.setTopAnchor(tabs, 5.0);
+        AnchorPane.setLeftAnchor(tabs, 5.0);
+        AnchorPane.setRightAnchor(tabs, 5.0);
+        AnchorPane.setTopAnchor(addButton, 10.0);
+        AnchorPane.setRightAnchor(addButton, 10.0);
+        addButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+                text.setDisable(false);
+
+                tab = new Tab("New File  " + (tabs.getTabs().size() + 1));
+                if(tabs.getTabs().size()==1){
+                    tab.setClosable(false);
+                }
+                tabs.getTabs().add(tab);
+                tabs.getSelectionModel().select(tab);
+                tab.setId("Default");
+                if(tabs.getTabs().size()==1){
+                    tab.setClosable(false);
+                }else {
+                    tab.setClosable(true);
+                }
+                text.setText("");
+            }
+        });
 
 
-        text = new TextArea();
+        root.getChildren().addAll(tabs, addButton);
+
         FileMenu = new Menu("File");
 
         Menu Edit = new Menu("Edit");
+        text.setDisable(true);
         Menu Prefer = new Menu("Preferences");
         MenuItem Setting = new MenuItem("Setting");
         Setting.setOnAction(e-> {
@@ -101,6 +124,31 @@ public class Main extends Application{
         Prefer.getItems().addAll(Setting);
         Menu Color = new Menu("Color");
         Menu BasicColor = new Menu("Default Colors");
+        tabs.getSelectionModel().selectedItemProperty().addListener((o,old,ne) -> {
+            try {
+                if (old.getId().startsWith("Default")) {
+                    old.setId("Default" + text.getText());
+                }
+                if(ne.getId().startsWith("Default")){
+                    if(ne.getId().equals("Default")){
+
+                    }else {
+                        text.setText(ne.getId().replaceAll("Default", ""));
+                    }
+                }
+                if(ne.getText().startsWith("New File")){
+
+                }else {
+                    ReadFile readFile = new ReadFile();
+                    readFile.OpenFile(ne.getId());
+                    readFile.GetFiles();
+                    readFile.CloseFile();
+                    text.setText(readFile.GiveFiles());
+                }
+            }catch (NullPointerException e){
+                //First Time Run
+            }
+        });
         MenuItem Chooser = new MenuItem("Color Picker");
         Chooser.setOnAction(e-> {
             MakeWindow();
@@ -127,7 +175,6 @@ public class Main extends Application{
         });
 
         text.setStyle("-fx-text-fill: #" + val[3].substring(2,8));
-        System.out.println(val[2]);
         BasicColor.getItems().addAll(red, blue, pink, green);
         Color.getItems().addAll(BasicColor);
 
@@ -213,11 +260,18 @@ public class Main extends Application{
             //Show save file dialog
             File file = fileChooser.showOpenDialog(primaryStage);
             name = file.getAbsolutePath();
+
+            Path path = file.toPath();
+            String parth = path.getFileName().toString();
+            setTab(parth, path.toString());
+
             ReadFile readFile = new ReadFile();
             readFile.OpenFile(file.getAbsolutePath());
             readFile.GetFiles();
             text.setText(readFile.GiveFiles());
             temp = readFile.GiveFiles();
+
+
 
             readFile.CloseFile();
 
@@ -257,22 +311,29 @@ public class Main extends Application{
 
         newFile.setOnAction(e->{
             text.setText("");
+            newTab();
         });
         MenuItem saveFile = new MenuItem("Save As");
         MenuItem SaveNorm = new MenuItem("Save File");
         SaveNorm.setOnAction(e->{
             String s = text.getText();
-            if(name==""){
+            int f = getTab();
+            if(tabs.getTabs().get(f).getId().startsWith("Default")){
 
                 FileChooser fileChooser = new FileChooser();
 
                 //Set extension filter
-                FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+                FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("All Files(*.*)", "*.*");
                 fileChooser.getExtensionFilters().add(extFilter);
 
                 //Show save file dialog
                 File file = fileChooser.showSaveDialog(primaryStage);
+                Path path = file.toPath();
+                String String_path = path.getFileName().toString();
+                int i = tabs.getSelectionModel().getSelectedIndex();
+                tabs.getTabs().get(i).setText(String_path);
                 name = file.getAbsolutePath();
+                tabs.getTabs().get(i).setId(file.getAbsolutePath());
                 WriteFile wr = new WriteFile();
                 try{
                     wr.OpenFile(text.getText(), file.getAbsolutePath());
@@ -283,8 +344,12 @@ public class Main extends Application{
                 }
                 temp = text.getText();
             }else {
-                File file = new File(name);
+                File file = new File(tabs.getTabs().get(f).getId());
                 WriteFile wr = new WriteFile();
+                Path path = file.toPath();
+                String String_path = path.getFileName().toString();
+                int i = tabs.getSelectionModel().getSelectedIndex();
+                tabs.getTabs().get(i).setText(String_path);
                 try {
                     wr.OpenFile(text.getText(), file.getAbsolutePath());
                     wr.WriteFile();
@@ -317,6 +382,7 @@ public class Main extends Application{
         });
 
         vb.getChildren().addAll(mb);
+        vb.getChildren().add(root);
         MenuItem exit = new MenuItem("Exit");
         MenuItem FullScreen = new MenuItem("Enable FullScreen");
         if(window.isFullScreen()){
@@ -344,7 +410,39 @@ public class Main extends Application{
         bb.setCenter(text);
         window.setScene(editor);
         window.show();
+        Region region = ( Region ) text.lookup( ".content" );
+        region.setBackground( new Background( new BackgroundFill( Paint.valueOf("#292f38"), CornerRadii.EMPTY, Insets.EMPTY ) ) );
+
+        // Or you can set it by setStyle()
+        region.setStyle( "-fx-background-color: #292f38" );
         }
+
+    private void newTab() {
+        tab = new Tab("New File  " + (tabs.getTabs().size() + 1));
+        if(tabs.getTabs().size()==1){
+            tab.setClosable(false);
+        }
+        tabs.getTabs().add(tab);
+        tabs.getSelectionModel().select(tab);
+        tab.setId("Default");
+        if(tabs.getTabs().size()==1){
+            tab.setClosable(false);
+        }else {
+            tab.setClosable(true);
+        }
+
+        text.setDisable(false);
+    }
+
+    private int getTab() {
+        return tabs.getSelectionModel().getSelectedIndex();
+    }
+
+    private void setTab(String parth, String URL) {
+        int f = tabs.getSelectionModel().getSelectedIndex();
+        tabs.getTabs().get(f).setText(parth);
+        tabs.getTabs().get(f).setId(URL);
+    }
 
     public void MakeWindow() {
 
