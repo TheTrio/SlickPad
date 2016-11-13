@@ -126,28 +126,34 @@ public class Main extends Application{
         Menu BasicColor = new Menu("Default Colors");
         tabs.getSelectionModel().selectedItemProperty().addListener((o,old,ne) -> {
             try {
-                if (old.getId().startsWith("Default")) {
-                    old.setId("Default" + text.getText());
-                }
-                if(ne.getId().startsWith("Default")){
-                    if(ne.getId().equals("Default")){
-
-                    }else {
-                        text.setText(ne.getId().replaceAll("Default", ""));
+                    if (old.getId().startsWith("Default")) {
+                        old.setId("Default" + text.getText());
                     }
+                if(old.getId().replace("Default", "").equals("")){
+                    tabs.getTabs().remove(old);
                 }
-                if(ne.getText().startsWith("New File")){
+                    if (ne.getId().startsWith("Default")) {
+                        if (ne.getId().equals("Default")) {
 
-                }else {
-                    ReadFile readFile = new ReadFile();
-                    readFile.OpenFile(ne.getId());
-                    readFile.GetFiles();
-                    readFile.CloseFile();
-                    text.setText(readFile.GiveFiles());
+                        } else {
+                            text.setText(ne.getId().replaceAll("Default", ""));
+                        }
+                    }
+                    if (ne.getText().startsWith("New File")) {
+
+                    } else {
+                        ReadFile readFile = new ReadFile();
+                        readFile.OpenFile(ne.getId());
+                        readFile.GetFiles();
+                        readFile.CloseFile();
+                        text.setText(readFile.GiveFiles());
+                    }
+
+
+                }catch(NullPointerException e){
+                    //First Time Run
                 }
-            }catch (NullPointerException e){
-                //First Time Run
-            }
+
         });
         MenuItem Chooser = new MenuItem("Color Picker");
         Chooser.setOnAction(e-> {
@@ -401,7 +407,7 @@ public class Main extends Application{
         exit.setOnAction(e-> {
            window.close();
         });
-        FileMenu.getItems().addAll(openFile,SaveNorm,saveFile, newFile,FullScreen,ProgrammerWindow, exit);
+        FileMenu.getItems().addAll(openFile,SaveNorm,saveFile,FullScreen,ProgrammerWindow, exit);
         mb.getMenus().addAll(FileMenu, Edit, Prefer);
         text.setFont(new Font(Integer.parseInt(val[2])));
         bb.setTop(vb);
