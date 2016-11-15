@@ -8,28 +8,28 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox prefHeight="362.0" prefWidth="428.0" style="-fx-background-color: #CFD8DC;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.company.SettingWindow">
+<VBox prefHeight="362.0" prefWidth="428.0" style="-fx-background-color: #6E6E6E;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.company.SettingWindow">
    <children>
       <HBox prefHeight="269.0" prefWidth="444.0">
          <children>
             <Pane prefHeight="250.0" prefWidth="200.0">
                <children>
-                  <Label layoutX="41.0" layoutY="47.0" text="Full-Screen Enabled">
+                  <Label layoutX="41.0" layoutY="47.0" text="Full-Screen Enabled" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </Label>
-                  <Label layoutX="41.0" layoutY="112.0" text="Notify to Save Changes">
+                  <Label layoutX="41.0" layoutY="112.0" text="Store Unsaved Files" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </Label>
-                  <Label layoutX="41.0" layoutY="175.0" text="Default Text Color">
+                  <Label layoutX="41.0" layoutY="175.0" text="Default Text Color" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </Label>
-                  <Label layoutX="41.0" layoutY="223.0" prefHeight="17.0" prefWidth="124.0" text="Default Text Size">
+                  <Label layoutX="41.0" layoutY="223.0" prefHeight="17.0" prefWidth="124.0" text="Default Text Size" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>

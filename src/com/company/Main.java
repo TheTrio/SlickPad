@@ -23,11 +23,17 @@ import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Formatter;
+import java.util.Scanner;
+import java.util.concurrent.ForkJoinPool;
 
 public class Main extends Application{
 
     private Stage window;
+    private int myTab = 1;
     private String color = "black";
     private boolean wrapSetting = false;
     private Scene editor;
@@ -58,6 +64,10 @@ public class Main extends Application{
 
         val = values;
 
+        if(val[0].equals("true")){
+            window.setFullScreen(true);
+        }
+
         BorderPane bb = new BorderPane();
         VBox vb = new VBox();
         window.setTitle("SlickPad");
@@ -78,13 +88,15 @@ public class Main extends Application{
 
                 text.setDisable(false);
 
-                tab = new Tab("New File  " + (tabs.getTabs().size() + 1));
+                tab = new Tab("New File  " + myTab + ".txt");
+                tab.setId(tab.getText());
+                myTab++;
                 if(tabs.getTabs().size()==1){
                     tab.setClosable(false);
                 }
                 tabs.getTabs().add(tab);
                 tabs.getSelectionModel().select(tab);
-                tab.setId("Default");
+
                 if(tabs.getTabs().size()==1){
                     tab.setClosable(false);
                 }else {
@@ -100,6 +112,34 @@ public class Main extends Application{
         FileMenu = new Menu("File");
 
         Menu Edit = new Menu("Edit");
+        MenuItem run = new MenuItem("Start Terminal");
+        run.setOnAction(e-> {
+            try {
+                if(tabs.getTabs().get(tabs.getSelectionModel().getSelectedIndex()).getText().endsWith(".java")) {
+                    Scanner s = new Scanner(System.in);
+                    String class_name = s.next();
+                    System.out.println(tabs.getTabs().get(tabs.getSelectionModel().getSelectedIndex()).getId());
+                    Runtime.getRuntime().exec("cmd /c javac " + tabs.getTabs().get(tabs.getSelectionModel().getSelectedIndex()).getId());
+
+                    String spd = (tabs.getTabs().get(tabs.getSelectionModel().getSelectedIndex()).getId().replace(tabs.getTabs().get(tabs.getSelectionModel().getSelectedIndex()).getText(), ""));
+
+                    Formatter formatter = new Formatter("Start.bat");
+                    formatter.format(spd.substring(0, 2) + "\n cd " + spd + "\n java " + class_name);
+
+
+
+                    formatter.close();
+
+                    Runtime.getRuntime().exec("cmd /c Start.bat > temp.txt");
+
+
+                }
+
+            }catch (Exception error){
+
+            }
+        });
+        Edit.getItems().add(run);
         text.setDisable(true);
         Menu Prefer = new Menu("Preferences");
         MenuItem Setting = new MenuItem("Setting");
@@ -125,7 +165,8 @@ public class Main extends Application{
         Menu Color = new Menu("Color");
         Menu BasicColor = new Menu("Default Colors");
         tabs.getSelectionModel().selectedItemProperty().addListener((o,old,ne) -> {
-            try {
+
+            /*try {
                     if (old.getId().startsWith("Default")) {
                         old.setId("Default" + text.getText());
                     }
@@ -153,8 +194,32 @@ public class Main extends Application{
                 }catch(NullPointerException e){
                     //First Time Run
                 }
+*/
+            WriteFile writeFile = new WriteFile();
+            try {
+                writeFile.OpenFile(text.getText(), old.getText());
+                writeFile.WriteFile();
+                writeFile.CloseFile();
+            }catch (Exception error){
+
+            }
+
+
+            File file = new File(ne.getId());
+
+                if (file.exists()) {
+                    ReadFile readFile = new ReadFile();
+                    readFile.OpenFile(file.getAbsolutePath());
+                    readFile.GetFiles();
+                    readFile.CloseFile();
+                    text.setText(readFile.GiveFiles());
+                } else {
+                    text.setText("");
+                }
+
 
         });
+
         MenuItem Chooser = new MenuItem("Color Picker");
         Chooser.setOnAction(e-> {
             MakeWindow();
@@ -282,38 +347,7 @@ public class Main extends Application{
             readFile.CloseFile();
 
         });
-        window.setOnCloseRequest(e-> {
-            if(name!=""){
-                ReadFile readFile = new ReadFile();
-                readFile.OpenFile(name);
-                readFile.GetFiles();
-                String s = readFile.GiveFiles();
-                readFile.CloseFile();
 
-
-
-                if(s.equals(text.getText())){
-
-                }else{
-                    if(SettingWindow.bool_Notify){
-                    Notifications notifications = Notifications.create()
-                            .title("SlickPad Data Protection Service")
-                            .text("It seems you havn't saved your file. Save your file, or click here to exit")
-                            .hideAfter(Duration.seconds(5))
-                            .position(Pos.BASELINE_RIGHT)
-                            .hideCloseButton()
-                            .onAction(evr->{
-                                window.close();
-                            });
-
-                    e.consume();
-                    notifications.showInformation();
-                    }
-
-                }
-
-            }
-        });
 
         newFile.setOnAction(e->{
             text.setText("");
@@ -324,7 +358,7 @@ public class Main extends Application{
         SaveNorm.setOnAction(e->{
             String s = text.getText();
             int f = getTab();
-            if(tabs.getTabs().get(f).getId().startsWith("Default")){
+            if(tabs.getTabs().get(f).getText().startsWith("New File")){
 
                 FileChooser fileChooser = new FileChooser();
 
@@ -356,6 +390,7 @@ public class Main extends Application{
                 String String_path = path.getFileName().toString();
                 int i = tabs.getSelectionModel().getSelectedIndex();
                 tabs.getTabs().get(i).setText(String_path);
+                tabs.getTabs().get(tabs.getSelectionModel().getSelectedIndex()).setId(file.getAbsolutePath());
                 try {
                     wr.OpenFile(text.getText(), file.getAbsolutePath());
                     wr.WriteFile();
@@ -376,6 +411,12 @@ public class Main extends Application{
             //Show save file dialog
             File file = fileChooser.showSaveDialog(primaryStage);
             name = file.getAbsolutePath();
+
+            Path path = file.toPath();
+            String filename = path.getFileName().toString();
+            tabs.getTabs().get(tabs.getSelectionModel().getSelectedIndex()).setText(filename);
+            tabs.getTabs().get(tabs.getSelectionModel().getSelectedIndex()).setId(file.getAbsolutePath());
+
             WriteFile wr = new WriteFile();
             try{
                 wr.OpenFile(text.getText(), file.getAbsolutePath());
@@ -389,11 +430,26 @@ public class Main extends Application{
 
         vb.getChildren().addAll(mb);
         vb.getChildren().add(root);
+        vb.setPadding(new Insets(0,0,10,0));
         MenuItem exit = new MenuItem("Exit");
         MenuItem FullScreen = new MenuItem("Enable FullScreen");
         if(window.isFullScreen()){
             FullScreen.setText("Disable FullScreen");
         }
+
+        window.setOnCloseRequest(close-> {
+            try {
+                System.out.println(val[1]);
+                if(val[1].equals("true")){
+
+                }else {
+                    Runtime.getRuntime().exec("cmd /c end.bat");
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
         FullScreen.setOnAction(e-> {
             if(FullScreen.getText().equals("Enable FullScreen")) {
                 FullScreen.setText("Disable FullScreen");
@@ -424,13 +480,15 @@ public class Main extends Application{
         }
 
     private void newTab() {
-        tab = new Tab("New File  " + (tabs.getTabs().size() + 1));
+        tab = new Tab("New File  " + myTab + ".txt");
+        tab.setId(tab.getText());
+        myTab++;
         if(tabs.getTabs().size()==1){
             tab.setClosable(false);
         }
         tabs.getTabs().add(tab);
         tabs.getSelectionModel().select(tab);
-        tab.setId("Default");
+
         if(tabs.getTabs().size()==1){
             tab.setClosable(false);
         }else {
