@@ -19,18 +19,13 @@ import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Duration;
-import org.controlsfx.control.Notifications;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Formatter;
 import java.util.Scanner;
-import java.util.concurrent.ForkJoinPool;
 
-public class Main extends Application{
+public class Main extends Application implements Runnable{
 
     private Stage window;
     private int myTab = 1;
@@ -110,36 +105,106 @@ public class Main extends Application{
         root.getChildren().addAll(tabs, addButton);
 
         FileMenu = new Menu("File");
+        MenuItem recover = new MenuItem("Recover Unsaved Files");
+
+        recover.setOnAction(e -> {
+            FileChooser fileChooser = new FileChooser();
+            String s = (System.getProperty("user.dir") + System.getProperty("file.separator")+ "AutoSave\\");
+            System.out.println(s);
+            fileChooser.setInitialDirectory(new File(s));
+            File file = fileChooser.showOpenDialog(primaryStage);
+            name = file.getAbsolutePath();
+
+            Path path = file.toPath();
+            String parth = path.getFileName().toString();
+            setTab(parth, path.toString());
+
+            ReadFile readFile = new ReadFile();
+            readFile.OpenFile(file.getAbsolutePath());
+            readFile.GetFiles();
+            text.setText(readFile.GiveFiles());
+            temp = readFile.GiveFiles();
+
+
+
+            readFile.CloseFile();
+
+        });
+        FileMenu.getItems().add(recover);
 
         Menu Edit = new Menu("Edit");
-        MenuItem run = new MenuItem("Start Terminal");
+        Menu JavaProgram = new Menu("Java Program");
+        MenuItem run = new MenuItem("Compile");
+        MenuItem exec = new MenuItem("Execute");
+
+        JavaProgram.getItems().addAll(run, exec);
         run.setOnAction(e-> {
             try {
-                if(tabs.getTabs().get(tabs.getSelectionModel().getSelectedIndex()).getText().endsWith(".java")) {
+                if (tabs.getTabs().get(tabs.getSelectionModel().getSelectedIndex()).getText().endsWith(".java")) {
                     Scanner s = new Scanner(System.in);
-                    String class_name = s.next();
-                    System.out.println(tabs.getTabs().get(tabs.getSelectionModel().getSelectedIndex()).getId());
-                    Runtime.getRuntime().exec("cmd /c javac " + tabs.getTabs().get(tabs.getSelectionModel().getSelectedIndex()).getId());
+                    FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Popup.fxml"));
 
+                    try {
+                        Parent root1 = (Parent) fxmlLoader.load();
+                        Stage Pop;
+                        Pop = new Stage();
+                        Pop.initModality(Modality.APPLICATION_MODAL);
+                        Pop.setTitle("Enter Value");
+                        Pop.setScene(new Scene(root1));
+                        Pop.setResizable(false);
+                        Pop.showAndWait();
+
+                    }catch (Exception er){
+
+
+                    }
                     String spd = (tabs.getTabs().get(tabs.getSelectionModel().getSelectedIndex()).getId().replace(tabs.getTabs().get(tabs.getSelectionModel().getSelectedIndex()).getText(), ""));
-
+                    System.out.println(spd);
                     Formatter formatter = new Formatter("Start.bat");
-                    formatter.format(spd.substring(0, 2) + "\n cd " + spd + "\n java " + class_name);
-
+                    formatter.format("@echo off \n"+ spd.substring(0, 2) + "\n cd " + spd + "\n java " + Input.className + "\n pause > nul \n exit");
 
 
                     formatter.close();
-
-                    Runtime.getRuntime().exec("cmd /c Start.bat > temp.txt");
+                    String className = Input.className;
+                    Runtime.getRuntime().exec("cmd /c start javac " + tabs.getTabs().get(tabs.getSelectionModel().getSelectedIndex()).getId());
 
 
                 }
 
+            } catch (Exception error) {
+                System.out.println(error);
+            }
+
+            //Code for Terminal. Do your editing as needed.
+
+            /*
+
+
+
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("CMD.fxml"));
+            try {
+                Parent root1 = (Parent) fxmlLoader.load();
+                SettingWindows = new Stage();
+                SettingWindows.initModality(Modality.APPLICATION_MODAL);
+                SettingWindows.setTitle("Settings");
+                SettingWindows.setScene(new Scene(root1));
+                SettingWindows.setResizable(false);
+                SettingWindows.showAndWait();
+            } catch (Exception error) {
+
+            }
+
+*/
+        });
+
+        exec.setOnAction(e-> {
+            try{
+                Runtime.getRuntime().exec("cmd /c start Start.bat");
             }catch (Exception error){
 
             }
         });
-        Edit.getItems().add(run);
+        Edit.getItems().add(JavaProgram);
         text.setDisable(true);
         Menu Prefer = new Menu("Preferences");
         MenuItem Setting = new MenuItem("Setting");
@@ -164,7 +229,7 @@ public class Main extends Application{
         Prefer.getItems().addAll(Setting);
         Menu Color = new Menu("Color");
         Menu BasicColor = new Menu("Default Colors");
-        tabs.getSelectionModel().selectedItemProperty().addListener((o,old,ne) -> {
+        tabs.getSelectionModel().selectedItemProperty().addListener((o, old, ne) -> {
 
             /*try {
                     if (old.getId().startsWith("Default")) {
@@ -200,22 +265,22 @@ public class Main extends Application{
                 writeFile.OpenFile(text.getText(), old.getText());
                 writeFile.WriteFile();
                 writeFile.CloseFile();
-            }catch (Exception error){
+            } catch (Exception error) {
 
             }
 
 
             File file = new File(ne.getId());
 
-                if (file.exists()) {
-                    ReadFile readFile = new ReadFile();
-                    readFile.OpenFile(file.getAbsolutePath());
-                    readFile.GetFiles();
-                    readFile.CloseFile();
-                    text.setText(readFile.GiveFiles());
-                } else {
-                    text.setText("");
-                }
+            if (file.exists()) {
+                ReadFile readFile = new ReadFile();
+                readFile.OpenFile(file.getAbsolutePath());
+                readFile.GetFiles();
+                readFile.CloseFile();
+                text.setText(readFile.GiveFiles());
+            } else {
+                text.setText("");
+            }
 
 
         });
@@ -441,7 +506,7 @@ public class Main extends Application{
             try {
                 System.out.println(val[1]);
                 if(val[1].equals("true")){
-
+                    Runtime.getRuntime().exec("cmd /c copy.bat");
                 }else {
                     Runtime.getRuntime().exec("cmd /c end.bat");
                 }
@@ -556,6 +621,19 @@ public class Main extends Application{
     public static void setColor(String color){
         text.setStyle("-fx-text-fill: " + color);
 
+    }
+    @Override
+    public void run() {
+
+        if(new File(spd + Input.className + ".class").exists()){
+
+            try{
+                System.out.println("Well Done");
+            Runtime.getRuntime().exec("cmd /c start Start.bat");
+            }catch (Exception e){
+
+            }
+        }
     }
 }
 

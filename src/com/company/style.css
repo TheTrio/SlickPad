@@ -1,0 +1,8 @@
+.text-area .content{
+    -fx-background-color: black;
+}
+
+.text-area {
+    -fx-text-fill: chartreuse;
+    -fx-font-size: 20px;
+}

@@ -1,7 +1,0 @@
-
-E:\Projects\SlickPad>E:
-
-E:\Projects\SlickPad>cd E:\Projects\ 
-
-E:\Projects>java Bacon 
-Lol

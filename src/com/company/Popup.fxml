@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import com.jfoenix.controls.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<Pane fx:controller="com.company.Input" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="130.0" prefWidth="335.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <JFXTextField fx:id="text" labelFloat="true" layoutX="25.0" layoutY="43.0" promptText="Class Name Here" onKeyPressed="#DoSomething">
+         <font>
+            <Font size="23.0" />
+         </font>
+      </JFXTextField>
+   </children>
+</Pane>
