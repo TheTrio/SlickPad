@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.sun.deploy.util.StringUtils;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -34,7 +33,7 @@ public class Editor{
             "new", "package", "private", "protected", "public",
             "return", "short", "static", "strictfp", "super",
             "switch", "synchronized", "this", "throw", "throws",
-            "transient", "try", "void", "volatile", "while"
+            "transient", "try", "void", "volatile", "while","System"
     };
 
     private static final String KEYWORD_PATTERN = "\\b(" + String.join("|", KEYWORDS) + ")\\b";
@@ -56,9 +55,8 @@ public class Editor{
     );
 
     private static final String sampleCode = String.join("\n", new String[] {
-            "public class Apples;",
+            "class Apples{",
             "    public static void main(String args[]){",
-            "        //Auto-generated Stub ",
             "        //Copy From Editor to paste code here",
             "    }",
             "}"

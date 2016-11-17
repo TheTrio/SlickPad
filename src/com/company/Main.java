@@ -12,6 +12,10 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -21,6 +25,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Formatter;
 import java.util.Scanner;
@@ -52,12 +57,223 @@ public class Main extends Application implements Runnable{
         MenuBar mb = new MenuBar();
         window = primaryStage;
         text = new TextArea();
+        HBox hb = new HBox();
         GetSetting getSetting = new GetSetting();
         getSetting.OpenFile();
         String values[] = getSetting.GiveSetting();
         getSetting.CloseFile();
 
         val = values;
+        hb.setPadding(new Insets(5, 0, 0, 10));
+        hb.setSpacing(1);
+        //hb.getChildren().addAll(saveBut,saveAllBut, newBut, openBut,closeBut, supportBut);
+
+        //New File Button
+        Button newBut = new Button();
+        newBut.setOnAction(e-> {
+            newTab();
+        });
+        newBut.setBackground(Background.EMPTY);
+        ImageView img = new ImageView(new Image(getClass().getResourceAsStream("Icons/newFile.png")));
+        img.setFitHeight(42);
+        img.setFitWidth(42);
+        newBut.setGraphic(img);
+        hb.getChildren().addAll(newBut);
+
+        //Save File Button
+
+        Button saveBut = new Button();
+        saveBut.setBackground(Background.EMPTY);
+        ImageView saveBut_img = new ImageView(new Image(getClass().getResourceAsStream("Icons/SaveFile.png")));
+        saveBut_img.setFitHeight(42);
+        saveBut_img.setFitWidth(42);
+        saveBut.setGraphic(saveBut_img);
+        hb.getChildren().addAll(saveBut);
+
+        saveBut.setOnAction(e ->{
+            String s = text.getText();
+            int f = getTab();
+            if(tabs.getTabs().get(f).getText().startsWith("New File")){
+
+                FileChooser fileChooser = new FileChooser();
+
+                //Set extension filter
+                FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("All Files(*.*)", "*.*");
+                fileChooser.getExtensionFilters().add(extFilter);
+
+                //Show save file dialog
+                File file = fileChooser.showSaveDialog(primaryStage);
+                Path path = file.toPath();
+                String String_path = path.getFileName().toString();
+                int i = tabs.getSelectionModel().getSelectedIndex();
+                tabs.getTabs().get(i).setText(String_path);
+                name = file.getAbsolutePath();
+                tabs.getTabs().get(i).setId(file.getAbsolutePath());
+                WriteFile wr = new WriteFile();
+                try{
+                    wr.OpenFile(text.getText(), file.getAbsolutePath());
+                    wr.WriteFile();
+                    wr.CloseFile();
+                }catch (Exception eff){
+
+                }
+                temp = text.getText();
+            }else {
+                File file = new File(tabs.getTabs().get(f).getId());
+                WriteFile wr = new WriteFile();
+                Path path = file.toPath();
+                String String_path = path.getFileName().toString();
+                int i = tabs.getSelectionModel().getSelectedIndex();
+                tabs.getTabs().get(i).setText(String_path);
+                tabs.getTabs().get(tabs.getSelectionModel().getSelectedIndex()).setId(file.getAbsolutePath());
+                try {
+                    wr.OpenFile(text.getText(), file.getAbsolutePath());
+                    wr.WriteFile();
+                    wr.CloseFile();
+                } catch (Exception eff) {
+
+                }
+                temp = text.getText();
+            }
+        });
+
+        //Close File Window Opener
+
+        Button closeBut = new Button();
+        closeBut.setBackground(Background.EMPTY);
+        ImageView closeBut_img = new ImageView(new Image(getClass().getResourceAsStream("Icons/CloseFile.png")));
+        closeBut_img.setFitHeight(42);
+        closeBut_img.setFitWidth(42);
+        closeBut.setGraphic(closeBut_img);
+        hb.getChildren().addAll(closeBut);
+
+        closeBut.setOnAction(e->{
+            if(tabs.getTabs().get(tabs.getSelectionModel().getSelectedIndex()).getText().contains("*")){
+
+            }else {
+                if(!(tabs.getTabs().size()==1))
+                    tabs.getTabs().remove(tabs.getSelectionModel().getSelectedIndex());
+            }
+        });
+
+        //Open File
+        Button openFileBut = new Button();
+        openFileBut.setBackground(Background.EMPTY);
+        ImageView openFileBut_img = new ImageView(new Image(getClass().getResourceAsStream("Icons/openFile.png")));
+        openFileBut_img.setFitHeight(42);
+        openFileBut_img.setFitWidth(42);
+        openFileBut.setGraphic(openFileBut_img);
+        hb.getChildren().addAll(openFileBut);
+
+
+        openFileBut.setOnAction(e -> {
+            FileChooser fileChooser = new FileChooser();
+
+
+            //Set extension filter
+            //FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("All files (*.*)", "*.*");
+            //fileChooser.getExtensionFilters().add(extFilter);
+
+            //Show save file dialog
+            File file = fileChooser.showOpenDialog(primaryStage);
+            name = file.getAbsolutePath();
+
+            Path path = file.toPath();
+            String parth = path.getFileName().toString();
+            setTab(parth, path.toString());
+
+            ReadFile readFile = new ReadFile();
+            readFile.OpenFile(file.getAbsolutePath());
+            readFile.GetFiles();
+            text.setText(readFile.GiveFiles());
+            temp = readFile.GiveFiles();
+
+
+            readFile.CloseFile();
+
+        });
+
+        //CMD Window
+
+        Button cmdBut = new Button();
+        cmdBut.setBackground(Background.EMPTY);
+        ImageView cmdBut_img = new ImageView(new Image(getClass().getResourceAsStream("Icons/cmd.png")));
+        cmdBut_img.setFitHeight(42);
+        cmdBut_img.setFitWidth(42);
+        cmdBut.setGraphic(cmdBut_img);
+        hb.getChildren().addAll(cmdBut);
+
+        cmdBut.setOnAction(e-> {
+            try {
+                Runtime.getRuntime().exec("cmd /c start");
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        });
+
+        //Programming Window
+
+        Button progBut = new Button();
+        progBut.setBackground(Background.EMPTY);
+        ImageView progBut_img = new ImageView(new Image(getClass().getResourceAsStream("Icons/programming.png")));
+        progBut_img.setFitHeight(42);
+        progBut_img.setFitWidth(42);
+        progBut.setGraphic(progBut_img);
+        hb.getChildren().addAll(progBut);
+
+        progBut.setOnAction(e-> {
+            Editor editor1 = new Editor();
+            editor1.code = text.getText();
+            editor1.start();
+        });
+
+        //Find Button
+
+        Button findBut = new Button();
+        findBut.setBackground(Background.EMPTY);
+        ImageView findBut_img = new ImageView(new Image(getClass().getResourceAsStream("Icons/find.png")));
+        findBut_img.setFitHeight(42);
+        findBut_img.setFitWidth(42);
+        findBut.setGraphic(findBut_img);
+        hb.getChildren().addAll(findBut);
+
+        //Run Java Program
+        Button runBut = new Button();
+        runBut.setBackground(Background.EMPTY);
+        ImageView runBut_img = new ImageView(new Image(getClass().getResourceAsStream("Icons/FunJava.png")));
+        runBut_img.setFitHeight(42);
+        runBut_img.setFitWidth(42);
+        runBut.setGraphic(runBut_img);
+        hb.getChildren().addAll(runBut);
+
+        //Html Viewer
+
+        Button htmlBut = new Button();
+        htmlBut.setBackground(Background.EMPTY);
+        ImageView htmlBut_img = new ImageView(new Image(getClass().getResourceAsStream("Icons/openHtml.png")));
+        htmlBut_img.setFitHeight(42);
+        htmlBut_img.setFitWidth(42);
+        htmlBut.setGraphic(htmlBut_img);
+        hb.getChildren().addAll(htmlBut);
+
+        //Settings
+        Button setBut = new Button();
+        setBut.setBackground(Background.EMPTY);
+        ImageView setBut_img = new ImageView(new Image(getClass().getResourceAsStream("Icons/setting.png")));
+        setBut_img.setFitHeight(42);
+        setBut_img.setFitWidth(42);
+        setBut.setGraphic(setBut_img);
+        hb.getChildren().addAll(setBut);
+
+        //Help
+
+        Button helpBut = new Button();
+        helpBut.setBackground(Background.EMPTY);
+        ImageView helpBut_img = new ImageView(new Image(getClass().getResourceAsStream("Icons/help.png")));
+        helpBut_img.setFitHeight(42);
+        helpBut_img.setFitWidth(42);
+        helpBut.setGraphic(helpBut_img);
+        hb.getChildren().addAll(helpBut);
 
         if(val[0].equals("true")){
             window.setFullScreen(true);
@@ -65,9 +281,15 @@ public class Main extends Application implements Runnable{
 
         BorderPane bb = new BorderPane();
         VBox vb = new VBox();
+
         window.setTitle("SlickPad");
         editor = new Scene(bb,628,532);
+        text.setOnKeyTyped(e-> {
+            if(tabs.getTabs().get(tabs.getSelectionModel().getSelectedIndex()).getText().contains("*")){
 
+            }else
+                tabs.getTabs().get(tabs.getSelectionModel().getSelectedIndex()).setText(tabs.getTabs().get(tabs.getSelectionModel().getSelectedIndex()).getText() + "*");
+        });
         final AnchorPane root = new AnchorPane();
         tabs = new TabPane();
         final Button addButton = new Button("+");
@@ -80,9 +302,6 @@ public class Main extends Application implements Runnable{
         addButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-
-                text.setDisable(false);
-
                 tab = new Tab("New File  " + myTab + ".txt");
                 tab.setId(tab.getText());
                 myTab++;
@@ -103,6 +322,7 @@ public class Main extends Application implements Runnable{
 
 
         root.getChildren().addAll(tabs, addButton);
+        newTab();
 
         FileMenu = new Menu("File");
         MenuItem recover = new MenuItem("Recover Unsaved Files");
@@ -140,6 +360,14 @@ public class Main extends Application implements Runnable{
         JavaProgram.getItems().addAll(run, exec);
         run.setOnAction(e-> {
             try {
+
+                /*if(tabs.getTabs().get(tabs.getSelectionModel().getSelectedIndex()).getText().contains("*")){
+                    Stage stg = new Stage();
+                    VBox vBox = new VBox();
+                    Scene scene = new Scene(vBox, 400,400);
+
+                }
+                */
                 if (tabs.getTabs().get(tabs.getSelectionModel().getSelectedIndex()).getText().endsWith(".java")) {
                     Scanner s = new Scanner(System.in);
                     FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Popup.fxml"));
@@ -205,7 +433,6 @@ public class Main extends Application implements Runnable{
             }
         });
         Edit.getItems().add(JavaProgram);
-        text.setDisable(true);
         Menu Prefer = new Menu("Preferences");
         MenuItem Setting = new MenuItem("Setting");
         Setting.setOnAction(e-> {
@@ -492,10 +719,10 @@ public class Main extends Application implements Runnable{
             }
 
         });
-
         vb.getChildren().addAll(mb);
+        vb.getChildren().add(hb);
+
         vb.getChildren().add(root);
-        vb.setPadding(new Insets(0,0,10,0));
         MenuItem exit = new MenuItem("Exit");
         MenuItem FullScreen = new MenuItem("Enable FullScreen");
         if(window.isFullScreen()){
