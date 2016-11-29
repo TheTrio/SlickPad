@@ -1,5 +1,6 @@
 package com.company;
 
+import com.jfoenix.controls.JFXButton;
 import javafx.application.Application;
 import javafx.event.*;
 import javafx.fxml.FXMLLoader;
@@ -23,9 +24,13 @@ import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.util.Formatter;
 import java.util.Scanner;
@@ -33,7 +38,9 @@ import java.util.Scanner;
 public class Main extends Application implements Runnable{
 
     private Stage window;
+    public static String myText = "";
     private int myTab = 1;
+    public static boolean bool_notify = false;
     private String color = "black";
     private boolean wrapSetting = false;
     private Scene editor;
@@ -222,21 +229,20 @@ public class Main extends Application implements Runnable{
         hb.getChildren().addAll(progBut);
 
         progBut.setOnAction(e-> {
-            Editor editor1 = new Editor();
-            editor1.code = text.getText();
-            editor1.start();
+            FXMLLoader fxmlLoader  = new FXMLLoader(getClass().getResource("Chooser.fxml"));
+
+            try {
+                Parent root = (Parent) fxmlLoader.load();
+                Stage stage = new Stage();
+                stage.setTitle("SlickPad");
+                stage.initModality(Modality.APPLICATION_MODAL);
+                stage.setScene(new Scene(root));
+                stage.show();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+
         });
-
-        //Find Button
-
-        Button findBut = new Button();
-        findBut.setBackground(Background.EMPTY);
-        ImageView findBut_img = new ImageView(new Image(getClass().getResourceAsStream("Icons/find.png")));
-        findBut_img.setFitHeight(42);
-        findBut_img.setFitWidth(42);
-        findBut.setGraphic(findBut_img);
-        hb.getChildren().addAll(findBut);
-
         //Run Java Program
         Button runBut = new Button();
         runBut.setBackground(Background.EMPTY);
@@ -245,6 +251,25 @@ public class Main extends Application implements Runnable{
         runBut_img.setFitWidth(42);
         runBut.setGraphic(runBut_img);
         hb.getChildren().addAll(runBut);
+
+        runBut.setOnAction(e->{
+
+            FXMLLoader fxmlLoader  = new FXMLLoader(getClass().getResource("RunChooser.fxml"));
+            if(tabs.getTabs().get(tabs.getSelectionModel().getSelectedIndex()).getId().contains("New File")){
+                bool_notify = true;
+                myText = text.getText();
+            }            try {
+                Parent root = (Parent) fxmlLoader.load();
+                Stage stage = new Stage();
+                stage.setTitle("SlickPad");
+                stage.initModality(Modality.APPLICATION_MODAL);
+                stage.setScene(new Scene(root));
+                stage.show();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        });
+
 
         //Html Viewer
 
@@ -256,6 +281,38 @@ public class Main extends Application implements Runnable{
         htmlBut.setGraphic(htmlBut_img);
         hb.getChildren().addAll(htmlBut);
 
+        htmlBut.setOnAction(new EventHandler<ActionEvent>(){
+            public void handle(ActionEvent e){
+                if(tabs.getTabs().get(tabs.getSelectionModel().getSelectedIndex()).getText().contains(".htm")){
+                    try {
+                        java.awt.Desktop.getDesktop().browse((new File(tabs.getTabs().get(tabs.getSelectionModel().getSelectedIndex()).getId()).toURI()));
+                    }catch (Exception error){
+
+                    }
+                }else if(tabs.getTabs().get(tabs.getSelectionModel().getSelectedIndex()).getText().startsWith("New File")){
+                    WriteFile writeFile = new WriteFile();
+                    try {
+                        File f = new File("temp");
+                        if(!f.exists()){
+                            f.mkdir();
+                            System.out.println("Directory Made");
+                        }
+                        writeFile.OpenFile(text.getText(), "temp//Unsaved.html");
+                        writeFile.WriteFile();
+                        writeFile.CloseFile();
+                    } catch (FileNotFoundException e1) {
+                        e1.printStackTrace();
+                    }
+
+                    try {
+                        java.awt.Desktop.getDesktop().browse((new File("temp//Unsaved.html")).toURI());
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            }
+        });
+
         //Settings
         Button setBut = new Button();
         setBut.setBackground(Background.EMPTY);
@@ -264,6 +321,27 @@ public class Main extends Application implements Runnable{
         setBut_img.setFitWidth(42);
         setBut.setGraphic(setBut_img);
         hb.getChildren().addAll(setBut);
+
+        setBut.setOnAction(e -> {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Setting.fxml"));
+
+
+
+            try {
+                Parent root = (Parent) fxmlLoader.load();
+
+                Stage stage = new Stage();
+                stage.setTitle("Settings");
+                stage.initModality(Modality.APPLICATION_MODAL);
+                stage.setScene(new Scene(root));
+                stage.setResizable(false);
+                stage.show();
+
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+
+        });
 
         //Help
 
@@ -275,6 +353,16 @@ public class Main extends Application implements Runnable{
         helpBut.setGraphic(helpBut_img);
         hb.getChildren().addAll(helpBut);
 
+        helpBut.setOnAction(e-> {
+            try {
+                java.awt.Desktop.getDesktop().browse(new URI("https://github.com/TheTrio/SlickPad"));
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            } catch (URISyntaxException e1) {
+                e1.printStackTrace();
+            }
+        });
+
         if(val[0].equals("true")){
             window.setFullScreen(true);
         }
@@ -284,12 +372,7 @@ public class Main extends Application implements Runnable{
 
         window.setTitle("SlickPad");
         editor = new Scene(bb,628,532);
-        text.setOnKeyTyped(e-> {
-            if(tabs.getTabs().get(tabs.getSelectionModel().getSelectedIndex()).getText().contains("*")){
 
-            }else
-                tabs.getTabs().get(tabs.getSelectionModel().getSelectedIndex()).setText(tabs.getTabs().get(tabs.getSelectionModel().getSelectedIndex()).getText() + "*");
-        });
         final AnchorPane root = new AnchorPane();
         tabs = new TabPane();
         final Button addButton = new Button("+");
@@ -498,6 +581,7 @@ public class Main extends Application implements Runnable{
 
 
             File file = new File(ne.getId());
+            System.out.println(file.getAbsolutePath());
 
             if (file.exists()) {
                 ReadFile readFile = new ReadFile();
@@ -606,7 +690,8 @@ public class Main extends Application implements Runnable{
         MenuItem openFile = new MenuItem("Open File");
         MenuItem ProgrammerWindow = new MenuItem("Programmer Window");
         ProgrammerWindow.setOnAction(e-> {
-            Editor editor1 = new Editor();
+            Editor editor1 = new Editor(
+            );
             editor1.code = text.getText();
             editor1.start();
 
@@ -741,6 +826,9 @@ public class Main extends Application implements Runnable{
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            close.consume();
+            System.exit(0);
+
         });
         FullScreen.setOnAction(e-> {
             if(FullScreen.getText().equals("Enable FullScreen")) {
@@ -753,7 +841,7 @@ public class Main extends Application implements Runnable{
         });
 
         exit.setOnAction(e-> {
-           window.close();
+           System.exit(0);
         });
         FileMenu.getItems().addAll(openFile,SaveNorm,saveFile,FullScreen,ProgrammerWindow, exit);
         mb.getMenus().addAll(FileMenu, Edit, Prefer);

@@ -18,8 +18,13 @@
     -fx-font-weight: bold;
 }
 .string {
-    -fx-fill: blue;
+    -fx-fill: red;
 }
+
+.org {
+	-fx-fill:blue;
+}
+
 
 .comment {
     -fx-fill: cadetblue;

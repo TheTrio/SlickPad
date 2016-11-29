@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import com.jfoenix.controls.*?>
+<?import javafx.scene.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<Pane fx:controller="com.company.AlertController" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="256.0" prefWidth="455.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <cursor>
+      <Cursor fx:constant="DEFAULT" />
+   </cursor>
+   <children>
+      <Label layoutX="7.0" layoutY="7.0" prefHeight="26.0" prefWidth="444.0" text="Oops! Looks Like you don't have a &quot;.java&quot; File">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Label>
+      <JFXButton layoutX="66.0" layoutY="154.0" prefHeight="57.0" prefWidth="115.0" style="-fx-background-color: #03A9F4;" text="Cancel" onAction="#ButtonCancelClicked"/>
+      <JFXButton layoutX="246.0" layoutY="154.0" prefHeight="57.0" prefWidth="115.0" style="-fx-background-color: #03A9F4;" text="Save File" />
+      <Label layoutX="123.0" layoutY="60.0" text="Here's what we can do">
+         <font>
+            <Font size="21.0" />
+         </font>
+      </Label>
+   </children>
+</Pane>

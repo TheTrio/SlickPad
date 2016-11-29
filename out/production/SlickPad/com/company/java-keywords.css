@@ -18,11 +18,14 @@
     -fx-font-weight: bold;
 }
 .string {
-    -fx-fill: blue;
+    -fx-fill: red;
 }
 
 .comment {
     -fx-fill: cadetblue;
+}
+.text {
+    -fx-fill: black;
 }
 
 .paragraph-box:has-caret {

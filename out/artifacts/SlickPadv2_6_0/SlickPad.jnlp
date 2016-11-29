@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <jnlp spec="1.0" xmlns:jfx="http://javafx.com" href="SlickPad.jnlp">
   <information>
-    <title>SlickPadv2.6.0</title>
-    <vendor>Unknown</vendor>
+    <title>SlickPad</title>
+    <vendor>TheTrio</vendor>
     <description>SlickPadv2.6.0</description>
     <offline-allowed/>
   </information>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="SlickPad.jar" size="148076" download="eager" />
+    <jar href="SlickPad.jar" size="190674" download="eager" />
     <jar href="controlsfx-8.40.12.jar" size="996389" download="eager" />
     <jar href="jfoenix.jar" size="2178891" download="eager" />
     <jar href="richtextfx-fat-0.7-M1.jar" size="734268" download="eager" />

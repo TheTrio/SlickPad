@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import com.jfoenix.controls.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<Pane fx:controller="com.company.ControllerForRun" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="227.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <JFXButton buttonType="RAISED" layoutX="14.0" layoutY="57.0" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: #673AB7;" text="Java" onAction="#Java"/>
+        <JFXButton buttonType="RAISED" layoutX="14.0" layoutY="115.0" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: #F44336;" text="Html" onAction="#Html"/>
+        <JFXButton buttonType="RAISED" layoutX="14.0" layoutY="175.0" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: #FFEB3B;" text="C++" onAction="#CPP"/>
+        <JFXButton buttonType="RAISED" layoutX="14.0" layoutY="236.0" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: #607D8B;" text="C" onAction="#C"/>
+        <Label layoutX="36.0" layoutY="14.0" prefHeight="43.0" prefWidth="157.0" text="Please Choose" wrapText="true">
+            <font>
+                <Font size="24.0" />
+            </font>
+        </Label>
+    </children>
+</Pane>
