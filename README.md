@@ -34,6 +34,23 @@ Website.
 After the Success of Horizon, this project was just a coffee one, made for fun. I never intended to complete it though I feel that its pretty good now. In its Version 2.8.0, SlickPad might just break away. But the Future seems to be Bright, for I am aiming for Javafx Game Development. Feel free to download and edit the code. 
 </p>
 <h7>Note: Feel free to download it and contribute to the community.</h7>
+<hr />
+<h2>How To Install SlickPad</h2>
+<p>
+For Your Convenience, TheTrio Has Put all the necessary files in the Jar Of SlickPad. Follow the following steps to Run SlickPad :-
+<h4>
+<ol>
+<li>Install Java JRE 8u110 or above</li>
+<li>Make sure your path is correct. To check, Open Cmd and Type "java" without the quotes. If Some text pops up, You'r probably good to go</li>
+<li>Download the Latest Version of SlickPad</li>
+<li>Extract the zip File</li>
+<li>Go to \out\artifacts\SlickPadv2_6_0</li>
+<li>Run SlickPad.jar</li>
+<li>If Windows is not recognising it, or Your archive software opens it, Press Shift on windows explorer, and choose start CMD Window here. In there type "java -jar SlickPad.jar" without the quotes. If It runs good. If not, Then Click a Screenshot of the Window and report in issues</li>
+</ol>
+<h2>Note : We are aware of the Problems user face when running SlickPad. Therefore with Release 3.0.0 of SlickPad a .exe file would be given to do all this confusing work. Please stay with us during this time.
+</h4>
+</p>
 <hr/>
 <h1>Regards,</h1>
 <h2>Shashwat</h2>
