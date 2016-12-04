@@ -5,6 +5,7 @@
 <p>
 SlickPad is a basic text editor which can be used for light programming. It supports Syntax highlighting and was a practice project which I made for Fun. SlickPad can do some basic functions like editing, saving and opening files. It has support for <b>Notifications</b>, which alert the user if the file hasn't been safed.
 </p>
+[![Slickpad.png](https://s17.postimg.org/z41nbjk7z/Slickpad.png)](https://postimg.org/image/i3ir2v76j/)
 <hr/>
 <h2>The Thought</h2>
 <p>
