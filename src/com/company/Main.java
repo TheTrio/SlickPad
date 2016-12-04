@@ -1,6 +1,7 @@
 package com.company;
 
 import com.jfoenix.controls.JFXButton;
+import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.event.*;
 import javafx.fxml.FXMLLoader;
@@ -25,6 +26,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.util.Duration;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -55,22 +57,20 @@ public class Main extends Application implements Runnable{
     static String textString = "";
     private String temp;
     String val[];
-    public static void main(String[] args) {
+
+    public static void main(String args[]){
         launch(args);
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+
         MenuBar mb = new MenuBar();
         window = primaryStage;
+        makeSplash();
         text = new TextArea();
         HBox hb = new HBox();
-        GetSetting getSetting = new GetSetting();
-        getSetting.OpenFile();
-        String values[] = getSetting.GiveSetting();
-        getSetting.CloseFile();
 
-        val = values;
         hb.setPadding(new Insets(5, 0, 0, 10));
         hb.setSpacing(1);
         //hb.getChildren().addAll(saveBut,saveAllBut, newBut, openBut,closeBut, supportBut);
@@ -363,9 +363,7 @@ public class Main extends Application implements Runnable{
             }
         });
 
-        if(val[0].equals("true")){
-            window.setFullScreen(true);
-        }
+
 
         BorderPane bb = new BorderPane();
         VBox vb = new VBox();
@@ -621,7 +619,6 @@ public class Main extends Application implements Runnable{
             text.setStyle("-fx-text-inner-color: " + color + ";");
         });
 
-        text.setStyle("-fx-text-fill: #" + val[3].substring(2,8));
         BasicColor.getItems().addAll(red, blue, pink, green);
         Color.getItems().addAll(BasicColor);
 
@@ -814,6 +811,40 @@ public class Main extends Application implements Runnable{
             FullScreen.setText("Disable FullScreen");
         }
 
+
+        FullScreen.setOnAction(e-> {
+            if(FullScreen.getText().equals("Enable FullScreen")) {
+                FullScreen.setText("Disable FullScreen");
+                window.setFullScreen(true);
+            }else {
+                FullScreen.setText("Enable FullScreen");
+                window.setFullScreen(false);
+            }
+        });
+
+        exit.setOnAction(e-> {
+           System.exit(0);
+        });
+        FileMenu.getItems().addAll(openFile,SaveNorm,saveFile,FullScreen,ProgrammerWindow, exit);
+        mb.getMenus().addAll(FileMenu, Edit, Prefer);
+
+        bb.setTop(vb);
+
+        text.setWrapText(wrapSetting);
+        bb.setCenter(text);
+        window.setScene(editor);
+        GetSetting getSetting = new GetSetting();
+        getSetting.OpenFile();
+        String values[] = getSetting.GiveSetting();
+        getSetting.CloseFile();
+
+
+        val = values;
+        text.setFont(new Font(Integer.parseInt(val[2])));
+        if(val[0].equals("true")){
+            window.setFullScreen(true);
+        }
+        text.setStyle("-fx-text-fill: #" + val[3].substring(2,8));
         window.setOnCloseRequest(close-> {
             try {
                 System.out.println(val[1]);
@@ -830,34 +861,31 @@ public class Main extends Application implements Runnable{
             System.exit(0);
 
         });
-        FullScreen.setOnAction(e-> {
-            if(FullScreen.getText().equals("Enable FullScreen")) {
-                FullScreen.setText("Disable FullScreen");
-                window.setFullScreen(true);
-            }else {
-                FullScreen.setText("Enable FullScreen");
-                window.setFullScreen(false);
-            }
-        });
 
-        exit.setOnAction(e-> {
-           System.exit(0);
-        });
-        FileMenu.getItems().addAll(openFile,SaveNorm,saveFile,FullScreen,ProgrammerWindow, exit);
-        mb.getMenus().addAll(FileMenu, Edit, Prefer);
-        text.setFont(new Font(Integer.parseInt(val[2])));
-        bb.setTop(vb);
-
-        text.setWrapText(wrapSetting);
-        bb.setCenter(text);
-        window.setScene(editor);
-        window.show();
-        Region region = ( Region ) text.lookup( ".content" );
-        region.setBackground( new Background( new BackgroundFill( Paint.valueOf("#292f38"), CornerRadii.EMPTY, Insets.EMPTY ) ) );
-
-        // Or you can set it by setStyle()
-        region.setStyle( "-fx-background-color: #292f38" );
         }
+
+    private void makeSplash() throws InterruptedException {
+        Stage SplashStage = new Stage();
+        VBox vBox = new VBox();
+        ImageView imageView = new ImageView(new Image(getClass().getResourceAsStream("Splash.jpg")));
+        vBox.getChildren().add(imageView);
+
+        SplashStage.setScene(new Scene(vBox,600,382));
+        SplashStage.initStyle(StageStyle.UNDECORATED);
+        SplashStage.show();
+        PauseTransition pause = new PauseTransition(Duration.seconds(2));
+        pause.setOnFinished(event -> {
+            window.show();
+            Region region = ( Region ) text.lookup( ".content" );
+            region.setBackground( new Background( new BackgroundFill( Paint.valueOf("#292f38"), CornerRadii.EMPTY, Insets.EMPTY ) ) );
+
+            // Or you can set it by setStyle()
+            region.setStyle( "-fx-background-color: #292f38" );
+            SplashStage.close();
+        });
+        pause.play();
+
+    }
 
     private void newTab() {
         tab = new Tab("New File  " + myTab + ".txt");
