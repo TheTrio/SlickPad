@@ -42,7 +42,8 @@ public class Editor{
             "new", "package", "private", "protected", "public",
             "return", "short", "static", "strictfp", "super",
             "switch", "synchronized", "this", "throw", "throws",
-            "transient", "try", "void", "volatile", "while","System"
+            "transient", "try", "void", "volatile", "while","System",
+            "BufferedReader", "InputStreamReader"
     };
 
 
@@ -185,11 +186,46 @@ public class Editor{
 
 
 
+
                 }
                 if (e.getCode() == KeyCode.TAB) {
                     String s = "    ";
                     codeArea.insertText(codeArea.getCaretPosition(), s);
                     e.consume();
+                }
+
+                if(e.getCode() ==KeyCode.SPACE && e.isControlDown()){
+                    int offset = codeArea.getCaretPosition();
+                    TwoDimensional.Position pos = codeArea.offsetToPosition(offset, null);
+                    int position = codeArea.getCaretPosition();
+                    int end = position;
+                    int caret = pos.getMinor();
+                    caret--;
+                    System.out.println("Caret is at " + caret);
+                    String textString = "";
+                    String codeAreaText = codeArea.getParagraph(codeArea.getCurrentParagraph()).getText();
+                    boolean doSomething = true;
+                    while (codeAreaText.charAt(caret)!=' '){
+                        textString+= codeAreaText.charAt(caret);
+                        caret--;
+                        end--;
+                    }
+                    textString = new StringBuilder(textString).reverse().toString();
+                    System.out.println(codeArea.getText().substring(end, position));
+                    System.out.println("Start was " + end + " and end was " + position);
+                    if(textString.equals("BufferedReader")){
+                        codeArea.replaceText(end, position, "BufferedReader read = new BufferedReader(input);");
+                    }else if(textString.equals("InputStreamReader")){
+                        codeArea.replaceText(end, position, "InputStreamReader input = new InputStreamReader(System.in);");
+                    }else if(textString.equalsIgnoreCase("SOPLN")){
+                        codeArea.replaceText(end, position, "System.out.println();");
+                    }else if(textString.equalsIgnoreCase("sout")){
+                        codeArea.replaceText(end, position, "System.out.println();");
+                    }else if(textString.equalsIgnoreCase("SOP")){
+                        codeArea.replaceText(end, position, "System.out.print();");
+                    }
+
+
                 }
 
                 if(e.getCode()==KeyCode.ENTER && e.isControlDown()){
@@ -205,6 +241,7 @@ public class Editor{
                             words = "";
                             Button button = new Button(commonString);
                             button.setOnAction(err->{
+                                System.out.println(codeArea.getCaretPosition());
                                 codeArea.replaceText(codeArea.getSelection().getStart(), codeArea.getSelection().getEnd(), commonString);
                                 vBox1.getChildren().removeAll(button);
                                 popup.getContent().removeAll(vBox1);

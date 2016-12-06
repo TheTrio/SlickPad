@@ -99,7 +99,6 @@ public class SettingWindow {
     }
 
     public void CloseAction(){
-
         Main.closeWindow();
     }
 

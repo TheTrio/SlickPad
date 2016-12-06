@@ -64,7 +64,7 @@ public class Main extends Application implements Runnable{
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-
+        SettingWindows = new Stage();
         MenuBar mb = new MenuBar();
         window = primaryStage;
         makeSplash();
@@ -325,17 +325,15 @@ public class Main extends Application implements Runnable{
         setBut.setOnAction(e -> {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Setting.fxml"));
 
-
-
             try {
                 Parent root = (Parent) fxmlLoader.load();
 
-                Stage stage = new Stage();
-                stage.setTitle("Settings");
-                stage.initModality(Modality.APPLICATION_MODAL);
-                stage.setScene(new Scene(root));
-                stage.setResizable(false);
-                stage.show();
+                SettingWindows  = new Stage();
+                SettingWindows.setTitle("Settings");
+                SettingWindows.initModality(Modality.APPLICATION_MODAL);
+                SettingWindows.setScene(new Scene(root));
+                SettingWindows.setResizable(false);
+                SettingWindows.show();
 
             } catch (IOException e1) {
                 e1.printStackTrace();
@@ -520,7 +518,6 @@ public class Main extends Application implements Runnable{
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Setting.fxml"));
                 try {
                     Parent root1 = (Parent) fxmlLoader.load();
-                    SettingWindows = new Stage();
                     SettingWindows.initModality(Modality.APPLICATION_MODAL);
                     SettingWindows.setTitle("Settings");
                     SettingWindows.setScene(new Scene(root1));
@@ -843,6 +840,10 @@ public class Main extends Application implements Runnable{
         text.setFont(new Font(Integer.parseInt(val[2])));
         if(val[0].equals("true")){
             window.setFullScreen(true);
+            FullScreen.setText("Disable FullScreen");
+
+        }else {
+            FullScreen.setText("Enable FullScreen");
         }
         text.setStyle("-fx-text-fill: #" + val[3].substring(2,8));
         window.setOnCloseRequest(close-> {
