@@ -49,7 +49,7 @@ public class EditorC{
                     + "|(?<COMMENT>" + COMMENT_PATTERN + ")"
     );
 
-    private static final String sampleCode = String.join("\n", new String[] {
+    private static  String sampleCode = String.join("\n", new String[] {
             "#include <stdio.h>",
             "    int main(){",
             "        printf(\"Hello SlickPad\");",
@@ -57,6 +57,17 @@ public class EditorC{
             "}",
 
     });
+    public void setText(String data) {
+        if(data.trim().length()>0){
+            sampleCode = data;
+        }else
+            sampleCode = String.join("\n",
+                    "#include <stdio.h>" ,
+                    "    int main(){",
+                    "//Type Your Code Here" ,
+                    "}"
+            );
+    }
 
     private String string;
     int i=0,j=0;

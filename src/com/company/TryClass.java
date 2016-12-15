@@ -1,49 +1,50 @@
 package com.company;
-import java.time.Duration;
 
 import javafx.application.Application;
-import javafx.geometry.Point2D;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.stage.Popup;
+import javafx.scene.control.ListView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
-import org.fxmisc.richtext.MouseOverTextEvent;
-import org.fxmisc.richtext.StyleClassedTextArea;
-
-public class TryClass extends Application {
-
-    public static void main(String[] args) {
-        launch(args);
-    }
+public class TryClass extends Application{
 
     @Override
-    public void start(Stage stage) {
-        StyleClassedTextArea area = new StyleClassedTextArea();
-        area.setWrapText(true);
-        area.appendText("Pause the mouse over the text for 1 second.");
+    public void start(Stage primaryStage) throws Exception {
+        ListView<String> listView = new ListView<>();
 
-        Popup popup = new Popup();
-        Label popupMsg = new Label();
-        popupMsg.setStyle(
-                "-fx-background-color: black;" +
-                        "-fx-text-fill: white;" +
-                        "-fx-padding: 5;");
-        popup.getContent().add(popupMsg);
+        listView.getItems().add("");
+        listView.getItems().add("Option 2");
 
-        area.setMouseOverTextDelay(Duration.ofSeconds(1));
-        area.addEventHandler(MouseOverTextEvent.MOUSE_OVER_TEXT_BEGIN, e -> {
-            int chIdx = e.getCharacterIndex();
-            Point2D pos = e.getScreenPosition();
-            popupMsg.setText("Character '" + area.getText(chIdx, chIdx+1) + "' at " + pos);
-            popup.show(area, pos.getX(), pos.getY() + 10);
+        VBox vBox = new VBox();
+        Label label = new Label("Right Click Here");
+        Stage stage  = new Stage();
+        stage.initStyle(StageStyle.UNDECORATED);
+        stage.setScene(new Scene(new StackPane(listView),100,100));
+
+        label.setOnMousePressed(e->{
+            if(e.isSecondaryButtonDown()) {
+                stage.setX(e.getScreenX());
+                stage.setY(e.getScreenY());
+                stage.show();
+            }else if(stage.isShowing()){
+                stage.hide();
+            }
         });
-        area.addEventHandler(MouseOverTextEvent.MOUSE_OVER_TEXT_END, e -> {
-            popup.hide();
+        vBox.getChildren().add(label);
+        Scene newScene = new Scene(vBox, 300,300);
+        newScene.addEventFilter(MouseEvent.MOUSE_PRESSED, e->
+        {
+            stage.hide();
         });
-
-        Scene scene = new Scene(area, 600, 400);
-        stage.setScene(scene);
-        stage.show();
+        primaryStage.setScene(newScene);
+        primaryStage.show();
     }
 }

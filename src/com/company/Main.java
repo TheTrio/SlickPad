@@ -229,6 +229,7 @@ public class Main extends Application implements Runnable{
         hb.getChildren().addAll(progBut);
 
         progBut.setOnAction(e-> {
+            ControllerForChooser.s = text.getText();
             FXMLLoader fxmlLoader  = new FXMLLoader(getClass().getResource("Chooser.fxml"));
 
             try {

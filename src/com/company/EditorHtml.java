@@ -76,9 +76,7 @@ public class EditorHtml{
 
     );
 
-    private static final String sampleCode = String.join("\n", new String[] {
-
-    });
+    private static String sampleCode = "";
 
     private String string;
     int i=0,j=0;
@@ -311,5 +309,15 @@ int ij = 0;
         }
         spansBuilder.add(Collections.emptyList(), text.length() - lastKwEnd);
         return spansBuilder.create();
+    }
+    public void setText(String data) {
+        if(data.trim().length()>0){
+            sampleCode = data;
+        }else
+            sampleCode = String.join("\n",
+                    "<html>" ,
+                    "    " ,
+                    "</html>"
+            );
     }
 }

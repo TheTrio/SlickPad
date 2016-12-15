@@ -28,7 +28,7 @@ import javafx.stage.StageStyle;
 import org.controlsfx.control.textfield.TextFields;
 import org.fxmisc.richtext.*;
 
-public class Editor{
+public class Editor {
     public static String code;
     CodeArea codeArea = new CodeArea();
     Stage primaryStage = new Stage();
@@ -42,11 +42,9 @@ public class Editor{
             "new", "package", "private", "protected", "public",
             "return", "short", "static", "strictfp", "super",
             "switch", "synchronized", "this", "throw", "throws",
-            "transient", "try", "void", "volatile", "while","System",
+            "transient", "try", "void", "volatile", "while", "System",
             "BufferedReader", "InputStreamReader"
     };
-
-
 
 
     private static final String KEYWORD_PATTERN = "\\b(" + String.join("|", KEYWORDS) + ")\\b";
@@ -66,21 +64,12 @@ public class Editor{
                     + "|(?<STRING>" + STRING_PATTERN + ")"
                     + "|(?<COMMENT>" + COMMENT_PATTERN + ")"
     );
-
-    private static final String sampleCode = String.join("\n", new String[] {
-            "class Apples{",
-            "    public static void main(String args[]){",
-            "        //Copy From Editor to paste code here",
-            "    }",
-            "}"
-
-    });
-
+    private String sampleCode = "";
     private String string;
-    int i=0,j=0;
+    int i = 0, j = 0;
     private String words = "";
-    public void start() {
 
+    public void start() {
         codeArea.setStyle("-fx-font-size: 15pt;");
         Popup popup = new Popup();
         codeArea.setPopupWindow(popup);
@@ -91,24 +80,24 @@ public class Editor{
         codeArea.setOnKeyTyped(e -> {
             if (e.getCharacter().equals("\"")) {
                 codeArea.insertText(codeArea.getCaretPosition(), "\"");
-                codeArea.moveTo(codeArea.getCaretPosition()-1);
+                codeArea.moveTo(codeArea.getCaretPosition() - 1);
                 e.consume();
             }
             if (e.getCharacter().equals("(")) {
                 codeArea.insertText(codeArea.getCaretPosition(), ")");
-                codeArea.moveTo(codeArea.getCaretPosition()-1);
+                codeArea.moveTo(codeArea.getCaretPosition() - 1);
                 e.consume();
             }
 
             if (e.getCharacter().equals("{")) {
                 codeArea.insertText(codeArea.getCaretPosition(), "}");
-                codeArea.moveTo(codeArea.getCaretPosition()-1);
+                codeArea.moveTo(codeArea.getCaretPosition() - 1);
 
                 e.consume();
             }
-            if(e.getCharacter().equals("[")){
+            if (e.getCharacter().equals("[")) {
                 codeArea.insertText(codeArea.getCaretPosition(), "]");
-                codeArea.moveTo(codeArea.getCaretPosition()-1);
+                codeArea.moveTo(codeArea.getCaretPosition() - 1);
                 e.consume();
             }
 
@@ -152,40 +141,37 @@ public class Editor{
 
         */
         codeArea.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
-            int f =0;
+            int f = 0;
             String spaces = "";
             VBox vBox1 = new VBox();
+
             @Override
             public void handle(KeyEvent e) {
-                if(e.getCode()==KeyCode.BACK_SPACE){
+                if (e.getCode() == KeyCode.BACK_SPACE) {
                     int offset = codeArea.getCaretPosition();
                     TwoDimensional.Position pos = codeArea.offsetToPosition(offset, null);
 
-
-                    if(codeArea.getParagraphs().get(codeArea.getCurrentParagraph()).getText().contains("{}")) {
-                        if (codeArea.getParagraphs().get(codeArea.getCurrentParagraph()).getText().charAt(pos.getMinor()-1) == '}'){
+                    if (codeArea.getParagraphs().get(codeArea.getCurrentParagraph()).getText().contains("{}")) {
+                        if (codeArea.getParagraphs().get(codeArea.getCurrentParagraph()).getText().charAt(pos.getMinor() - 1) == '}') {
                             System.out.println(codeArea.getCaretPosition());
-                            codeArea.replaceText(codeArea.getCaretPosition()-2, codeArea.getCaretPosition(), "");
+                            codeArea.replaceText(codeArea.getCaretPosition() - 2, codeArea.getCaretPosition(), "");
                             e.consume();
                         }
                     }
-                    if(codeArea.getParagraphs().get(codeArea.getCurrentParagraph()).getText().contains("[]")) {
-                        if (codeArea.getParagraphs().get(codeArea.getCurrentParagraph()).getText().charAt(pos.getMinor()-1) == ']'){
+                    if (codeArea.getParagraphs().get(codeArea.getCurrentParagraph()).getText().contains("[]")) {
+                        if (codeArea.getParagraphs().get(codeArea.getCurrentParagraph()).getText().charAt(pos.getMinor() - 1) == ']') {
                             System.out.println(codeArea.getCaretPosition());
-                            codeArea.replaceText(codeArea.getCaretPosition()-2, codeArea.getCaretPosition(), "");
+                            codeArea.replaceText(codeArea.getCaretPosition() - 2, codeArea.getCaretPosition(), "");
                             e.consume();
                         }
                     }
-                    if(codeArea.getParagraphs().get(codeArea.getCurrentParagraph()).getText().contains("()")) {
-                        if (codeArea.getParagraphs().get(codeArea.getCurrentParagraph()).getText().charAt(pos.getMinor()-1) == ')'){
+                    if (codeArea.getParagraphs().get(codeArea.getCurrentParagraph()).getText().contains("()")) {
+                        if (codeArea.getParagraphs().get(codeArea.getCurrentParagraph()).getText().charAt(pos.getMinor() - 1) == ')') {
                             System.out.println(codeArea.getCaretPosition());
-                            codeArea.replaceText(codeArea.getCaretPosition()-2, codeArea.getCaretPosition(), "");
+                            codeArea.replaceText(codeArea.getCaretPosition() - 2, codeArea.getCaretPosition(), "");
                             e.consume();
                         }
                     }
-
-
-
 
                 }
                 if (e.getCode() == KeyCode.TAB) {
@@ -194,7 +180,7 @@ public class Editor{
                     e.consume();
                 }
 
-                if(e.getCode() ==KeyCode.SPACE && e.isControlDown()){
+                if (e.getCode() == KeyCode.SPACE && e.isControlDown()) {
                     int offset = codeArea.getCaretPosition();
                     TwoDimensional.Position pos = codeArea.offsetToPosition(offset, null);
                     int position = codeArea.getCaretPosition();
@@ -205,58 +191,106 @@ public class Editor{
                     String textString = "";
                     String codeAreaText = codeArea.getParagraph(codeArea.getCurrentParagraph()).getText();
                     boolean doSomething = true;
-                    while (codeAreaText.charAt(caret)!=' '){
-                        textString+= codeAreaText.charAt(caret);
+                    while (codeAreaText.charAt(caret) != ' ') {
+                        textString += codeAreaText.charAt(caret);
                         caret--;
                         end--;
                     }
                     textString = new StringBuilder(textString).reverse().toString();
                     System.out.println(codeArea.getText().substring(end, position));
                     System.out.println("Start was " + end + " and end was " + position);
-                    if(textString.equals("BufferedReader")){
+                    if (textString.startsWith("BufferedRe")) {
                         codeArea.replaceText(end, position, "BufferedReader read = new BufferedReader(input);");
-                    }else if(textString.equals("InputStreamReader")){
+                    } else if (textString.startsWith("InputStr")) {
                         codeArea.replaceText(end, position, "InputStreamReader input = new InputStreamReader(System.in);");
-                    }else if(textString.equalsIgnoreCase("SOPLN")){
+                    } else if (textString.equalsIgnoreCase("SOPLN")) {
                         codeArea.replaceText(end, position, "System.out.println();");
-                    }else if(textString.equalsIgnoreCase("sout")){
+                    } else if (textString.equalsIgnoreCase("sout")) {
                         codeArea.replaceText(end, position, "System.out.println();");
-                    }else if(textString.equalsIgnoreCase("SOP")){
+                    } else if (textString.equalsIgnoreCase("SOP")) {
                         codeArea.replaceText(end, position, "System.out.print();");
+                    } else if (textString.startsWith("for")) {
+                        Pattern pattern = Pattern.compile("\\d*,\\d*,\\d*");
+                        Matcher matcher = pattern.matcher(textString);
+
+                        if (matcher.find()) {
+                            String s = matcher.group(0);
+                            System.out.println(s);
+                            pattern = null;
+                            matcher = null;
+                            pattern = Pattern.compile("\\d*,");
+                            matcher = pattern.matcher(s);
+                            String s2 = "";
+                            String s1 = "";
+                            String s3 = "";
+                            if (matcher.find()) {
+                                s1 = matcher.group(0);
+                                System.out.println(s1);
+                            } else {
+
+                            }
+                            pattern = null;
+                            matcher = null;
+                            pattern = Pattern.compile(",\\d*,");
+                            matcher = pattern.matcher(s);
+                            if (matcher.find()) {
+                                s2 = matcher.group(0);
+                                System.out.println(s2);
+                            } else {
+
+                            }
+
+                            pattern = null;
+                            matcher = null;
+                            pattern = Pattern.compile(",\\d*$");
+                            matcher = pattern.matcher(s);
+                            if (matcher.find()) {
+                                s3 = matcher.group(0);
+                                System.out.println(s3);
+                            } else {
+
+                            }
+                            s1 = s1.replace(",", "");
+                            s2 = s2.replace(",", "");
+                            s3 = s3.replace(",", "");
+
+                            codeArea.replaceText(end, position, "for(int i=" + s1 + ";i<=" + s2 + ";i=i+" + s3 + ")" + " {}");
+                        } else {
+                            codeArea.replaceText(end, position, "for(int i=1;i<=10;i++) {}");
+                        }
                     }
 
 
                 }
-
-                if(e.getCode()==KeyCode.ENTER && e.isControlDown()){
-                    for(String commonString : KEYWORDS){
+                if (e.getCode() == KeyCode.ENTER && e.isControlDown()) {
+                    for (String commonString : KEYWORDS) {
                         String words = codeArea.getSelectedText();
-                        if(commonString.contains(words)){
+                        if (commonString.contains(words)) {
                             System.out.println(words);
-                        if(words==null || words.equals(" ") || words.matches("\\s+") || codeArea.getSelectedText().isEmpty()){
-                            f = 0;
-                            System.out.println("Word is null");
-                        }else {
-                            f++;
-                            words = "";
-                            Button button = new Button(commonString);
-                            button.setOnAction(err->{
-                                System.out.println(codeArea.getCaretPosition());
-                                codeArea.replaceText(codeArea.getSelection().getStart(), codeArea.getSelection().getEnd(), commonString);
-                                vBox1.getChildren().removeAll(button);
-                                popup.getContent().removeAll(vBox1);
-                                popup.hide();
-                            });
-                            vBox1.getChildren().add(button);
-                        }
-                        }else {
+                            if (words == null || words.equals(" ") || words.matches("\\s+") || codeArea.getSelectedText().isEmpty()) {
+                                f = 0;
+                                System.out.println("Word is null");
+                            } else {
+                                f++;
+                                words = "";
+                                Button button = new Button(commonString);
+                                button.setOnAction(err -> {
+                                    System.out.println(codeArea.getCaretPosition());
+                                    codeArea.replaceText(codeArea.getSelection().getStart(), codeArea.getSelection().getEnd(), commonString);
+                                    vBox1.getChildren().removeAll(button);
+                                    popup.getContent().removeAll(vBox1);
+                                    popup.hide();
+                                });
+                                vBox1.getChildren().add(button);
+                            }
+                        } else {
 
                         }
                     }
 
-                    if(f==0){
+                    if (f == 0) {
                         Button bb = new Button("No Result");
-                        bb.setOnAction(errr-> {
+                        bb.setOnAction(errr -> {
                             popup.getContent().remove(vBox1);
                             vBox1.getChildren().remove(bb);
                             popup.hide();
@@ -264,26 +298,25 @@ public class Editor{
                         vBox1.getChildren().add(bb);
 
 
-
                     }
 
                     popup.getContent().add(vBox1);
                     popup.show(primaryStage);
-                }else if(e.getCode()==KeyCode.ENTER){
+                } else if (e.getCode() == KeyCode.ENTER) {
                     int offset = codeArea.getCaretPosition();
                     TwoDimensional.Position pos = codeArea.offsetToPosition(offset, null);
                     int paralast = pos.getMajor();
 
-                        for(int i=0;i<codeArea.getParagraph(paralast).length();i++){
-                            if(codeArea.getParagraph(paralast).charAt(i)==' '){
-                                spaces+=codeArea.getParagraph(paralast).charAt(i);
-                            }else {
-                                break;
-                            }
+                    for (int i = 0; i < codeArea.getParagraph(paralast).length(); i++) {
+                        if (codeArea.getParagraph(paralast).charAt(i) == ' ') {
+                            spaces += codeArea.getParagraph(paralast).charAt(i);
+                        } else {
+                            break;
                         }
-                                        e.consume();
+                    }
+                    e.consume();
                     codeArea.insertText(codeArea.getCaretPosition(), "\n" + spaces);
-                    spaces= "";
+                    spaces = "";
 
 
                 }
@@ -307,7 +340,12 @@ public class Editor{
                 }
                 */
 
-        //}
+                //}
+
+                if(e.getCode()==KeyCode.BACK_SLASH && e.isControlDown() && e.isShiftDown()){
+                    String tempText = codeArea.getSelectedText();
+                    codeArea.replaceText(codeArea.getSelection().getStart(), codeArea.getSelection().getEnd(), "/*" + tempText + "*/");
+                }
             }
         });
 
@@ -317,25 +355,36 @@ public class Editor{
                 .subscribe(change -> {
                     codeArea.setStyleSpans(0, computeHighlighting(codeArea.getText()));
                 });
-        codeArea.replaceText(0, 0, sampleCode);
+        codeArea.replaceText(0,0,sampleCode);
         BorderPane bp = new BorderPane();
         MenuBar mb = new MenuBar();
 
         Menu File = new Menu("File");
         MenuItem get = new MenuItem("Transfer Code To Editor");
-        get.setOnAction(e->{
+        get.setOnAction(e -> {
             giveText();
         });
         File.getItems().add(get);
         mb.getMenus().addAll(File);
         bp.setTop(mb);
         bp.setCenter(vBox);
-        Scene scene = new Scene(bp, 760,400);
+        Scene scene = new Scene(bp, 760, 400);
         scene.getStylesheets().add("java-keywords.css");
 
         primaryStage.setScene(scene);
         primaryStage.setTitle("Programmer Window");
         primaryStage.show();
+    }
+
+    public void setText(String data) {
+        if(data.trim().length()>0){
+            sampleCode = data;
+        }else
+            sampleCode = String.join("\n",
+                    "class Apples{" ,
+                    "    //Type Your Code Here" ,
+                    "}"
+            );
     }
 
     private void giveText() {
@@ -347,7 +396,7 @@ public class Editor{
         int lastKwEnd = 0;
         StyleSpansBuilder<Collection<String>> spansBuilder
                 = new StyleSpansBuilder<>();
-        while(matcher.find()) {
+        while (matcher.find()) {
             String styleClass =
                     matcher.group("KEYWORD") != null ? "keyword" :
                             matcher.group("PAREN") != null ? "paren" :
@@ -356,7 +405,8 @@ public class Editor{
                                                     matcher.group("SEMICOLON") != null ? "semicolon" :
                                                             matcher.group("STRING") != null ? "string" :
                                                                     matcher.group("COMMENT") != null ? "comment" :
-                                                                            null; /* never happens */ assert styleClass != null;
+                                                                            null; /* never happens */
+            assert styleClass != null;
             spansBuilder.add(Collections.emptyList(), matcher.start() - lastKwEnd);
             spansBuilder.add(Collections.singleton(styleClass), matcher.end() - matcher.start());
             lastKwEnd = matcher.end();

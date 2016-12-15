@@ -1,6 +1,6 @@
 @echo off 
 C:
  cd C:\Users\shashwat\Desktop\
- java TooltipDemo
+ java Apples
  pause > nul 
  exit

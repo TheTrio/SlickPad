@@ -54,7 +54,7 @@ public class EditorCPP{
                     + "|(?<COMMENT>" + COMMENT_PATTERN + ")"
     );
 
-    private static final String sampleCode = String.join("\n", new String[] {
+    private static String sampleCode = String.join("\n", new String[] {
             "#include <iostream>",
             "    using namespace std;",
             "        int main(){",
@@ -62,6 +62,19 @@ public class EditorCPP{
             "}"
 
     });
+
+    public void setText(String data) {
+        if(data.trim().length()>0){
+            sampleCode = data;
+        }else
+            sampleCode = String.join("\n",
+                    "#include <iostream>",
+                    "    using namespace std;",
+                    "        int main(){",
+                    "           //Type Your Code Here",
+                    "}"
+            );
+    }
 
     private String string;
     int i=0,j=0;
