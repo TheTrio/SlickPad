@@ -21,4 +21,7 @@ public class ThreadRunner implements Runnable{
         SplashStage.initStyle(StageStyle.UNDECORATED);
         SplashStage.show();
     }
+
+
+
 }

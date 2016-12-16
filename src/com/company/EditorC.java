@@ -64,7 +64,7 @@ public class EditorC{
             sampleCode = String.join("\n",
                     "#include <stdio.h>" ,
                     "    int main(){",
-                    "//Type Your Code Here" ,
+                    "       printf(\"Hello World\")" ,
                     "}"
             );
     }

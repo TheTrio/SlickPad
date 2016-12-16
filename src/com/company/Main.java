@@ -869,10 +869,10 @@ public class Main extends Application implements Runnable{
     private void makeSplash() throws InterruptedException {
         Stage SplashStage = new Stage();
         VBox vBox = new VBox();
-        ImageView imageView = new ImageView(new Image(getClass().getResourceAsStream("Splash.jpg")));
+        ImageView imageView = new ImageView(new Image(getClass().getResourceAsStream("Splash.png")));
         vBox.getChildren().add(imageView);
 
-        SplashStage.setScene(new Scene(vBox,600,382));
+        SplashStage.setScene(new Scene(vBox,800,509));
         SplashStage.initStyle(StageStyle.UNDECORATED);
         SplashStage.show();
         PauseTransition pause = new PauseTransition(Duration.seconds(2));

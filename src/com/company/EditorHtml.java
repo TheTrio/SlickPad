@@ -316,7 +316,6 @@ int ij = 0;
         }else
             sampleCode = String.join("\n",
                     "<html>" ,
-                    "    " ,
                     "</html>"
             );
     }

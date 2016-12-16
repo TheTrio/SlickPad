@@ -1,17 +1,12 @@
 package com.company;
 
-import java.io.IOException;
-import java.security.Key;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Menu;
@@ -21,14 +16,11 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import org.controlsfx.control.textfield.TextFields;
 import org.fxmisc.richtext.*;
 
-public class Editor {
+public class Editor{
     public static String code;
     CodeArea codeArea = new CodeArea();
     Stage primaryStage = new Stage();
@@ -205,10 +197,13 @@ public class Editor {
                         codeArea.replaceText(end, position, "InputStreamReader input = new InputStreamReader(System.in);");
                     } else if (textString.equalsIgnoreCase("SOPLN")) {
                         codeArea.replaceText(end, position, "System.out.println();");
+                        codeArea.moveTo(codeArea.getCaretPosition()-2);
                     } else if (textString.equalsIgnoreCase("sout")) {
                         codeArea.replaceText(end, position, "System.out.println();");
+                        codeArea.moveTo(codeArea.getCaretPosition()-2);
                     } else if (textString.equalsIgnoreCase("SOP")) {
                         codeArea.replaceText(end, position, "System.out.print();");
+                        codeArea.moveTo(codeArea.getCaretPosition()-2);
                     } else if (textString.startsWith("for")) {
                         Pattern pattern = Pattern.compile("\\d*,\\d*,\\d*");
                         Matcher matcher = pattern.matcher(textString);
@@ -255,8 +250,10 @@ public class Editor {
                             s3 = s3.replace(",", "");
 
                             codeArea.replaceText(end, position, "for(int i=" + s1 + ";i<=" + s2 + ";i=i+" + s3 + ")" + " {}");
+                            codeArea.moveTo(codeArea.getCaretPosition()-1);
                         } else {
                             codeArea.replaceText(end, position, "for(int i=1;i<=10;i++) {}");
+                            codeArea.moveTo(codeArea.getCaretPosition()-1);
                         }
                     }
 
@@ -346,6 +343,7 @@ public class Editor {
                     String tempText = codeArea.getSelectedText();
                     codeArea.replaceText(codeArea.getSelection().getStart(), codeArea.getSelection().getEnd(), "/*" + tempText + "*/");
                 }
+
             }
         });
 
@@ -382,7 +380,9 @@ public class Editor {
         }else
             sampleCode = String.join("\n",
                     "class Apples{" ,
-                    "    //Type Your Code Here" ,
+                    "    public static void main(String args[]){" ,
+                    "       //Type Your Code Here",
+                    "   }",
                     "}"
             );
     }
@@ -414,4 +414,6 @@ public class Editor {
         spansBuilder.add(Collections.emptyList(), text.length() - lastKwEnd);
         return spansBuilder.create();
     }
+
+
 }
