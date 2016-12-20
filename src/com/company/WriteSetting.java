@@ -19,7 +19,7 @@ public class WriteSetting {
     }
 
     public void AddRecords(String val[]){
-        x.format("%s\n%s\n%s\n%s", val[0], val[1],val[2], val[3]);
+        x.format("%s\n%s\n%s\n%s\n%s\n%s", val[0], val[1],val[2], val[3], val[4], val[5]);
     }
 
     public void CloseFile(){

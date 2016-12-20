@@ -44,13 +44,10 @@ public class ControllerForRun implements Runnable{
                 }
                 String className = Input.className;
                 Formatter formatter = new Formatter("Jrun.bat");
-                formatter.format("@echo off\n" + "javac temp.java\n" + "start cb_console_runner.exe java " + className);
+                formatter.format("@echo off\n" +"\"" +  SettingWindow.StringPathJava + "\\bin\\javac\"" + " temp.java\n" + "start cb_console_runner.exe java " + className);
 
 
                 formatter.close();
-
-
-
 
                 Runtime.getRuntime().exec("cmd /c  Jrun.bat");
             } catch (FileNotFoundException e1) {
@@ -77,7 +74,7 @@ public class ControllerForRun implements Runnable{
             form.format("%s", Main.myText);
             form.close();
 
-            Runtime.getRuntime().exec("cmd /c start Crun.bat");
+            Runtime.getRuntime().exec("cmd /c Crun.bat");
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -92,7 +89,7 @@ public class ControllerForRun implements Runnable{
             Formatter form = new Formatter("temp.cpp");
             form.format("%s", Main.myText);
             form.close();
-            Process p = Runtime.getRuntime().exec("cmd /c start CPrun.bat");
+            Process p = Runtime.getRuntime().exec("cmd /c CPrun.bat");
             p.waitFor();
         } catch (FileNotFoundException e) {
             e.printStackTrace();

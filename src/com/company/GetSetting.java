@@ -8,7 +8,7 @@ public class GetSetting {
     private File file;
     private Scanner x;
     private int y = 0;
-    private String val[] = new String[4];
+    private String val[] = new String[6];
 
     public void OpenFile(){
         file = new File("Settings.data");
@@ -20,10 +20,15 @@ public class GetSetting {
     }
 
     public String[] GiveSetting(){
-        while(x.hasNext()){
-            val[y] = x.next();
+        while(x.hasNextLine()){
+            System.out.println(y);
+            if(y>=6)
+                break;
+            val[y] = x.nextLine();
             y++;
         }
+
+        y = 0;
 
         return val;
     }

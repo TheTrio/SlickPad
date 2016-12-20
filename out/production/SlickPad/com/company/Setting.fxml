@@ -1,42 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.validation.*?>
-<?import javafx.scene.text.*?>
-<?import com.jfoenix.controls.*?>
-<?import javafx.geometry.*?>
-<?import java.lang.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXColorPicker?>
+<?import com.jfoenix.controls.JFXSlider?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXToggleButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<VBox prefHeight="362.0" prefWidth="428.0" style="-fx-background-color: #6E6E6E;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.company.SettingWindow">
+<VBox prefHeight="511.0" prefWidth="452.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.company.SettingWindow">
    <children>
       <HBox prefHeight="269.0" prefWidth="444.0">
          <children>
-            <Pane prefHeight="250.0" prefWidth="200.0">
+            <Pane minHeight="-Infinity" minWidth="-Infinity" prefHeight="321.0" prefWidth="200.0">
                <children>
-                  <Label layoutX="41.0" layoutY="47.0" text="Full-Screen Enabled" textFill="WHITE">
+                  <Label layoutX="33.0" layoutY="48.0" style="-fx-text-fill: #000000;" text="Full-Screen Enabled" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </Label>
-                  <Label layoutX="41.0" layoutY="112.0" text="Store Unsaved Files" textFill="WHITE">
+                  <Label layoutX="32.0" layoutY="108.0" style="-fx-text-fill: #000000;" text="Store Unsaved Files" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </Label>
-                  <Label layoutX="41.0" layoutY="175.0" text="Default Text Color" textFill="WHITE">
+                  <Label layoutX="30.0" layoutY="175.0" style="-fx-text-fill: #000000;" text="Default Text Color" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </Label>
-                  <Label layoutX="41.0" layoutY="223.0" prefHeight="17.0" prefWidth="124.0" text="Default Text Size" textFill="WHITE">
+                  <Label layoutX="30.0" layoutY="235.0" prefHeight="17.0" prefWidth="124.0" style="-fx-text-fill: #000000;" text="Default Text Size" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="31.0" layoutY="302.0" prefHeight="17.0" prefWidth="124.0" style="-fx-text-fill: #000000;" text="Path to Java JDK" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <Separator layoutX="216.0" orientation="VERTICAL" prefHeight="421.0" prefWidth="9.0" />
+                  <Label layoutX="29.0" layoutY="355.0" prefHeight="17.0" prefWidth="155.0" style="-fx-text-fill: #000000;" text="Path to C/C++ Compiler" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </Label>
                </children>
             </Pane>
-            <Pane prefHeight="342.0" prefWidth="187.0">
+            <Pane minHeight="-Infinity" minWidth="-Infinity" prefHeight="414.0" prefWidth="256.0">
                <children>
                   <JFXToggleButton fx:id="Save" layoutX="36.0" layoutY="96.0" />
                   <JFXToggleButton fx:id="Screen" layoutX="36.0" layoutY="28.0" />
@@ -46,15 +62,20 @@
                         <Insets left="15.0" top="30.0" />
                      </padding>
                   </JFXSlider>
+                  <JFXTextField fx:id="pathJdk" layoutX="31.0" layoutY="299.0" />
+                  <JFXButton fx:id="openerJava" buttonType="RAISED" layoutX="178.0" layoutY="299.0" style="-fx-background-color: #4FC3F7;" text="..." />
+                  <JFXTextField fx:id="pathC" layoutX="31.0" layoutY="345.0" />
+                  <JFXButton fx:id="openerC" buttonType="RAISED" layoutX="178.0" layoutY="345.0" style="-fx-background-color: #4FC3F7;" text="..." />
                </children>
             </Pane>
          </children>
       </HBox>
-      <Pane prefHeight="89.0" prefWidth="428.0">
+      <Pane prefHeight="84.0" prefWidth="422.0">
          <children>
-            <JFXButton fx:id="Close_But" buttonType="RAISED" cancelButton="true" layoutX="101.0" layoutY="25.0" onAction="#CloseAction" prefHeight="35.0" prefWidth="62.0" ripplerFill="WHITE" style="-fx-background-color: #0277BD;" text="Close" />
-            <JFXButton fx:id="Save_But" buttonType="RAISED" cancelButton="true" layoutX="191.0" layoutY="25.0" onAction="#SaveAction" prefHeight="35.0" prefWidth="62.0" ripplerFill="WHITE" style="-fx-background-color: #0277BD;" text="Save" />
-            <JFXButton fx:id="Apply_But" buttonType="RAISED" cancelButton="true" layoutX="278.0" layoutY="25.0" onAction="#ApplyAction" prefHeight="35.0" prefWidth="62.0" ripplerFill="WHITE" style="-fx-background-color: #0277BD;" text="Apply" />
+            <JFXButton fx:id="Close_But" buttonType="RAISED" cancelButton="true" layoutX="101.0" layoutY="25.0" onAction="#CloseAction" prefHeight="35.0" prefWidth="62.0" ripplerFill="WHITE" style="-fx-background-color: #4FC3F7;" text="Close" />
+            <JFXButton fx:id="Save_But" buttonType="RAISED" cancelButton="true" layoutX="191.0" layoutY="25.0" onAction="#SaveAction" prefHeight="35.0" prefWidth="62.0" ripplerFill="WHITE" style="-fx-background-color: #4FC3F7;" text="Save" />
+            <JFXButton fx:id="Apply_But" buttonType="RAISED" cancelButton="true" layoutX="278.0" layoutY="25.0" onAction="#ApplyAction" prefHeight="35.0" prefWidth="62.0" ripplerFill="WHITE" style="-fx-background-color: #4FC3F7;" text="Apply" />
+            <Separator layoutX="-1.0" layoutY="-4.0" prefHeight="6.0" prefWidth="452.0" />
          </children>
          <VBox.margin>
             <Insets top="10.0" />
@@ -62,4 +83,4 @@
       </Pane>
    </children>
 
-      </VBox>
+</VBox>

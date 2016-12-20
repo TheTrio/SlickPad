@@ -22,10 +22,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
-import javafx.stage.FileChooser;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
+import javafx.stage.*;
 import javafx.util.Duration;
 
 import java.io.File;
@@ -62,6 +59,7 @@ public class Main extends Application implements Runnable{
         launch(args);
     }
 
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         SettingWindows = new Stage();
@@ -77,6 +75,7 @@ public class Main extends Application implements Runnable{
 
         //New File Button
         Button newBut = new Button();
+        newBut.setId("NewTab");
         newBut.setOnAction(e-> {
             newTab();
         });
@@ -462,20 +461,14 @@ public class Main extends Application implements Runnable{
                         Pop.setResizable(false);
                         Pop.showAndWait();
 
-                    }catch (Exception er){
-
-
-                    }
+                    }catch (Exception er){}
                     String spd = (tabs.getTabs().get(tabs.getSelectionModel().getSelectedIndex()).getId().replace(tabs.getTabs().get(tabs.getSelectionModel().getSelectedIndex()).getText(), ""));
                     System.out.println(spd);
                     Formatter formatter = new Formatter("Start.bat");
-                    formatter.format("@echo off \n"+ spd.substring(0, 2) + "\n cd " + spd + "\n java " + Input.className + "\n pause > nul \n exit");
+                    formatter.format("@echo off\n" +"\"" +  SettingWindow.StringPathJava + "/bin/javac\" " + "\"" + tabs.getSelectionModel().getSelectedItem().getId() + "\""+ "\n" + "start cb_console_runner.exe " + "\"" + SettingWindow.StringPathJava + "\\bin\\java\" -cp \"" + tabs.getSelectionModel().getSelectedItem() .getId().replace(tabs.getSelectionModel().getSelectedItem().getText(), "").replace("\\", "/") + "\" " + Input.className);
 
-
+                    System.out.println(tabs.getTabs().get(tabs.getSelectionModel().getSelectedIndex()).getId());
                     formatter.close();
-                    String className = Input.className;
-                    Runtime.getRuntime().exec("cmd /c start javac " + tabs.getTabs().get(tabs.getSelectionModel().getSelectedIndex()).getId());
-
 
                 }
 
@@ -831,6 +824,7 @@ public class Main extends Application implements Runnable{
         text.setWrapText(wrapSetting);
         bb.setCenter(text);
         window.setScene(editor);
+
         GetSetting getSetting = new GetSetting();
         getSetting.OpenFile();
         String values[] = getSetting.GiveSetting();
@@ -838,6 +832,8 @@ public class Main extends Application implements Runnable{
 
 
         val = values;
+        SettingWindow.StringPathJava = val[4];
+        SettingWindow.StringPathC = val[5];
         text.setFont(new Font(Integer.parseInt(val[2])));
         if(val[0].equals("true")){
             window.setFullScreen(true);
