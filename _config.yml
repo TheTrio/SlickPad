@@ -2,7 +2,7 @@ title: Slickpad
 description: "The Simple, Elegant and fast Editor "
 google_analytics: 
 show_downloads: true
-theme: jekyll-theme-slate
+theme: jekyll-theme-architect
 
 gems:
   - jekyll-mentions
