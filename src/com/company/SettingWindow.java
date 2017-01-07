@@ -43,33 +43,34 @@ public class SettingWindow {
     public static boolean bool_Notify;
     public static String StringPathJava;
     public static String StringPathC;
+
     public void initialize() {
         getData();
         String rule = names[3];
-        rule = rule.substring(2,8);
+        rule = rule.substring(2, 8);
         ColorID.setValue(Color.valueOf(rule));
         Size.setValue(Integer.parseInt(names[2]));
-        if(names[0].equals("true")){
+        if (names[0].equals("true")) {
             System.out.println("Full Screen - True");
             bool_Screen = true;
             Screen.setText("Enabled");
             Screen.setSelected(true);
-        }else {
+        } else {
             System.out.println("Full Screen - False");
-            bool_Screen= false;
+            bool_Screen = false;
             Screen.setText("Disabled");
             Screen.setSelected(false);
         }
 
-        if(names[1].equals("true")){
+        if (names[1].equals("true")) {
             System.out.println("Sound - true");
             Save.setText("Enabled");
             bool_Notify = true;
             Save.setSelected(true);
-        }else {
+        } else {
             System.out.println("Sound - false");
             Save.setText("Disabled");
-            bool_Notify= false;
+            bool_Notify = false;
             Save.setSelected(false);
         }
         Screen.setOnAction(e -> {
@@ -80,28 +81,28 @@ public class SettingWindow {
             }
         });
 
-        Save.setOnAction(e-> {
-            if(Save.isSelected()){
+        Save.setOnAction(e -> {
+            if (Save.isSelected()) {
                 Save.setText("Enabled");
-            }else {
+            } else {
                 Save.setText("Disabled");
             }
         });
 
-        DirectoryChooser directoryChooser = new DirectoryChooser() ;
+        DirectoryChooser directoryChooser = new DirectoryChooser();
 
         pathJdk.setText(names[4]);
         pathC.setText(names[5]);
         openerJava.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent e){
-                File f =  directoryChooser.showDialog(openerJava.getScene().getWindow());
+            public void handle(ActionEvent e) {
+                File f = directoryChooser.showDialog(openerJava.getScene().getWindow());
                 pathJdk.setText(f.getAbsolutePath());
             }
         });
 
-        openerC.setOnAction(new EventHandler<ActionEvent>(){
-            public void handle(ActionEvent e){
-                File f =  directoryChooser.showDialog(openerJava.getScene().getWindow());
+        openerC.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent e) {
+                File f = directoryChooser.showDialog(openerJava.getScene().getWindow());
                 pathC.setText(f.getAbsolutePath());
             }
         });
@@ -119,7 +120,7 @@ public class SettingWindow {
         names = values;
     }
 
-    public void GiveData(){
+    public void GiveData() {
         javafx.scene.paint.Color c = ColorID.getValue();
         color = c.toString();
         size = (int) Size.getValue();
@@ -135,26 +136,24 @@ public class SettingWindow {
 
     }
 
-    public void CloseAction(){
+    public void CloseAction() {
         Main.closeWindow();
         StringPathC = pathC.getText();
         StringPathJava = pathJdk.getText();
     }
 
-    public void SaveAction(){
+    public void SaveAction() {
         GiveData();
         StringPathC = pathC.getText();
         StringPathJava = pathJdk.getText();
         Main.closeWindow();
     }
 
-    public void ApplyAction(){
+    public void ApplyAction() {
         GiveData();
         StringPathC = pathC.getText();
         StringPathJava = pathJdk.getText();
     }
-
-
 
 
 }

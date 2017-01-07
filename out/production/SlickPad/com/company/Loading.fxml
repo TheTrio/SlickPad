@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="258.0"
+      prefWidth="366.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <ProgressIndicator layoutX="110.0" layoutY="98.0" prefHeight="140.0" prefWidth="147.0"/>
+        <Label fx:id="Text" layoutX="24.0" layoutY="5.0" prefHeight="83.0" prefWidth="346.0" text="Checking for Errors"
+               wrapText="true">
+            <font>
+                <Font size="36.0"/>
+            </font>
+        </Label>
+    </children>
+</Pane>

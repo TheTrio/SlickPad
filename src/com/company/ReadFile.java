@@ -9,7 +9,7 @@ public class ReadFile {
     private Scanner x;
     private String data = "";
 
-    public void OpenFile(String s){
+    public void OpenFile(String s) {
         f = new File(s);
         try {
             x = new Scanner(f);
@@ -18,17 +18,18 @@ public class ReadFile {
         }
     }
 
-    public void GetFiles(){
-        while(x.hasNextLine()){
-            data +=x.nextLine() + "\n";
+    public void GetFiles() {
+        while (x.hasNextLine()) {
+            data += x.nextLine() + "\n";
         }
 
     }
 
-    public String GiveFiles(){
+    public String GiveFiles() {
         return data;
     }
-    public void CloseFile(){
+
+    public void CloseFile() {
         x.close();
     }
 }

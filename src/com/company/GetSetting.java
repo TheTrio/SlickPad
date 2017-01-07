@@ -10,7 +10,7 @@ public class GetSetting {
     private int y = 0;
     private String val[] = new String[6];
 
-    public void OpenFile(){
+    public void OpenFile() {
         file = new File("Settings.data");
         try {
             x = new Scanner(file);
@@ -19,10 +19,10 @@ public class GetSetting {
         }
     }
 
-    public String[] GiveSetting(){
-        while(x.hasNextLine()){
+    public String[] GiveSetting() {
+        while (x.hasNextLine()) {
             System.out.println(y);
-            if(y>=6)
+            if (y >= 6)
                 break;
             val[y] = x.nextLine();
             y++;
@@ -33,7 +33,7 @@ public class GetSetting {
         return val;
     }
 
-    public void CloseFile(){
+    public void CloseFile() {
         x.close();
     }
 

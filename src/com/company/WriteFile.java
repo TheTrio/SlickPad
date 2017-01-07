@@ -18,11 +18,11 @@ public class WriteFile {
         x = new Formatter(f);
     }
 
-    public void WriteFile(){
+    public void WriteFile() {
         x.format("%s\n", s);
     }
 
-    public void CloseFile(){
+    public void CloseFile() {
         x.close();
     }
 }

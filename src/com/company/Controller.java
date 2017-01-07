@@ -7,8 +7,8 @@ public class Controller {
     @FXML
     TextArea Text;
 
-    public void initialize(){
-        Text.setOnKeyPressed(e->{
+    public void initialize() {
+        Text.setOnKeyPressed(e -> {
             e.consume();
         });
     }

@@ -8,21 +8,21 @@ public class WriteSetting {
     private File file;
     private Formatter x;
 
-    public void OpenFile(){
+    public void OpenFile() {
         file = new File("Settings.data");
 
         try {
             x = new Formatter(file);
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e);
         }
     }
 
-    public void AddRecords(String val[]){
-        x.format("%s\n%s\n%s\n%s\n%s\n%s", val[0], val[1],val[2], val[3], val[4], val[5]);
+    public void AddRecords(String val[]) {
+        x.format("%s\n%s\n%s\n%s\n%s\n%s", val[0], val[1], val[2], val[3], val[4], val[5]);
     }
 
-    public void CloseFile(){
+    public void CloseFile() {
         x.close();
     }
 

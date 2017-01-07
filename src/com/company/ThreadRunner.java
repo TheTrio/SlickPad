@@ -8,7 +8,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-public class ThreadRunner implements Runnable{
+public class ThreadRunner implements Runnable {
 
     @Override
     public void run() {
@@ -17,11 +17,10 @@ public class ThreadRunner implements Runnable{
         ImageView imageView = new ImageView(new Image(getClass().getResourceAsStream("Splash.jpg")));
         vBox.getChildren().add(imageView);
 
-        SplashStage.setScene(new Scene(vBox,600,382));
+        SplashStage.setScene(new Scene(vBox, 600, 382));
         SplashStage.initStyle(StageStyle.UNDECORATED);
         SplashStage.show();
     }
-
 
 
 }

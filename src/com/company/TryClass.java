@@ -1,20 +1,16 @@
 package com.company;
 
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-public class TryClass extends Application{
+public class TryClass extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -25,22 +21,22 @@ public class TryClass extends Application{
 
         VBox vBox = new VBox();
         Label label = new Label("Right Click Here");
-        Stage stage  = new Stage();
+        Stage stage = new Stage();
         stage.initStyle(StageStyle.UNDECORATED);
-        stage.setScene(new Scene(new StackPane(listView),100,100));
+        stage.setScene(new Scene(new StackPane(listView), 100, 100));
 
-        label.setOnMousePressed(e->{
-            if(e.isSecondaryButtonDown()) {
+        label.setOnMousePressed(e -> {
+            if (e.isSecondaryButtonDown()) {
                 stage.setX(e.getScreenX());
                 stage.setY(e.getScreenY());
                 stage.show();
-            }else if(stage.isShowing()){
+            } else if (stage.isShowing()) {
                 stage.hide();
             }
         });
         vBox.getChildren().add(label);
-        Scene newScene = new Scene(vBox, 300,300);
-        newScene.addEventFilter(MouseEvent.MOUSE_PRESSED, e->
+        Scene newScene = new Scene(vBox, 300, 300);
+        newScene.addEventFilter(MouseEvent.MOUSE_PRESSED, e ->
         {
             stage.hide();
         });

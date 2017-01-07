@@ -1,0 +1,16 @@
+#TextBox .content {
+    -fx-background-color: black;
+}
+
+#TextBox {
+    -fx-text-fill: green;
+    -fx-font-size: 15px;
+}
+
+#MakeBut {
+    -fx-background-color: cyan;
+}
+
+#OuterPane {
+    -fx-background-color: black;
+}

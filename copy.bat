@@ -1,2 +1,2 @@
 copy "New File"*.txt AutoSave
-pause
+end.bat

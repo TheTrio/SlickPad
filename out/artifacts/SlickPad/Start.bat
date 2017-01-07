@@ -1,6 +1,2 @@
-@echo off 
-C:
- cd C:\Users\shashwat\Desktop\
- java Apples
- pause > nul 
- exit
+@echo off
+"null/bin/javac" "C:\Users\shashwat\Desktop\Main.java"

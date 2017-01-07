@@ -1,6 +1,5 @@
 package com.company;
 
-import com.jfoenix.controls.JFXTextField;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -13,15 +12,16 @@ import org.controlsfx.control.textfield.TextFields;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class AutoController implements Initializable{
+public class AutoController implements Initializable {
     @FXML
     AnchorPane root;
 
     @FXML
     TextField input;
     private Stage theStage;
+
     @Override
-    public void initialize(URL url, ResourceBundle rb){
+    public void initialize(URL url, ResourceBundle rb) {
         String[] words = {
                 "abstract", "assert", "boolean", "break", "byte",
                 "case", "catch", "char", "class", "const",
@@ -32,17 +32,17 @@ public class AutoController implements Initializable{
                 "new", "package", "private", "protected", "public",
                 "return", "short", "static", "strictfp", "super",
                 "switch", "synchronized", "this", "throw", "throws",
-                "transient", "try", "void", "volatile", "while","System"
+                "transient", "try", "void", "volatile", "while", "System"
         };
         String[] how = {
                 "hi", "how", "How are you"
         };
         TextFields.bindAutoCompletion(input, words);
-        input.setOnKeyPressed(e->{
-            if(e.getCode()== KeyCode.ENTER){
+        input.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.ENTER) {
                 System.out.println("hello");
                 Node source = (Node) e.getSource();
-                theStage = (Stage)source.getScene().getWindow();
+                theStage = (Stage) source.getScene().getWindow();
                 theStage.close();
             }
         });

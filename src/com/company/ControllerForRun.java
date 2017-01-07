@@ -1,26 +1,24 @@
 package com.company;
 
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Formatter;
-import java.util.*;
+import java.util.Scanner;
 
 
-public class ControllerForRun implements Runnable{
-    public void Java(ActionEvent e){
-        if(Main.bool_notify==true){
+public class ControllerForRun implements Runnable {
+    public void Java(ActionEvent e) {
+        if (Main.bool_notify == true) {
+            
             try {
-                Formatter form= new Formatter("temp.java");
+                Formatter form = new Formatter("temp.java");
                 form.format("%s", Main.myText);
                 form.close();
                 Thread thread = new Thread(this);
@@ -38,17 +36,14 @@ public class ControllerForRun implements Runnable{
                     Pop.setResizable(false);
                     Pop.showAndWait();
 
-                }catch (Exception er){
+                } catch (Exception er) {
 
 
                 }
                 String className = Input.className;
                 Formatter formatter = new Formatter("Jrun.bat");
-                formatter.format("@echo off\n" +"\"" +  SettingWindow.StringPathJava + "\\bin\\javac\"" + " temp.java\n" + "start cb_console_runner.exe java " + className);
-
-
+                formatter.format("@echo off\n" + "\"" + SettingWindow.StringPathJava + "\\bin\\javac\"" + " temp.java\n" + "start cb_console_runner.exe java " + className);
                 formatter.close();
-
                 Runtime.getRuntime().exec("cmd /c  Jrun.bat");
             } catch (FileNotFoundException e1) {
                 e1.printStackTrace();
@@ -59,15 +54,14 @@ public class ControllerForRun implements Runnable{
             }
 
 
-
         }
     }
 
-    public void Html(ActionEvent actionEvent){
+    public void Html(ActionEvent actionEvent) {
 
     }
 
-    public void C(ActionEvent event){
+    public void C(ActionEvent event) {
 
         try {
             Formatter form = new Formatter("temp.c");
@@ -84,7 +78,7 @@ public class ControllerForRun implements Runnable{
 
     }
 
-    public void CPP(ActionEvent event){
+    public void CPP(ActionEvent event) {
         try {
             Formatter form = new Formatter("temp.cpp");
             form.format("%s", Main.myText);

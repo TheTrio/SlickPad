@@ -15,14 +15,14 @@
 </script>
 
 <script>
-    function javafxEmbed_SlickPad_id() {
+    function javafxEmbedSlickPad_id() {
         dtjava.embed(
             {
                 id : 'SlickPad_id',
                 url : 'SlickPad.jnlp',
                 placeholder : 'javafx-app-placeholder',
-                width : 600,
-                height : 400
+                width: '600',
+                height: '400'
             },
             {
                 javafx : '8.0+'
@@ -31,7 +31,7 @@
         );
     }
     <!-- Embed FX application into web page once page is loaded -->
-    dtjava.addOnloadCallback(javafxEmbed_SlickPad_id);
+    dtjava.addOnloadCallback(javafxEmbedSlickPad_id);
 </script>
 
 </head><body>

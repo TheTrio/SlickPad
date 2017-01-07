@@ -1,40 +1,41 @@
 package com.company;
 
-import com.jfoenix.controls.JFXButton;
 import javafx.animation.PauseTransition;
 import javafx.application.Application;
-import javafx.event.*;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
-import javafx.stage.*;
+import javafx.stage.FileChooser;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.util.Formatter;
 import java.util.Scanner;
 
-public class Main extends Application implements Runnable{
+public class Main extends Application {
+
 
     private Stage window;
     public static String myText = "";
@@ -53,12 +54,35 @@ public class Main extends Application implements Runnable{
     private TabPane tabs;
     static String textString = "";
     private String temp;
-    String val[];
+    private String val[];
+    private Pane pane;
+    private BorderPane bb;
+    private TextArea textArea;
 
-    public static void main(String args[]){
-        launch(args);
+
+    public static void main(String args[]) {
+        if (System.getProperty("os.name").startsWith("Windows")) {
+            launch(args);
+        } else {
+            System.out.println("Sorry. SlickPad v3.0.0 is only compatible with Windows. Visit the website for more");
+        }
     }
 
+    public static String toRGBCode(Color color) {
+        return String.format("#%02X%02X%02X",
+                (int) (color.getRed() * 255),
+                (int) (color.getGreen() * 255),
+                (int) (color.getBlue() * 255));
+    }
+
+    public static void writeText(String s) {
+        text.setText(s);
+    }
+
+    public static void setColor(String color) {
+        text.setStyle("-fx-text-fill: " + color);
+
+    }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -67,8 +91,10 @@ public class Main extends Application implements Runnable{
         window = primaryStage;
         makeSplash();
         text = new TextArea();
+        text.setOnKeyTyped(e -> {
+            tabs.getSelectionModel().getSelectedItem().setStyle("-fx-background-color : #FF7043");
+        });
         HBox hb = new HBox();
-
         hb.setPadding(new Insets(5, 0, 0, 10));
         hb.setSpacing(1);
         //hb.getChildren().addAll(saveBut,saveAllBut, newBut, openBut,closeBut, supportBut);
@@ -76,7 +102,7 @@ public class Main extends Application implements Runnable{
         //New File Button
         Button newBut = new Button();
         newBut.setId("NewTab");
-        newBut.setOnAction(e-> {
+        newBut.setOnAction(e -> {
             newTab();
         });
         newBut.setBackground(Background.EMPTY);
@@ -96,10 +122,10 @@ public class Main extends Application implements Runnable{
         saveBut.setGraphic(saveBut_img);
         hb.getChildren().addAll(saveBut);
 
-        saveBut.setOnAction(e ->{
+        saveBut.setOnAction(e -> {
             String s = text.getText();
             int f = getTab();
-            if(tabs.getTabs().get(f).getText().startsWith("New File")){
+            if (tabs.getTabs().get(f).getText().startsWith("New File")) {
 
                 FileChooser fileChooser = new FileChooser();
 
@@ -116,15 +142,16 @@ public class Main extends Application implements Runnable{
                 name = file.getAbsolutePath();
                 tabs.getTabs().get(i).setId(file.getAbsolutePath());
                 WriteFile wr = new WriteFile();
-                try{
+                try {
                     wr.OpenFile(text.getText(), file.getAbsolutePath());
                     wr.WriteFile();
                     wr.CloseFile();
-                }catch (Exception eff){
+                } catch (Exception eff) {
 
                 }
                 temp = text.getText();
-            }else {
+            } else {
+                System.out.println(tabs.getSelectionModel().getSelectedItem().getId());
                 File file = new File(tabs.getTabs().get(f).getId());
                 WriteFile wr = new WriteFile();
                 Path path = file.toPath();
@@ -137,7 +164,6 @@ public class Main extends Application implements Runnable{
                     wr.WriteFile();
                     wr.CloseFile();
                 } catch (Exception eff) {
-
                 }
                 temp = text.getText();
             }
@@ -153,11 +179,11 @@ public class Main extends Application implements Runnable{
         closeBut.setGraphic(closeBut_img);
         hb.getChildren().addAll(closeBut);
 
-        closeBut.setOnAction(e->{
-            if(tabs.getTabs().get(tabs.getSelectionModel().getSelectedIndex()).getText().contains("*")){
+        closeBut.setOnAction(e -> {
+            if (tabs.getTabs().get(tabs.getSelectionModel().getSelectedIndex()).getText().contains("*")) {
 
-            }else {
-                if(!(tabs.getTabs().size()==1))
+            } else {
+                if (!(tabs.getTabs().size() == 1))
                     tabs.getTabs().remove(tabs.getSelectionModel().getSelectedIndex());
             }
         });
@@ -209,7 +235,7 @@ public class Main extends Application implements Runnable{
         cmdBut.setGraphic(cmdBut_img);
         hb.getChildren().addAll(cmdBut);
 
-        cmdBut.setOnAction(e-> {
+        cmdBut.setOnAction(e -> {
             try {
                 Runtime.getRuntime().exec("cmd /c start");
             } catch (IOException e1) {
@@ -227,9 +253,9 @@ public class Main extends Application implements Runnable{
         progBut.setGraphic(progBut_img);
         hb.getChildren().addAll(progBut);
 
-        progBut.setOnAction(e-> {
+        progBut.setOnAction(e -> {
             ControllerForChooser.s = text.getText();
-            FXMLLoader fxmlLoader  = new FXMLLoader(getClass().getResource("Chooser.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Chooser.fxml"));
 
             try {
                 Parent root = (Parent) fxmlLoader.load();
@@ -252,13 +278,14 @@ public class Main extends Application implements Runnable{
         runBut.setGraphic(runBut_img);
         hb.getChildren().addAll(runBut);
 
-        runBut.setOnAction(e->{
+        runBut.setOnAction(e -> {
 
-            FXMLLoader fxmlLoader  = new FXMLLoader(getClass().getResource("RunChooser.fxml"));
-            if(tabs.getTabs().get(tabs.getSelectionModel().getSelectedIndex()).getId().contains("New File")){
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("RunChooser.fxml"));
+            if (tabs.getTabs().get(tabs.getSelectionModel().getSelectedIndex()).getId().contains("New File")) {
                 bool_notify = true;
                 myText = text.getText();
-            }            try {
+            }
+            try {
                 Parent root = (Parent) fxmlLoader.load();
                 Stage stage = new Stage();
                 stage.setTitle("SlickPad");
@@ -281,19 +308,19 @@ public class Main extends Application implements Runnable{
         htmlBut.setGraphic(htmlBut_img);
         hb.getChildren().addAll(htmlBut);
 
-        htmlBut.setOnAction(new EventHandler<ActionEvent>(){
-            public void handle(ActionEvent e){
-                if(tabs.getTabs().get(tabs.getSelectionModel().getSelectedIndex()).getText().contains(".htm")){
+        htmlBut.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent e) {
+                if (tabs.getTabs().get(tabs.getSelectionModel().getSelectedIndex()).getText().contains(".htm")) {
                     try {
                         java.awt.Desktop.getDesktop().browse((new File(tabs.getTabs().get(tabs.getSelectionModel().getSelectedIndex()).getId()).toURI()));
-                    }catch (Exception error){
+                    } catch (Exception error) {
 
                     }
-                }else if(tabs.getTabs().get(tabs.getSelectionModel().getSelectedIndex()).getText().startsWith("New File")){
+                } else if (tabs.getTabs().get(tabs.getSelectionModel().getSelectedIndex()).getText().startsWith("New File")) {
                     WriteFile writeFile = new WriteFile();
                     try {
                         File f = new File("temp");
-                        if(!f.exists()){
+                        if (!f.exists()) {
                             f.mkdir();
                             System.out.println("Directory Made");
                         }
@@ -328,7 +355,7 @@ public class Main extends Application implements Runnable{
             try {
                 Parent root = (Parent) fxmlLoader.load();
 
-                SettingWindows  = new Stage();
+                SettingWindows = new Stage();
                 SettingWindows.setTitle("Settings");
                 SettingWindows.initModality(Modality.APPLICATION_MODAL);
                 SettingWindows.setScene(new Scene(root));
@@ -351,7 +378,7 @@ public class Main extends Application implements Runnable{
         helpBut.setGraphic(helpBut_img);
         hb.getChildren().addAll(helpBut);
 
-        helpBut.setOnAction(e-> {
+        helpBut.setOnAction(e -> {
             try {
                 java.awt.Desktop.getDesktop().browse(new URI("https://github.com/TheTrio/SlickPad"));
             } catch (IOException e1) {
@@ -362,12 +389,11 @@ public class Main extends Application implements Runnable{
         });
 
 
-
-        BorderPane bb = new BorderPane();
+        bb = new BorderPane();
         VBox vb = new VBox();
 
         window.setTitle("SlickPad");
-        editor = new Scene(bb,628,532);
+        editor = new Scene(bb, 628, 532);
 
         final AnchorPane root = new AnchorPane();
         tabs = new TabPane();
@@ -384,15 +410,15 @@ public class Main extends Application implements Runnable{
                 tab = new Tab("New File  " + myTab + ".txt");
                 tab.setId(tab.getText());
                 myTab++;
-                if(tabs.getTabs().size()==1){
+                if (tabs.getTabs().size() == 1) {
                     tab.setClosable(false);
                 }
                 tabs.getTabs().add(tab);
                 tabs.getSelectionModel().select(tab);
 
-                if(tabs.getTabs().size()==1){
+                if (tabs.getTabs().size() == 1) {
                     tab.setClosable(false);
-                }else {
+                } else {
                     tab.setClosable(true);
                 }
                 text.setText("");
@@ -408,7 +434,7 @@ public class Main extends Application implements Runnable{
 
         recover.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
-            String s = (System.getProperty("user.dir") + System.getProperty("file.separator")+ "AutoSave\\");
+            String s = (System.getProperty("user.dir") + System.getProperty("file.separator") + "AutoSave\\");
             System.out.println(s);
             fileChooser.setInitialDirectory(new File(s));
             File file = fileChooser.showOpenDialog(primaryStage);
@@ -423,9 +449,6 @@ public class Main extends Application implements Runnable{
             readFile.GetFiles();
             text.setText(readFile.GiveFiles());
             temp = readFile.GiveFiles();
-
-
-
             readFile.CloseFile();
 
         });
@@ -434,19 +457,11 @@ public class Main extends Application implements Runnable{
         Menu Edit = new Menu("Edit");
         Menu JavaProgram = new Menu("Java Program");
         MenuItem run = new MenuItem("Compile");
-        MenuItem exec = new MenuItem("Execute");
 
-        JavaProgram.getItems().addAll(run, exec);
-        run.setOnAction(e-> {
+        JavaProgram.getItems().addAll(run);
+        run.setOnAction(e -> {
+            textArea.setText("");
             try {
-
-                /*if(tabs.getTabs().get(tabs.getSelectionModel().getSelectedIndex()).getText().contains("*")){
-                    Stage stg = new Stage();
-                    VBox vBox = new VBox();
-                    Scene scene = new Scene(vBox, 400,400);
-
-                }
-                */
                 if (tabs.getTabs().get(tabs.getSelectionModel().getSelectedIndex()).getText().endsWith(".java")) {
                     Scanner s = new Scanner(System.in);
                     FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Popup.fxml"));
@@ -461,14 +476,60 @@ public class Main extends Application implements Runnable{
                         Pop.setResizable(false);
                         Pop.showAndWait();
 
-                    }catch (Exception er){}
+                    } catch (Exception er) {
+                    }
                     String spd = (tabs.getTabs().get(tabs.getSelectionModel().getSelectedIndex()).getId().replace(tabs.getTabs().get(tabs.getSelectionModel().getSelectedIndex()).getText(), ""));
                     System.out.println(spd);
                     Formatter formatter = new Formatter("Start.bat");
-                    formatter.format("@echo off\n" +"\"" +  SettingWindow.StringPathJava + "/bin/javac\" " + "\"" + tabs.getSelectionModel().getSelectedItem().getId() + "\""+ "\n" + "start cb_console_runner.exe " + "\"" + SettingWindow.StringPathJava + "\\bin\\java\" -cp \"" + tabs.getSelectionModel().getSelectedItem() .getId().replace(tabs.getSelectionModel().getSelectedItem().getText(), "").replace("\\", "/") + "\" " + Input.className);
+                    formatter.format("@echo off\n" + "\"" + SettingWindow.StringPathJava + "/bin/javac\" " + "\"" + tabs.getSelectionModel().getSelectedItem().getId() + "\"");
 
                     System.out.println(tabs.getTabs().get(tabs.getSelectionModel().getSelectedIndex()).getId());
                     formatter.close();
+
+                    Formatter newFormatter = new Formatter("Execute.bat");
+                    newFormatter.format("@echo off\n" + "\"" + SettingWindow.StringPathJava + "/bin/javac\" " + "\"" + tabs.getSelectionModel().getSelectedItem().getId() + "\"" + "\n" + "start cb_console_runner.exe " + "\"" + SettingWindow.StringPathJava + "\\bin\\java\" -cp \"" + tabs.getSelectionModel().getSelectedItem().getId().replace(tabs.getSelectionModel().getSelectedItem().getText(), "").replace("\\", "/") + "\" " + Input.className);
+                    newFormatter.close();
+
+                    Process p = Runtime.getRuntime().exec("cmd /c Start.bat");
+
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+                    String as;
+                    String errorString = "Your Program had the following errors \n";
+                    boolean errorfound = false;
+
+                    Parent scene = new FXMLLoader(getClass().getResource("Loading.fxml")).load();
+                    Scene newScene = new Scene(scene, 366, 258);
+                    Stage stage = new Stage();
+                    stage.initStyle(StageStyle.UTILITY);
+                    stage.setScene(newScene);
+                    stage.show();
+
+                    while ((as = bufferedReader.readLine()) != null) {
+                        errorString = errorString + "\n" + as;
+                        errorfound = true;
+                    }
+
+                    if (errorfound) {
+                        ChangeText(errorString);
+                        stage.hide();
+                    } else {
+                        Thread thread = new Thread() {
+                            @Override
+                            public void run() {
+                                try {
+                                    Runtime.getRuntime().exec("cmd /c Execute.bat");
+                                } catch (IOException e1) {
+                                    System.out.println(e1);
+                                }
+                            }
+                        };
+                        thread.start();
+                        thread.join();
+                        stage.hide();
+                    }
+
+
+                } else {
 
                 }
 
@@ -492,36 +553,52 @@ public class Main extends Application implements Runnable{
                 SettingWindows.setResizable(false);
                 SettingWindows.showAndWait();
             } catch (Exception error) {
-
             }
-
 */
         });
 
-        exec.setOnAction(e-> {
-            try{
-                Runtime.getRuntime().exec("cmd /c start Start.bat");
-            }catch (Exception error){
-
-            }
-        });
         Edit.getItems().add(JavaProgram);
         Menu Prefer = new Menu("Preferences");
-        MenuItem Setting = new MenuItem("Setting");
-        Setting.setOnAction(e-> {
-            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Setting.fxml"));
-                try {
-                    Parent root1 = (Parent) fxmlLoader.load();
-                    SettingWindows.initModality(Modality.APPLICATION_MODAL);
-                    SettingWindows.setTitle("Settings");
-                    SettingWindows.setScene(new Scene(root1));
-                    SettingWindows.setResizable(false);
-                    SettingWindows.showAndWait();
-
-                }catch (Exception er){
-
-
+        Menu View = new Menu("View");
+        CheckMenuItem QuickBar = new CheckMenuItem("QuickBar");
+        QuickBar.setSelected(true);
+        CheckMenuItem TerminalEmulator = new CheckMenuItem("Terminal Emulator");
+        QuickBar.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            if (QuickBar.isSelected()) {
+                vb.getChildren().add(1, hb);
+            } else {
+                vb.getChildren().remove(hb);
+            }
+        });
+        TerminalEmulator.setSelected(true);
+        TerminalEmulator.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if (TerminalEmulator.isSelected()) {
+                    bb.setBottom(pane);
+                } else {
+                    bb.setBottom(null);
                 }
+            }
+        });
+
+        View.getItems().addAll(QuickBar, TerminalEmulator);
+        Prefer.getItems().add(View);
+        MenuItem Setting = new MenuItem("Setting");
+        Setting.setOnAction(e -> {
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Setting.fxml"));
+            try {
+                Parent root1 = (Parent) fxmlLoader.load();
+                SettingWindows.initModality(Modality.APPLICATION_MODAL);
+                SettingWindows.setTitle("Settings");
+                SettingWindows.setScene(new Scene(root1));
+                SettingWindows.setResizable(false);
+                SettingWindows.showAndWait();
+
+            } catch (Exception er) {
+
+
+            }
         });
 
 
@@ -586,26 +663,26 @@ public class Main extends Application implements Runnable{
         });
 
         MenuItem Chooser = new MenuItem("Color Picker");
-        Chooser.setOnAction(e-> {
+        Chooser.setOnAction(e -> {
             MakeWindow();
         });
         MenuItem red = new MenuItem("Red");
-        red.setOnAction(e-> {
+        red.setOnAction(e -> {
             color = "red";
             text.setStyle("-fx-text-inner-color: " + color + ";");
         });
         MenuItem blue = new MenuItem("Blue");
-        blue.setOnAction(e-> {
+        blue.setOnAction(e -> {
             color = "blue";
             text.setStyle("-fx-text-inner-color: " + color + ";");
         });
         MenuItem pink = new MenuItem("Pink");
-        pink.setOnAction(e-> {
+        pink.setOnAction(e -> {
             color = "pink";
             text.setStyle("-fx-text-inner-color: " + color + ";");
         });
         MenuItem green = new MenuItem("Green");
-        green.setOnAction(e-> {
+        green.setOnAction(e -> {
             color = "green";
             text.setStyle("-fx-text-inner-color: " + color + ";");
         });
@@ -616,9 +693,9 @@ public class Main extends Application implements Runnable{
         Menu Font = new Menu("Font");
         CheckMenuItem Wrap = new CheckMenuItem("Word Wrap");
         Wrap.setOnAction(event -> {
-            if(Wrap.isSelected()){
+            if (Wrap.isSelected()) {
                 wrapSetting = true;
-            }else {
+            } else {
                 wrapSetting = false;
             }
             text.setWrapText(wrapSetting);
@@ -647,37 +724,34 @@ public class Main extends Application implements Runnable{
         Font.getItems().addAll(f12, f15, f20, f30, f45, custom);
         Edit.getItems().addAll(Font, Wrap, Color);
         Color.getItems().addAll(Chooser);
-        f12.setOnAction(e-> {
+        f12.setOnAction(e -> {
             font = 12;
             text.setFont(new Font(font));
         });
 
-        f15.setOnAction(e-> {
+        f15.setOnAction(e -> {
             font = 15;
             text.setFont(new Font(font));
         });
 
-        f20.setOnAction(e-> {
+        f20.setOnAction(e -> {
             font = 20;
             text.setFont(new Font(font));
         });
 
-        f30.setOnAction(e-> {
+        f30.setOnAction(e -> {
             font = 30;
             text.setFont(new Font(font));
         });
 
-        f45.setOnAction(e-> {
+        f45.setOnAction(e -> {
             font = 45;
             text.setFont(new Font(font));
         });
-
-
-
         MenuItem newFile = new MenuItem("New File");
         MenuItem openFile = new MenuItem("Open File");
         MenuItem ProgrammerWindow = new MenuItem("Programmer Window");
-        ProgrammerWindow.setOnAction(e-> {
+        ProgrammerWindow.setOnAction(e -> {
             Editor editor1 = new Editor(
             );
             editor1.code = text.getText();
@@ -685,7 +759,7 @@ public class Main extends Application implements Runnable{
 
         });
 
-        openFile.setOnAction(e->{
+        openFile.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
 
 
@@ -708,22 +782,21 @@ public class Main extends Application implements Runnable{
             temp = readFile.GiveFiles();
 
 
-
             readFile.CloseFile();
 
         });
 
 
-        newFile.setOnAction(e->{
+        newFile.setOnAction(e -> {
             text.setText("");
             newTab();
         });
         MenuItem saveFile = new MenuItem("Save As");
         MenuItem SaveNorm = new MenuItem("Save File");
-        SaveNorm.setOnAction(e->{
+        SaveNorm.setOnAction(e -> {
             String s = text.getText();
             int f = getTab();
-            if(tabs.getTabs().get(f).getText().startsWith("New File")){
+            if (tabs.getTabs().get(f).getText().startsWith("New File")) {
 
                 FileChooser fileChooser = new FileChooser();
 
@@ -740,15 +813,15 @@ public class Main extends Application implements Runnable{
                 name = file.getAbsolutePath();
                 tabs.getTabs().get(i).setId(file.getAbsolutePath());
                 WriteFile wr = new WriteFile();
-                try{
+                try {
                     wr.OpenFile(text.getText(), file.getAbsolutePath());
                     wr.WriteFile();
                     wr.CloseFile();
-                }catch (Exception eff){
+                } catch (Exception eff) {
 
                 }
                 temp = text.getText();
-            }else {
+            } else {
                 File file = new File(tabs.getTabs().get(f).getId());
                 WriteFile wr = new WriteFile();
                 Path path = file.toPath();
@@ -766,7 +839,7 @@ public class Main extends Application implements Runnable{
                 temp = text.getText();
             }
         });
-        saveFile.setOnAction(e-> {
+        saveFile.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
 
             //Set extension filter
@@ -783,47 +856,86 @@ public class Main extends Application implements Runnable{
             tabs.getTabs().get(tabs.getSelectionModel().getSelectedIndex()).setId(file.getAbsolutePath());
 
             WriteFile wr = new WriteFile();
-            try{
+            try {
                 wr.OpenFile(text.getText(), file.getAbsolutePath());
                 wr.WriteFile();
                 wr.CloseFile();
-            }catch (Exception eff){
+            } catch (Exception eff) {
 
             }
 
         });
         vb.getChildren().addAll(mb);
         vb.getChildren().add(hb);
-
         vb.getChildren().add(root);
         MenuItem exit = new MenuItem("Exit");
         MenuItem FullScreen = new MenuItem("Enable FullScreen");
-        if(window.isFullScreen()){
+        if (window.isFullScreen()) {
             FullScreen.setText("Disable FullScreen");
         }
 
 
-        FullScreen.setOnAction(e-> {
-            if(FullScreen.getText().equals("Enable FullScreen")) {
+        FullScreen.setOnAction(e -> {
+            if (FullScreen.getText().equals("Enable FullScreen")) {
                 FullScreen.setText("Disable FullScreen");
                 window.setFullScreen(true);
-            }else {
+            } else {
                 FullScreen.setText("Enable FullScreen");
                 window.setFullScreen(false);
             }
         });
 
-        exit.setOnAction(e-> {
-           System.exit(0);
+        exit.setOnAction(e -> {
+            System.exit(0);
         });
-        FileMenu.getItems().addAll(openFile,SaveNorm,saveFile,FullScreen,ProgrammerWindow, exit);
+        FileMenu.getItems().addAll(openFile, SaveNorm, saveFile, FullScreen, ProgrammerWindow, exit);
         mb.getMenus().addAll(FileMenu, Edit, Prefer);
 
         bb.setTop(vb);
 
         text.setWrapText(wrapSetting);
         bb.setCenter(text);
+        Pane bottom = new Pane();
+        TextArea textArea = new TextArea();
+        textArea.setMinHeight(20);
+        bottom.getChildren().add(textArea);
+        editor.getStylesheets().add(getClass().getResource("Error.css").toExternalForm());
+        text.setOnDragOver(new EventHandler<DragEvent>() {
+            public void handle(DragEvent e) {
+                Dragboard db = e.getDragboard();
+                if (db.hasFiles()) {
+                    e.acceptTransferModes(TransferMode.COPY);
+                }
+                e.consume();
+            }
+        });
+
+        text.setOnDragDropped(e -> {
+            Dragboard db = e.getDragboard();
+            boolean success = false;
+            if (db.hasFiles()) {
+                System.out.println("Hello");
+                String file = null;
+                success = true;
+                String FileName = null;
+                for (File f : db.getFiles()) {
+                    file = f.getAbsolutePath();
+                    FileName = f.getName();
+                }
+                ReadFile readFile = new ReadFile();
+                readFile.OpenFile(file);
+                readFile.GetFiles();
+                System.out.println(readFile.GiveFiles());
+                text.setText(readFile.GiveFiles());
+                readFile.CloseFile();
+                tabs.getSelectionModel().getSelectedItem().setText(FileName);
+                tabs.getSelectionModel().getSelectedItem().setId(file);
+
+            }
+            e.setDropCompleted(success);
+        });
         window.setScene(editor);
+        MakePane();
 
         GetSetting getSetting = new GetSetting();
         getSetting.OpenFile();
@@ -835,23 +947,22 @@ public class Main extends Application implements Runnable{
         SettingWindow.StringPathJava = val[4];
         SettingWindow.StringPathC = val[5];
         text.setFont(new Font(Integer.parseInt(val[2])));
-        if(val[0].equals("true")){
+        if (val[0].equals("true")) {
             window.setFullScreen(true);
             FullScreen.setText("Disable FullScreen");
 
-        }else {
+        } else {
             FullScreen.setText("Enable FullScreen");
         }
-        text.setStyle("-fx-text-fill: #" + val[3].substring(2,8));
-        window.setOnCloseRequest(close-> {
+        text.setStyle("-fx-text-fill: #" + val[3].substring(2, 8));
+        window.setOnCloseRequest(close -> {
             try {
                 System.out.println(val[1]);
-                if(val[1].equals("true")){
+                if (val[1].equals("true")) {
                     Runtime.getRuntime().exec("cmd /c copy.bat");
-                }else {
+                } else {
                     Runtime.getRuntime().exec("cmd /c end.bat");
                 }
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -860,48 +971,10 @@ public class Main extends Application implements Runnable{
 
         });
 
-        }
-
-    private void makeSplash() throws InterruptedException {
-        Stage SplashStage = new Stage();
-        VBox vBox = new VBox();
-        ImageView imageView = new ImageView(new Image(getClass().getResourceAsStream("Splash.png")));
-        vBox.getChildren().add(imageView);
-
-        SplashStage.setScene(new Scene(vBox,800,509));
-        SplashStage.initStyle(StageStyle.UNDECORATED);
-        SplashStage.show();
-        PauseTransition pause = new PauseTransition(Duration.seconds(2));
-        pause.setOnFinished(event -> {
-            window.show();
-            Region region = ( Region ) text.lookup( ".content" );
-            region.setBackground( new Background( new BackgroundFill( Paint.valueOf("#292f38"), CornerRadii.EMPTY, Insets.EMPTY ) ) );
-
-            // Or you can set it by setStyle()
-            region.setStyle( "-fx-background-color: #292f38" );
-            SplashStage.close();
-        });
-        pause.play();
-
     }
 
-    private void newTab() {
-        tab = new Tab("New File  " + myTab + ".txt");
-        tab.setId(tab.getText());
-        myTab++;
-        if(tabs.getTabs().size()==1){
-            tab.setClosable(false);
-        }
-        tabs.getTabs().add(tab);
-        tabs.getSelectionModel().select(tab);
-
-        if(tabs.getTabs().size()==1){
-            tab.setClosable(false);
-        }else {
-            tab.setClosable(true);
-        }
-
-        text.setDisable(false);
+    private void ChangeText(String errorString) {
+        textArea.setText(errorString);
     }
 
     private int getTab() {
@@ -942,39 +1015,96 @@ public class Main extends Application implements Runnable{
         stage.setScene(scene);
         stage.show();
     }
-    public static String toRGBCode( Color color)
-    {
-        return String.format( "#%02X%02X%02X",
-                (int)( color.getRed() * 255 ),
-                (int)( color.getGreen() * 255 ),
-                (int)( color.getBlue() * 255 ) );
+
+    private void MakePane() {
+        pane = new Pane();
+
+        textArea = new TextArea();
+        textArea.setLayoutY(0);
+        textArea.setLayoutX(0);
+        textArea.setId("TextBox");
+        textArea.setPrefWidth(window.getScene().getWidth());
+        textArea.setEditable(false);
+        textArea.setWrapText(true);
+        Button button = new Button();
+        button.setId("MakeBut");
+        pane.setId("OuterPane");
+
+        ImageView imgView1 = new ImageView(new Image(getClass().getResource("down.png").toExternalForm()));
+        imgView1.setPreserveRatio(true);
+        imgView1.setFitHeight(20);
+
+        ImageView imgView2 = new ImageView(new Image(getClass().getResource("up.png").toExternalForm()));
+        imgView2.setPreserveRatio(true);
+        imgView2.setFitHeight(20);
+        button.setGraphic(imgView1);
+        window.getScene().widthProperty().addListener((observable, oldValue, newValue) -> {
+            textArea.setPrefWidth(newValue.doubleValue());
+        });
+        textArea.widthProperty().addListener((observable, oldValue, newValue) -> {
+            button.setTranslateX(textArea.getWidth() / 2);
+            button.setTranslateY(textArea.getLayoutY());
+        });
+
+        button.setOnAction(ewerwer -> {
+            if (button.getGraphic() == imgView1) {
+                button.setGraphic(imgView2);
+                pane.getChildren().remove(textArea);
+                button.toFront();
+            } else {
+                button.setGraphic(imgView1);
+                pane.getChildren().add(textArea);
+                button.toFront();
+            }
+        });
+        pane.getChildren().add(button);
+        pane.getChildren().add(textArea);
+        bb.setBottom(pane);
+        button.toFront();
+        button.setTranslateX(textArea.getPrefWidth() / 2);
     }
 
+    private void makeSplash() throws InterruptedException {
+        Stage SplashStage = new Stage();
+        VBox vBox = new VBox();
+        ImageView imageView = new ImageView(new Image(getClass().getResourceAsStream("Splash.png")));
+        vBox.getChildren().add(imageView);
 
-    public static void writeText(String s){
-        text.setText(s);
+        SplashStage.setScene(new Scene(vBox, 800, 509));
+        SplashStage.initStyle(StageStyle.UNDECORATED);
+        SplashStage.show();
+        PauseTransition pause = new PauseTransition(Duration.seconds(1));
+        pause.setOnFinished(event -> {
+            window.show();
+            Region region = (Region) text.lookup(".content");
+            region.setBackground(new Background(new BackgroundFill(Paint.valueOf("#292f38"), CornerRadii.EMPTY, Insets.EMPTY)));
+            SplashStage.close();
+        });
+        pause.play();
     }
 
     public static void closeWindow() {
         SettingWindows.close();
     }
 
-    public static void setColor(String color){
-        text.setStyle("-fx-text-fill: " + color);
-
-    }
-    @Override
-    public void run() {
-
-        if(new File(spd + Input.className + ".class").exists()){
-
-            try{
-                System.out.println("Well Done");
-            Runtime.getRuntime().exec("cmd /c start Start.bat");
-            }catch (Exception e){
-
-            }
+    private void newTab() {
+        tab = new Tab("New File  " + myTab + ".txt");
+        tab.setId(tab.getText());
+        myTab++;
+        if (tabs.getTabs().size() == 1) {
+            tab.setClosable(false);
         }
+        tabs.getTabs().add(tab);
+        tabs.getSelectionModel().select(tab);
+
+        if (tabs.getTabs().size() == 1) {
+            tab.setClosable(false);
+        } else {
+            tab.setClosable(true);
+        }
+
+        text.setDisable(false);
     }
+
 }
 
