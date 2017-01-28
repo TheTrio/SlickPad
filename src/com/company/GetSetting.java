@@ -10,16 +10,22 @@ public class GetSetting {
     private int y = 0;
     private String val[] = new String[6];
 
+    private boolean b = false;
     public void OpenFile() {
         file = new File("Settings.data");
+        if(file.exists()){
+            b = true;
+        }
         try {
-            x = new Scanner(file);
+            if(b)
+                x = new Scanner(file);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }
 
     public String[] GiveSetting() {
+        if(b){
         while (x.hasNextLine()) {
             System.out.println(y);
             if (y >= 6)
@@ -31,6 +37,8 @@ public class GetSetting {
         y = 0;
 
         return val;
+        }else return null;
+
     }
 
     public void CloseFile() {

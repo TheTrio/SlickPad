@@ -1,6 +1,7 @@
 package com.company;
 
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -9,9 +10,8 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Paint;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import org.fxmisc.richtext.*;
@@ -63,7 +63,6 @@ public class Editor {
     private String words = "";
 
     public void start() {
-        codeArea.setStyle("-fx-font-size: 15pt;");
         Popup popup = new Popup();
         codeArea.setPopupWindow(popup);
         codeArea.setPopupAlignment(PopupAlignment.SELECTION_BOTTOM_CENTER);
@@ -368,6 +367,7 @@ public class Editor {
         bp.setTop(mb);
         bp.setCenter(vBox);
         Scene scene = new Scene(bp, 760, 400);
+        codeArea.setId("CodeArea");
         scene.getStylesheets().add("java-keywords.css");
 
         primaryStage.setScene(scene);

@@ -38,3 +38,10 @@
     -fx-background-color: #f2f9fc;
 }
 
+#CodeArea .text{
+    -fx-fill: white;
+}
+
+#CodeArea{
+    -fx-background-color: #2B2B2B;
+}

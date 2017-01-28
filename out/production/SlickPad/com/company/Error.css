@@ -14,3 +14,12 @@
 #OuterPane {
     -fx-background-color: black;
 }
+
+.tab-pane .tab:selected
+{
+    -fx-background-color: chartreuse;
+}
+
+.tab-pane .tab {
+    -fx-background-color: #e6e6e6;
+}

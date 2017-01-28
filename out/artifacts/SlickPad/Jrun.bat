@@ -1,3 +1,3 @@
 @echo off
-javac temp.java
-start cb_console_runner.exe java Apples
+"C:\Program Files\Java\jdk1.8.0_112\bin\javac" temp.java
+start cb_console_runner.exe java Main

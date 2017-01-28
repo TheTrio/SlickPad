@@ -1,35 +1,47 @@
-.keyword {
+#CodeArea .text{
+    -fx-fill: black;
+    -fx-font-size: 20px;
+    -rtfx-background-color:aqua;
+}
+
+#CodeArea .text.keyword {
     -fx-fill: purple;
     -fx-font-weight: bold;
 }
-.semicolon {
+
+
+#CodeArea .text.semicolon {
     -fx-font-weight: bold;
 }
-.paren {
+#CodeArea .text.paren {
     -fx-fill: firebrick;
     -fx-font-weight: bold;
 }
-.bracket {
+#CodeArea .text.bracket {
     -fx-fill: darkgreen;
     -fx-font-weight: bold;
 }
-.brace {
+#CodeArea .text.brace {
     -fx-fill: teal;
     -fx-font-weight: bold;
 }
-.string {
+#CodeArea .text.string {
     -fx-fill: red;
 }
 
-.org {
+#CodeArea .text.org {
 	-fx-fill:blue;
 }
 
 
-.comment {
+#CodeArea .text.comment {
     -fx-fill: cadetblue;
 }
 
-.paragraph-box:has-caret {
+/*.paragraph-box:has-caret {
     -fx-background-color: #f2f9fc;
+}*/
+
+#CodeArea {
+    -fx-background-color: ghostwhite;
 }

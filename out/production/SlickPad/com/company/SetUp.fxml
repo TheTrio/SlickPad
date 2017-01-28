@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ImageView pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@bck.jpg" />
+         </image>
+      </ImageView>
+      <Label layoutX="81.0" layoutY="14.0" text="Configure SlickPad for First Use" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="28.0" />
+         </font>
+      </Label>
+      <ImageView fx:id="dark" fitHeight="304.0" fitWidth="463.0" layoutX="24.0" layoutY="82.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@dark.png" />
+         </image>
+         <effect>
+            <DropShadow />
+         </effect>
+      </ImageView>
+      <ImageView fx:id="light" fitHeight="304.0" fitWidth="238.0" layoutX="348.0" layoutY="82.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@white.png" />
+         </image>
+         <effect>
+            <DropShadow />
+         </effect>
+      </ImageView>
+      <Label layoutX="91.0" layoutY="60.0" text="SlickPad Default" textFill="WHITE" />
+      <Label layoutX="416.0" layoutY="60.0" text="Eclipse Light" textFill="WHITE" />
+   </children>
+</Pane>

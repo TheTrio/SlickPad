@@ -27,6 +27,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
+import javax.swing.*;
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -92,7 +93,10 @@ public class Main extends Application {
         makeSplash();
         text = new TextArea();
         text.setOnKeyTyped(e -> {
-            tabs.getSelectionModel().getSelectedItem().setStyle("-fx-background-color : #FF7043");
+            if(!tabs.getSelectionModel().getSelectedItem().getText().startsWith("New File")) {
+                System.out.println("True");
+                //tabs.getSelectionModel().getSelectedItem().setStyle("-fx-background-color : #FF7043");
+            }
         });
         HBox hb = new HBox();
         hb.setPadding(new Insets(5, 0, 0, 10));
@@ -125,6 +129,7 @@ public class Main extends Application {
         saveBut.setOnAction(e -> {
             String s = text.getText();
             int f = getTab();
+            //tabs.getSelectionModel().getSelectedItem().st
             if (tabs.getTabs().get(f).getText().startsWith("New File")) {
 
                 FileChooser fileChooser = new FileChooser();
@@ -146,8 +151,7 @@ public class Main extends Application {
                     wr.OpenFile(text.getText(), file.getAbsolutePath());
                     wr.WriteFile();
                     wr.CloseFile();
-                } catch (Exception eff) {
-
+                } catch (Exception eff){
                 }
                 temp = text.getText();
             } else {
@@ -281,6 +285,7 @@ public class Main extends Application {
         runBut.setOnAction(e -> {
 
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("RunChooser.fxml"));
+            ControllerForRun.m = this;
             if (tabs.getTabs().get(tabs.getSelectionModel().getSelectedIndex()).getId().contains("New File")) {
                 bool_notify = true;
                 myText = text.getText();
@@ -456,7 +461,7 @@ public class Main extends Application {
 
         Menu Edit = new Menu("Edit");
         Menu JavaProgram = new Menu("Java Program");
-        MenuItem run = new MenuItem("Compile");
+        MenuItem run = new MenuItem("Compile And Run");
 
         JavaProgram.getItems().addAll(run);
         run.setOnAction(e -> {
@@ -530,7 +535,7 @@ public class Main extends Application {
 
 
                 } else {
-
+                    JOptionPane.showMessageDialog(null, "Please Save Your File first");
                 }
 
             } catch (Exception error) {
@@ -797,9 +802,8 @@ public class Main extends Application {
             String s = text.getText();
             int f = getTab();
             if (tabs.getTabs().get(f).getText().startsWith("New File")) {
-
                 FileChooser fileChooser = new FileChooser();
-
+                tabs.getSelectionModel().getSelectedItem().setStyle("-fx-background-color: green");
                 //Set extension filter
                 FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("All Files(*.*)", "*.*");
                 fileChooser.getExtensionFilters().add(extFilter);
@@ -822,6 +826,7 @@ public class Main extends Application {
                 }
                 temp = text.getText();
             } else {
+                tabs.getSelectionModel().getSelectedItem().setStyle("-fx-background-color: green");
                 File file = new File(tabs.getTabs().get(f).getId());
                 WriteFile wr = new WriteFile();
                 Path path = file.toPath();
@@ -973,7 +978,7 @@ public class Main extends Application {
 
     }
 
-    private void ChangeText(String errorString) {
+    public void ChangeText(String errorString) {
         textArea.setText(errorString);
     }
 

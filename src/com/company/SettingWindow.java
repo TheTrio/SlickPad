@@ -113,11 +113,14 @@ public class SettingWindow {
     private void getData() {
         GetSetting getSetting = new GetSetting();
         getSetting.OpenFile();
-        String values[] = getSetting.GiveSetting();
-        getSetting.CloseFile();
+        if(getSetting.GiveSetting()==null){
 
+        }else {
+            String values[] = getSetting.GiveSetting();
+            getSetting.CloseFile();
+            names = values;
+        }
 
-        names = values;
     }
 
     public void GiveData() {

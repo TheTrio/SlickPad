@@ -1,2 +1,2 @@
 @echo off
-"null/bin/javac" "C:\Users\shashwat\Desktop\Main.java"
+"null/bin/javac" "E:\Projects\SlickPad\out\artifacts\SlickPad\temp.java"
