@@ -7,6 +7,10 @@ SlickPad is a basic text editor which can be used for light programming. It supp
 </p>
 [![Slickpad.png](https://s17.postimg.org/z41nbjk7z/Slickpad.png)](https://postimg.org/image/i3ir2v76j/)
 <hr/>
+<h2>Download SlickPad</h2>
+<p>
+You can download SlickPad for free <a href="http://www.mediafire.com/file/a2o97g67y72yy6p/SlickPad.rar">here</a> It is a rar, and contains two files. Extract the rar to the Desktop and run the exe. Then install SlickPad. Please note that SlickPad is installed in ProgramFiles/TheTrio/SlickPad.  Before worrying about it not installing, go and check that directory first. If not found, then open an issue on this Page
+</p>
 <h2>The Thought</h2>
 <p>
 The One and only reason to make SlickPad was to get rid of the old, boring text editor from Windows - <b>Notepad</b>. Though there were many alternatives, I wanted to do things by Myself, that was, to code an editor and to use it for my needs. Though SlickPad may not be the best, it makes me proud to say, that it certainly with this v2.8.0 ,surpassed Notepad in each aspect.
@@ -45,7 +49,6 @@ For Your Convenience, TheTrio Has Put all the necessary files in the Jar Of Slic
 <li>Run SlickPad.jar</li>
 <li>If Windows is not recognising it, or Your archive software opens it, Press Shift on windows explorer, and choose start CMD Window here. In there type "java -jar SlickPad.jar" without the quotes. If It runs good. If not, Then Click a Screenshot of the Window and report in issues</li>
 </ol>
-<h3>Note : We are aware of the Problems user face when running SlickPad. Therefore with Release 3.0.0 of SlickPad a .exe file would be given to do all this confusing work. Please stay with us during this time.</h3>
 <hr />
 <h2>The Future</h2>
 <p>
