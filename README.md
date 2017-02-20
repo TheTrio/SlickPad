@@ -9,7 +9,7 @@ SlickPad is a basic text editor which can be used for light programming. It supp
 <hr/>
 <h2>Download SlickPad</h2>
 <p>
-You can download SlickPad for free <a href="http://www.mediafire.com/file/a2o97g67y72yy6p/SlickPad.rar">here</a> It is a rar, and contains two files. Extract the rar to the Desktop and run the exe. Then install SlickPad. Please note that SlickPad is installed in ProgramFiles/TheTrio/SlickPad.  Before worrying about it not installing, go and check that directory first. If not found, then open an issue on this Page
+You can download SlickPad for free <a href="https://www.dropbox.com/s/u4jnudw2lpvw43m/SlickPadv2-9-3.rar?dl=0">here</a> It is a rar, and contains two files. Extract the rar to the Desktop and run the exe. Then install SlickPad. Please note that SlickPad is installed in ProgramFiles/TheTrio/SlickPad.  Before worrying about it not installing, go and check that directory first. If not found, then open an issue on this Page
 </p>
 <h2>The Thought</h2>
 <p>
@@ -34,7 +34,7 @@ For Your Convenience, TheTrio Has Put all the necessary files in the Jar Of Slic
 <ol>
 <li>Install Java JRE 8u110 or above</li>
 <li>Make sure your path is correct. To check, Open Cmd and Type "java" without the quotes. If Some text pops up, You'r probably good to go</li>
-<li>Download the Latest Version of SlickPad from <a href="http://www.mediafire.com/file/a2o97g67y72yy6p/SlickPad.rar">here</a></li>
+<li>Download the Latest Version of SlickPad from <a href="https://www.dropbox.com/s/u4jnudw2lpvw43m/SlickPadv2-9-3.rar?dl=0">here</a></li>
 <li>Extract the rar File</li>
 <li>Run the file with the .exe extension</li>
 <li>Install SlickPad with the installer.</li>
