@@ -34,11 +34,12 @@ For Your Convenience, TheTrio Has Put all the necessary files in the Jar Of Slic
 <ol>
 <li>Install Java JRE 8u110 or above</li>
 <li>Make sure your path is correct. To check, Open Cmd and Type "java" without the quotes. If Some text pops up, You'r probably good to go</li>
-<li>Download the Latest Version of SlickPad</li>
-<li>Extract the zip File</li>
-<li>Go to \out\artifacts\SlickPadv2_6_0</li>
-<li>Run SlickPad.jar</li>
-<li>If Windows is not recognising it, or Your archive software opens it, Press Shift on windows explorer, and choose start CMD Window here. In there type "java -jar SlickPad.jar" without the quotes. If It runs good. If not, Then Click a Screenshot of the Window and report in issues</li>
+<li>Download the Latest Version of SlickPad from <a href="http://www.mediafire.com/file/a2o97g67y72yy6p/SlickPad.rar">here</a></li>
+<li>Extract the rar File</li>
+<li>Run the file with the .exe extension</li>
+<li>Install SlickPad with the installer.</li>
+<li>Go to documents/TheTrio/SlickPad, and double click on the SlickPad exe.</li>
+<li>Have fun</li>
 </ol>
 <hr />
 <h2>The Future</h2>
