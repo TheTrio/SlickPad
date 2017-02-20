@@ -16,17 +16,8 @@ You can download SlickPad for free <a href="http://www.mediafire.com/file/a2o97g
 The One and only reason to make SlickPad was to get rid of the old, boring text editor from Windows - <b>Notepad</b>. Though there were many alternatives, I wanted to do things by Myself, that was, to code an editor and to use it for my needs. Though SlickPad may not be the best, it makes me proud to say, that it certainly with this v2.8.0 ,surpassed Notepad in each aspect.
 </p>
 <hr/>
-<h2>Credits</h2>
-<p>
-To start of I'd like to thank the people from whom I learnt java from :-
-<ul>
-<li><h3><a href="https://thenewboston.com/">Bucky Roberts</a></h3></li>
-<li><h3><a href="http://www.genuinecoder.com/">Genuine Coder</a></h3></li>
-</ul>
-
-Apart from them, In SlickPad, I have made use of various libraries build by many helping people out there. 
-It's not possible to thank everyone, so I will just name the library and the link to their 
-Website.
+<h2>External Libraries</h2>
+In SlickPad, I have made use of various libraries, build by many people out there. It's not possible to thank everyone, so I will just name the library and the link to its Website.
 <ul>
 <li><a href="http://fxexperience.com/controlsfx/">ControlsFx - 8.4.0.12</a></li>
 <li><a href="http://jfoenix.com/">JFoenix</a></li>
