@@ -23,3 +23,24 @@
 .tab-pane .tab {
     -fx-background-color: #e6e6e6;
 }
+
+#TextMain {
+    -fx-background-color: white;
+}
+
+#TextMain .scroll-pane {
+    -fx-background-color: black;
+}
+
+#TextMain .scroll-pane .viewport{
+    -fx-background-color: white;
+}
+
+
+#TextMain .scroll-pane .content{
+    -fx-background-color: #292f38;
+}
+
+#Split *.split-pane-divider{
+    -fx-pref-width: 10px;
+}

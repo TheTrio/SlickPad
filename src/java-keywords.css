@@ -1,47 +1,53 @@
 #CodeArea .text{
-    -fx-fill: black;
+    -fx-fill: white;
     -fx-font-size: 20px;
-    -rtfx-background-color:aqua;
 }
 
+#CodeArea .text.num{
+    -fx-fill: aqua;
+    -fx-font-weight: bold;
+}
+
+
 #CodeArea .text.keyword {
-    -fx-fill: purple;
+    -fx-fill: #AF5DCD;
     -fx-font-weight: bold;
 }
 
 
 #CodeArea .text.semicolon {
     -fx-font-weight: bold;
+    -fx-fill: #AF5DCD;
 }
 #CodeArea .text.paren {
-    -fx-fill: firebrick;
-    -fx-font-weight: bold;
+    -fx-fill: white;
 }
 #CodeArea .text.bracket {
-    -fx-fill: darkgreen;
+    -fx-fill: white;
     -fx-font-weight: bold;
 }
 #CodeArea .text.brace {
-    -fx-fill: teal;
+    -fx-fill: white;
     -fx-font-weight: bold;
 }
 #CodeArea .text.string {
-    -fx-fill: red;
+    -fx-fill: #98C379;
 }
-
-#CodeArea .text.org {
-	-fx-fill:blue;
+#CodeArea .text.charac {
+    -fx-fill: #EC407A;
 }
-
+#CodeArea {
+    -fx-background-color:#282C34;
+}
 
 #CodeArea .text.comment {
-    -fx-fill: cadetblue;
+     -fx-fill: #577165;
+ }
+
+#CodeArea .text.const{
+    -fx-fill : #E5C07B;
 }
 
-/*.paragraph-box:has-caret {
-    -fx-background-color: #f2f9fc;
-}*/
-
-#CodeArea {
-    -fx-background-color: ghostwhite;
+#CodeArea .caret{
+    -fx-stroke: red;
 }

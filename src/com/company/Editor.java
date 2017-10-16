@@ -3,6 +3,8 @@ package com.company;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
@@ -18,6 +20,7 @@ import org.fxmisc.richtext.*;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.function.IntFunction;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,8 +38,8 @@ public class Editor {
             "new", "package", "private", "protected", "public",
             "return", "short", "static", "strictfp", "super",
             "switch", "synchronized", "this", "throw", "throws",
-            "transient", "try", "void", "volatile", "while", "System",
-            "BufferedReader", "InputStreamReader"
+            "transient", "try", "void", "volatile", "while", "String"
+
     };
 
 
@@ -47,15 +50,22 @@ public class Editor {
     private static final String SEMICOLON_PATTERN = "\\;";
     private static final String STRING_PATTERN = "\"([^\"\\\\]|\\\\.)*\"";
     private static final String COMMENT_PATTERN = "//[^\n]*" + "|" + "/\\*(.|\\R)*?\\*/";
+    private static final String NUMBER_PATTERN = "\\d";
+    private static final String CONST_PATTERN  = "\\b[A-Z].*?\\b";
+    private static final String CHARACTER_PATTERN = "'.'";
 
     private static final Pattern PATTERN = Pattern.compile(
             "(?<KEYWORD>" + KEYWORD_PATTERN + ")"
+                    + "|(?<NUMBER>" + NUMBER_PATTERN + ")"
+                    + "|(?<CHAR>" + CHARACTER_PATTERN + ")"
+                    + "|(?<CONST>" + CONST_PATTERN + ")"
                     + "|(?<PAREN>" + PAREN_PATTERN + ")"
                     + "|(?<BRACE>" + BRACE_PATTERN + ")"
                     + "|(?<BRACKET>" + BRACKET_PATTERN + ")"
                     + "|(?<SEMICOLON>" + SEMICOLON_PATTERN + ")"
                     + "|(?<STRING>" + STRING_PATTERN + ")"
                     + "|(?<COMMENT>" + COMMENT_PATTERN + ")"
+
     );
     private String sampleCode = "";
     private String string;
@@ -63,10 +73,16 @@ public class Editor {
     private String words = "";
 
     public void start() {
-        Popup popup = new Popup();
-        codeArea.setPopupWindow(popup);
-        codeArea.setPopupAlignment(PopupAlignment.SELECTION_BOTTOM_CENTER);
-        codeArea.setPopupAnchorOffset(new Point2D(0, 0));
+        IntFunction<Node> numberFactory = LineNumberFactory.get(codeArea);
+        IntFunction<Node> arrowFactory = new ArrowFactory(codeArea.currentParagraphProperty());
+        IntFunction<Node> graphicFactory = line -> {
+            HBox hbox = new HBox(
+                    numberFactory.apply(line),
+                    arrowFactory.apply(line));
+            hbox.setAlignment(Pos.CENTER_LEFT);
+            return hbox;
+        };
+        codeArea.setParagraphGraphicFactory(graphicFactory);
         VBox vBox = new VBox(codeArea);
         VBox.setVgrow(codeArea, Priority.ALWAYS);
         codeArea.setOnKeyTyped(e -> {
@@ -75,19 +91,24 @@ public class Editor {
                 codeArea.moveTo(codeArea.getCaretPosition() - 1);
                 e.consume();
             }
-            if (e.getCharacter().equals("(")) {
+            else if(e.getCharacter().equals("<")){
+                codeArea.insertText(codeArea.getCaretPosition(), ">");
+                codeArea.moveTo(codeArea.getCaretPosition() - 1);
+                e.consume();
+            }
+            else if (e.getCharacter().equals("(")) {
                 codeArea.insertText(codeArea.getCaretPosition(), ")");
                 codeArea.moveTo(codeArea.getCaretPosition() - 1);
                 e.consume();
             }
 
-            if (e.getCharacter().equals("{")) {
+            else if (e.getCharacter().equals("{")) {
                 codeArea.insertText(codeArea.getCaretPosition(), "}");
                 codeArea.moveTo(codeArea.getCaretPosition() - 1);
 
                 e.consume();
             }
-            if (e.getCharacter().equals("[")) {
+            else if (e.getCharacter().equals("[")) {
                 codeArea.insertText(codeArea.getCaretPosition(), "]");
                 codeArea.moveTo(codeArea.getCaretPosition() - 1);
                 e.consume();
@@ -144,25 +165,47 @@ public class Editor {
                     TwoDimensional.Position pos = codeArea.offsetToPosition(offset, null);
 
                     if (codeArea.getParagraphs().get(codeArea.getCurrentParagraph()).getText().contains("{}")) {
-                        if (codeArea.getParagraphs().get(codeArea.getCurrentParagraph()).getText().charAt(pos.getMinor() - 1) == '}') {
-                            System.out.println(codeArea.getCaretPosition());
-                            codeArea.replaceText(codeArea.getCaretPosition() - 2, codeArea.getCaretPosition(), "");
-                            e.consume();
+                        if (codeArea.getParagraphs().get(codeArea.getCurrentParagraph()).getText().charAt(pos.getMinor() - 1) == '{') {
+                            if(codeArea.getParagraphs().get(codeArea.getCurrentParagraph()).getText().charAt(pos.getMinor()) == '}') {
+                                System.out.println("Trying new");
+                                codeArea.replaceText(codeArea.getCaretPosition() - 1, codeArea.getCaretPosition()+1, "");
+                                e.consume();
+                            }
                         }
                     }
                     if (codeArea.getParagraphs().get(codeArea.getCurrentParagraph()).getText().contains("[]")) {
-                        if (codeArea.getParagraphs().get(codeArea.getCurrentParagraph()).getText().charAt(pos.getMinor() - 1) == ']') {
-                            System.out.println(codeArea.getCaretPosition());
-                            codeArea.replaceText(codeArea.getCaretPosition() - 2, codeArea.getCaretPosition(), "");
-                            e.consume();
+                        if (codeArea.getParagraphs().get(codeArea.getCurrentParagraph()).getText().charAt(pos.getMinor() - 1) == '[') {
+                            if(codeArea.getParagraphs().get(codeArea.getCurrentParagraph()).getText().charAt(pos.getMinor()) == ']') {
+                                System.out.println("Trying new");
+                                codeArea.replaceText(codeArea.getCaretPosition() - 1, codeArea.getCaretPosition()+1, "");
+                                e.consume();
+                            }
                         }
                     }
                     if (codeArea.getParagraphs().get(codeArea.getCurrentParagraph()).getText().contains("()")) {
-                        if (codeArea.getParagraphs().get(codeArea.getCurrentParagraph()).getText().charAt(pos.getMinor() - 1) == ')') {
-                            System.out.println(codeArea.getCaretPosition());
-                            codeArea.replaceText(codeArea.getCaretPosition() - 2, codeArea.getCaretPosition(), "");
-                            e.consume();
+                        if (codeArea.getParagraphs().get(codeArea.getCurrentParagraph()).getText().charAt(pos.getMinor() - 1) == '(') {
+                            if(codeArea.getParagraphs().get(codeArea.getCurrentParagraph()).getText().charAt(pos.getMinor()) == ')') {
+                                System.out.println("Trying new");
+                                codeArea.replaceText(codeArea.getCaretPosition() - 1, codeArea.getCaretPosition()+1, "");
+                                e.consume();
+                            }
                         }
+                    }
+
+                    if(codeArea.getParagraph(codeArea.getCurrentParagraph()).getText().trim().isEmpty()){
+                        codeArea.replaceText(codeArea.getCaretPosition()-codeArea.getParagraph(codeArea.getCurrentParagraph()).getText().length(), codeArea.getCaretPosition(), "");
+                    }
+
+                    if(codeArea.getParagraph(codeArea.getCurrentParagraph()).getText().endsWith(" ")){
+                        String text = codeArea.getParagraph(codeArea.getCurrentParagraph()).getText();
+                        int ch = 0;
+                        for(int i=text.length()-1;i>=0;i--){
+                            if(text.charAt(i)!=' '){
+                                break;
+                            }else
+                                ch++;
+                        }
+                        codeArea.replaceText(codeArea.getCaretPosition()-ch+1, codeArea.getCaretPosition(), "");
                     }
 
                 }
@@ -170,6 +213,10 @@ public class Editor {
                     String s = "    ";
                     codeArea.insertText(codeArea.getCaretPosition(), s);
                     e.consume();
+                }
+
+                if(e.getCode()==KeyCode.A && e.isControlDown() && e.isShiftDown()){
+                    codeArea.selectLine();
                 }
 
                 if (e.getCode() == KeyCode.SPACE && e.isControlDown()) {
@@ -183,15 +230,32 @@ public class Editor {
                     String textString = "";
                     String codeAreaText = codeArea.getParagraph(codeArea.getCurrentParagraph()).getText();
                     boolean doSomething = true;
-                    while (codeAreaText.charAt(caret) != ' ') {
-                        textString += codeAreaText.charAt(caret);
-                        caret--;
-                        end--;
+                    try {
+                        while (codeAreaText.charAt(caret) != ' ') {
+                            textString += codeAreaText.charAt(caret);
+                            caret--;
+                            end--;
+                        }
+                    }catch (StringIndexOutOfBoundsException erradsk){
+                        caret++;
                     }
                     textString = new StringBuilder(textString).reverse().toString();
                     System.out.println(codeArea.getText().substring(end, position));
                     System.out.println("Start was " + end + " and end was " + position);
-                    if (textString.startsWith("BufferedRe")) {
+                    if(textString.equals("class")){
+                        codeArea.replaceText(end, position,String.join("\n",
+                                "class Apples{",
+                                "    public static void main(String args[]){",
+                                "       //Type Your Code Here",
+                                "    }",
+                                "}"
+                        ));
+                    }
+                    else if(textString.equals("main")){
+                        codeArea.replaceText(end, position, String.join("\n", "public static void main(String args[]){",
+                                                                              "\n    }"
+                                ));
+                    }else if (textString.startsWith("BufferedRe")) {
                         codeArea.replaceText(end, position, "BufferedReader read = new BufferedReader(input);");
                     } else if (textString.startsWith("InputStr")) {
                         codeArea.replaceText(end, position, "InputStreamReader input = new InputStreamReader(System.in);");
@@ -207,7 +271,6 @@ public class Editor {
                     } else if (textString.startsWith("for")) {
                         Pattern pattern = Pattern.compile("\\d*,\\d*,\\d*");
                         Matcher matcher = pattern.matcher(textString);
-
                         if (matcher.find()) {
                             String s = matcher.group(0);
                             System.out.println(s);
@@ -259,47 +322,7 @@ public class Editor {
 
 
                 }
-                if (e.getCode() == KeyCode.ENTER && e.isControlDown()) {
-                    for (String commonString : KEYWORDS) {
-                        String words = codeArea.getSelectedText();
-                        if (commonString.contains(words)) {
-                            System.out.println(words);
-                            if (words == null || words.equals(" ") || words.matches("\\s+") || codeArea.getSelectedText().isEmpty()) {
-                                f = 0;
-                                System.out.println("Word is null");
-                            } else {
-                                f++;
-                                words = "";
-                                Button button = new Button(commonString);
-                                button.setOnAction(err -> {
-                                    System.out.println(codeArea.getCaretPosition());
-                                    codeArea.replaceText(codeArea.getSelection().getStart(), codeArea.getSelection().getEnd(), commonString);
-                                    vBox1.getChildren().removeAll(button);
-                                    popup.getContent().removeAll(vBox1);
-                                    popup.hide();
-                                });
-                                vBox1.getChildren().add(button);
-                            }
-                        } else {
-
-                        }
-                    }
-
-                    if (f == 0) {
-                        Button bb = new Button("No Result");
-                        bb.setOnAction(errr -> {
-                            popup.getContent().remove(vBox1);
-                            vBox1.getChildren().remove(bb);
-                            popup.hide();
-                        });
-                        vBox1.getChildren().add(bb);
-
-
-                    }
-
-                    popup.getContent().add(vBox1);
-                    popup.show(primaryStage);
-                } else if (e.getCode() == KeyCode.ENTER) {
+                 if (e.getCode() == KeyCode.ENTER) {
                     int offset = codeArea.getCaretPosition();
                     TwoDimensional.Position pos = codeArea.offsetToPosition(offset, null);
                     int paralast = pos.getMajor();
@@ -347,7 +370,6 @@ public class Editor {
             }
         });
 
-        codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
         codeArea.richChanges()
                 .filter(ch -> !ch.getInserted().equals(ch.getRemoved()))
                 .subscribe(change -> {
@@ -383,7 +405,7 @@ public class Editor {
                     "class Apples{",
                     "    public static void main(String args[]){",
                     "       //Type Your Code Here",
-                    "   }",
+                    "    }",
                     "}"
             );
     }
@@ -400,6 +422,9 @@ public class Editor {
         while (matcher.find()) {
             String styleClass =
                     matcher.group("KEYWORD") != null ? "keyword" :
+                            matcher.group("NUMBER") !=null ? "num" :
+                                    matcher.group("CHAR") !=null ? "charac" :
+                                    matcher.group("CONST") !=null ? "const" :
                             matcher.group("PAREN") != null ? "paren" :
                                     matcher.group("BRACE") != null ? "brace" :
                                             matcher.group("BRACKET") != null ? "bracket" :

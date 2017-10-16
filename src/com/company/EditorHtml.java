@@ -81,10 +81,7 @@ public class EditorHtml{
     private String string;
     int i=0,j=0;
     public void start() {
-        Popup popup = new Popup();
-        codeArea.setPopupWindow(popup);
-        codeArea.setPopupAlignment(PopupAlignment.SELECTION_BOTTOM_CENTER);
-        codeArea.setPopupAnchorOffset(new Point2D(0, 0));
+        codeArea.setId("CodeArea");
         VBox vBox = new VBox(codeArea);
         VBox.setVgrow(codeArea, Priority.ALWAYS);
         codeArea.setStyle("-fx-font-size: 15pt;");
@@ -125,48 +122,7 @@ int f = 0;
             String spaces = "";
             @Override
             public void handle(KeyEvent e) {
-
-                if(e.getCode()==KeyCode.ENTER && e.isControlDown()){
-                    for(String commonString : KEYWORDS){
-                        String words = codeArea.getSelectedText();
-                        if(commonString.toLowerCase().contains(words.toLowerCase())){
-                            System.out.println(words);
-                            if(words==null || words.equals(" ") || words.matches("\\s+") || codeArea.getSelectedText().isEmpty()){
-                                f = 0;
-                                System.out.println("Word is null");
-                            }else {
-                                f++;
-                                words = "";
-                                Button button = new Button(commonString);
-                                button.setOnAction(err->{
-                                    codeArea.replaceText(codeArea.getSelection().getStart(), codeArea.getSelection().getEnd(), commonString);
-                                    popup.getContent().removeAll(vBox1);
-                                    vBox1.getChildren().clear();
-                                    popup.hide();
-                                });
-                                vBox1.getChildren().add(button);
-                            }
-                        }else {
-
-                        }
-                    }
-
-                    if(f==0){
-                        Button bb = new Button("No Result");
-                        bb.setOnAction(errr-> {
-                            popup.getContent().remove(vBox1);
-                            vBox1.getChildren().remove(bb);
-                            popup.hide();
-                        });
-                        vBox1.getChildren().add(bb);
-
-
-
-                    }
-                    e.consume();
-                    popup.getContent().add(vBox1);
-                    popup.show(primaryStage);
-                }else if(e.getCode()==KeyCode.ENTER){
+                 if(e.getCode()==KeyCode.ENTER){
                     int offset = codeArea.getCaretPosition();
                     TwoDimensional.Position pos = codeArea.offsetToPosition(offset, null);
                     int paralast = pos.getMajor();
@@ -184,32 +140,29 @@ int f = 0;
 
 
                 }
-                if(e.getCode()==KeyCode.BACK_SPACE){
-                    if(popup.isShowing()){
-                        popup.hide();
-                    }
+                if(e.getCode()==KeyCode.BACK_SPACE) {
                     int offset = codeArea.getCaretPosition();
                     TwoDimensional.Position pos = codeArea.offsetToPosition(offset, null);
 
 
-                    if(codeArea.getParagraphs().get(codeArea.getCurrentParagraph()).getText().contains("{}")) {
-                        if (codeArea.getParagraphs().get(codeArea.getCurrentParagraph()).getText().charAt(pos.getMinor()-1) == '}'){
+                    if (codeArea.getParagraphs().get(codeArea.getCurrentParagraph()).getText().contains("{}")) {
+                        if (codeArea.getParagraphs().get(codeArea.getCurrentParagraph()).getText().charAt(pos.getMinor() - 1) == '}') {
                             System.out.println(codeArea.getCaretPosition());
-                            codeArea.replaceText(codeArea.getCaretPosition()-2, codeArea.getCaretPosition(), "");
+                            codeArea.replaceText(codeArea.getCaretPosition() - 2, codeArea.getCaretPosition(), "");
                             e.consume();
                         }
                     }
-                    if(codeArea.getParagraphs().get(codeArea.getCurrentParagraph()).getText().contains("[]")) {
-                        if (codeArea.getParagraphs().get(codeArea.getCurrentParagraph()).getText().charAt(pos.getMinor()-1) == ']'){
+                    if (codeArea.getParagraphs().get(codeArea.getCurrentParagraph()).getText().contains("[]")) {
+                        if (codeArea.getParagraphs().get(codeArea.getCurrentParagraph()).getText().charAt(pos.getMinor() - 1) == ']') {
                             System.out.println(codeArea.getCaretPosition());
-                            codeArea.replaceText(codeArea.getCaretPosition()-2, codeArea.getCaretPosition(), "");
+                            codeArea.replaceText(codeArea.getCaretPosition() - 2, codeArea.getCaretPosition(), "");
                             e.consume();
                         }
                     }
-                    if(codeArea.getParagraphs().get(codeArea.getCurrentParagraph()).getText().contains("()")) {
-                        if (codeArea.getParagraphs().get(codeArea.getCurrentParagraph()).getText().charAt(pos.getMinor()-1) == ')'){
+                    if (codeArea.getParagraphs().get(codeArea.getCurrentParagraph()).getText().contains("()")) {
+                        if (codeArea.getParagraphs().get(codeArea.getCurrentParagraph()).getText().charAt(pos.getMinor() - 1) == ')') {
                             System.out.println(codeArea.getCaretPosition());
-                            codeArea.replaceText(codeArea.getCaretPosition()-2, codeArea.getCaretPosition(), "");
+                            codeArea.replaceText(codeArea.getCaretPosition() - 2, codeArea.getCaretPosition(), "");
                             e.consume();
                         }
                     }

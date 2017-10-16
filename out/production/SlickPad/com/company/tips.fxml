@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXTextArea?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="315.0" prefWidth="520.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <JFXTextArea fx:id="text" editable="false" focusColor="#030817" labelFloat="true" layoutX="30.0" layoutY="23.0" maxWidth="467.0" minWidth="458.0" prefHeight="63.0" prefWidth="461.0" />
+      <ImageView fx:id="img" fitHeight="179.0" fitWidth="461.0" layoutX="30.0" layoutY="110.0" pickOnBounds="true" preserveRatio="true" />
+   </children>
+</Pane>

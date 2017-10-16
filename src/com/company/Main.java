@@ -8,6 +8,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -16,11 +17,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -59,13 +62,14 @@ public class Main extends Application {
     private Pane pane;
     private BorderPane bb;
     private TextArea textArea;
+    private SplitPane splitPane;
 
 
     public static void main(String args[]) {
         if (System.getProperty("os.name").startsWith("Windows")) {
             launch(args);
         } else {
-            System.out.println("Sorry. SlickPad v3.0.0 is only compatible with Windows. Visit the website for more");
+            System.out.println("Sorry. SlickPad v3.0.0 is only compatible with Windows. Visit the website(https://www.github.com/TheTrio/SlickPad) for more");
         }
     }
 
@@ -87,6 +91,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        textArea = new TextArea();
         SettingWindows = new Stage();
         MenuBar mb = new MenuBar();
         window = primaryStage;
@@ -580,9 +585,9 @@ public class Main extends Application {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 if (TerminalEmulator.isSelected()) {
-                    bb.setBottom(pane);
+                    splitPane.getItems().add(1,textArea);
                 } else {
-                    bb.setBottom(null);
+                    splitPane.getItems().remove(textArea);
                 }
             }
         });
@@ -826,7 +831,7 @@ public class Main extends Application {
                 }
                 temp = text.getText();
             } else {
-                tabs.getSelectionModel().getSelectedItem().setStyle("-fx-background-color: green");
+                //tabs.getSelectionModel().getSelectedItem().setStyle("-fx-background-color: green");
                 File file = new File(tabs.getTabs().get(f).getId());
                 WriteFile wr = new WriteFile();
                 Path path = file.toPath();
@@ -899,11 +904,16 @@ public class Main extends Application {
         bb.setTop(vb);
 
         text.setWrapText(wrapSetting);
-        bb.setCenter(text);
-        Pane bottom = new Pane();
-        TextArea textArea = new TextArea();
-        textArea.setMinHeight(20);
-        bottom.getChildren().add(textArea);
+        splitPane = new SplitPane();
+        splitPane.setId("Split");
+        splitPane.getItems().addAll(text, textArea);
+        splitPane.setOrientation(Orientation.VERTICAL);
+        bb.setCenter(splitPane);
+        text.setId("TextMain");
+
+        //bottom.getChildren().add(textArea);
+
+        //bottom.setStyle("-fx-background-color: rgba(53,89,119,0.4);";
         editor.getStylesheets().add(getClass().getResource("Error.css").toExternalForm());
         text.setOnDragOver(new EventHandler<DragEvent>() {
             public void handle(DragEvent e) {
@@ -939,7 +949,36 @@ public class Main extends Application {
             }
             e.setDropCompleted(success);
         });
+        //editor.setFill(javafx.scene.paint.Color.TRANSPARENT);
+        editor.setOnKeyPressed(e->{
+
+            if(e.getCode()== KeyCode.ALT){
+                if(vb.getChildren().contains(mb)){
+                    vb.getChildren().remove(mb);
+                }else
+                    vb.getChildren().add(0, mb);
+            }else if(e.getCode()==KeyCode.G && e.isControlDown()){
+                System.out.println("Got Moving");
+                if(vb.getChildren().contains(root)){
+                    vb.getChildren().remove(root);
+                }else {
+                    vb.getChildren().add(vb.getChildren().size(), root);
+                }
+            }else if(e.getCode()==KeyCode.I && e.isControlDown()){
+                System.out.println("Got here");
+
+                    font = font + 15;
+                text.setFont(new Font(font));
+            }else if(e.getCode()==KeyCode.D && e.isControlDown()){
+                if(font>=5)
+                    font = font - 15;
+                else
+                    font = 5;
+                text.setFont(new Font(font));
+            }
+        });
         window.setScene(editor);
+
         MakePane();
 
         GetSetting getSetting = new GetSetting();
@@ -1024,49 +1063,17 @@ public class Main extends Application {
     private void MakePane() {
         pane = new Pane();
 
-        textArea = new TextArea();
-        textArea.setLayoutY(0);
-        textArea.setLayoutX(0);
         textArea.setId("TextBox");
         textArea.setPrefWidth(window.getScene().getWidth());
         textArea.setEditable(false);
         textArea.setWrapText(true);
-        Button button = new Button();
-        button.setId("MakeBut");
-        pane.setId("OuterPane");
 
-        ImageView imgView1 = new ImageView(new Image(getClass().getResource("down.png").toExternalForm()));
-        imgView1.setPreserveRatio(true);
-        imgView1.setFitHeight(20);
-
-        ImageView imgView2 = new ImageView(new Image(getClass().getResource("up.png").toExternalForm()));
-        imgView2.setPreserveRatio(true);
-        imgView2.setFitHeight(20);
-        button.setGraphic(imgView1);
-        window.getScene().widthProperty().addListener((observable, oldValue, newValue) -> {
+       /* window.getScene().widthProperty().addListener((observable, oldValue, newValue) -> {
             textArea.setPrefWidth(newValue.doubleValue());
-        });
-        textArea.widthProperty().addListener((observable, oldValue, newValue) -> {
-            button.setTranslateX(textArea.getWidth() / 2);
-            button.setTranslateY(textArea.getLayoutY());
-        });
+        });*/
 
-        button.setOnAction(ewerwer -> {
-            if (button.getGraphic() == imgView1) {
-                button.setGraphic(imgView2);
-                pane.getChildren().remove(textArea);
-                button.toFront();
-            } else {
-                button.setGraphic(imgView1);
-                pane.getChildren().add(textArea);
-                button.toFront();
-            }
-        });
-        pane.getChildren().add(button);
-        pane.getChildren().add(textArea);
-        bb.setBottom(pane);
-        button.toFront();
-        button.setTranslateX(textArea.getPrefWidth() / 2);
+        //button.toFront();
+        //button.setTranslateX(textArea.getPrefWidth() / 2);
     }
 
     private void makeSplash() throws InterruptedException {
@@ -1080,9 +1087,11 @@ public class Main extends Application {
         SplashStage.show();
         PauseTransition pause = new PauseTransition(Duration.seconds(1));
         pause.setOnFinished(event -> {
+
             window.show();
-            Region region = (Region) text.lookup(".content");
-            region.setBackground(new Background(new BackgroundFill(Paint.valueOf("#292f38"), CornerRadii.EMPTY, Insets.EMPTY)));
+
+            //Region region = (Region) text.lookup(".content");
+            //region.setBackground(new Background(new BackgroundFill(Paint.valueOf("#292f38"), CornerRadii.EMPTY, Insets.EMPTY)));
             SplashStage.close();
         });
         pause.play();
@@ -1112,4 +1121,3 @@ public class Main extends Application {
     }
 
 }
-

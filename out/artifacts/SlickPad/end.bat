@@ -1,1 +1,0 @@
-del "New File"*.txt

@@ -19,12 +19,13 @@ import java.util.regex.Pattern;
 public class EditorC {
     public static String code;
     CodeArea codeArea = new CodeArea();
+
     Stage primaryStage = new Stage();
     static String[] KEYWORDS = {
-            "auto", "double", "int", "struct", "break", "else", "long", "switch", "case",
+            "auto", "double", "include","int", "struct", "break", "else", "long", "switch", "case",
             "enum", "register", "typedef", "char", "extern", "return", "union", "const",
             "float", "short", "unsigned", "continue", "for", "signed", "void", "default",
-            "goto", "sizeof", "volatile", "do", "if", "static", "while", "printf", "#include "
+            "goto", "sizeof", "volatile", "do", "if", "static", "while", "printf"
     };
 
 
@@ -33,24 +34,31 @@ public class EditorC {
     private static final String BRACE_PATTERN = "\\{|\\}";
     private static final String BRACKET_PATTERN = "\\[|\\]";
     private static final String SEMICOLON_PATTERN = "\\;";
-    private static final String STRING_PATTERN = "<([^\"\\\\]|\\\\.)*>" + "|" + "\"([^\"\\\\]|\\\\.)*\"";
+    private static final String STRING_PATTERN = "\"([^\"\\\\]|\\\\.)*\"";
     private static final String COMMENT_PATTERN = "//[^\n]*" + "|" + "/\\*(.|\\R)*?\\*/";
+    private static final String NUMBER_PATTERN = "\\d";
+    private static final String CONST_PATTERN  = "\\b[A-Z].*?\\b";
+    private static final String CHARACTER_PATTERN = "'[.*]'";
 
     private static final Pattern PATTERN = Pattern.compile(
             "(?<KEYWORD>" + KEYWORD_PATTERN + ")"
+                    + "|(?<NUMBER>" + NUMBER_PATTERN + ")"
+                    + "|(?<CHAR>" + CHARACTER_PATTERN + ")"
+                    + "|(?<CONST>" + CONST_PATTERN + ")"
                     + "|(?<PAREN>" + PAREN_PATTERN + ")"
                     + "|(?<BRACE>" + BRACE_PATTERN + ")"
                     + "|(?<BRACKET>" + BRACKET_PATTERN + ")"
                     + "|(?<SEMICOLON>" + SEMICOLON_PATTERN + ")"
                     + "|(?<STRING>" + STRING_PATTERN + ")"
                     + "|(?<COMMENT>" + COMMENT_PATTERN + ")"
+
     );
 
     private static String sampleCode = String.join("\n", new String[]{
             "#include <stdio.h>",
-            "    int main(){",
-            "        printf(\"Hello SlickPad\");",
-            "       return 0;",
+            "int main(){",
+            "    printf(\"Hello SlickPad\");",
+            "    return 0;",
             "}",
 
     });
@@ -66,13 +74,16 @@ public class EditorC {
         while (matcher.find()) {
             String styleClass =
                     matcher.group("KEYWORD") != null ? "keyword" :
-                            matcher.group("PAREN") != null ? "paren" :
-                                    matcher.group("BRACE") != null ? "brace" :
-                                            matcher.group("BRACKET") != null ? "bracket" :
-                                                    matcher.group("SEMICOLON") != null ? "semicolon" :
-                                                            matcher.group("STRING") != null ? "string" :
-                                                                    matcher.group("COMMENT") != null ? "comment" :
-                                                                            null; /* never happens */
+                            matcher.group("NUMBER") !=null ? "num" :
+                                    matcher.group("CHAR") !=null ? "charac" :
+                                            matcher.group("CONST") !=null ? "const" :
+                                                    matcher.group("PAREN") != null ? "paren" :
+                                                            matcher.group("BRACE") != null ? "brace" :
+                                                                    matcher.group("BRACKET") != null ? "bracket" :
+                                                                            matcher.group("SEMICOLON") != null ? "semicolon" :
+                                                                                    matcher.group("STRING") != null ? "string" :
+                                                                                            matcher.group("COMMENT") != null ? "comment" :
+                                                                                                    null; /* never happens */
             assert styleClass != null;
             spansBuilder.add(Collections.emptyList(), matcher.start() - lastKwEnd);
             spansBuilder.add(Collections.singleton(styleClass), matcher.end() - matcher.start());
@@ -88,8 +99,9 @@ public class EditorC {
         } else
             sampleCode = String.join("\n",
                     "#include <stdio.h>",
-                    "    int main(){",
-                    "       printf(\"Hello World\")",
+                    "int main(){",
+                    "    printf(\"Hello World\");",
+                    "    return 0;",
                     "}"
             );
     }
@@ -99,6 +111,8 @@ public class EditorC {
     }
 
     public void start() {
+
+        codeArea.setId("CodeArea");
         codeArea.setOnKeyTyped(e -> {
             if (e.getCharacter().equals("\"")) {
                 codeArea.insertText(codeArea.getCaretPosition(), "\"");

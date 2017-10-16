@@ -53,9 +53,9 @@ public class EditorCPP {
 
     private static String sampleCode = String.join("\n", new String[]{
             "#include <iostream>",
-            "    using namespace std;",
-            "        int main(){",
-            "           cout << \"Hello SlickPad\" << endl;",
+            "using namespace std;",
+            "int main(){",
+            "   cout << \"Hello SlickPad\" << endl;",
             "}"
 
     });
@@ -66,9 +66,10 @@ public class EditorCPP {
         } else
             sampleCode = String.join("\n",
                     "#include <iostream>",
-                    "    using namespace std;",
-                    "        int main(){",
-                    "           //Type Your Code Here",
+                    "using namespace std;",
+                    "int main(){",
+                    "   //Type Your Code Here",
+                    "   return 0;",
                     "}"
             );
     }
@@ -77,6 +78,7 @@ public class EditorCPP {
     int i = 0, j = 0;
 
     public void start() {
+        codeArea.setId("CodeArea");
         codeArea.setStyle("-fx-font-size: 15pt;");
         codeArea.setOnKeyTyped(e -> {
             if (e.getCharacter().equals("\"")) {
