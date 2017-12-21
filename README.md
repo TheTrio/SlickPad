@@ -3,19 +3,26 @@
 <hr />
 <h2>About SlickPad</h2>
 <p>
-SlickPad is a basic text editor which can be used for light programming. It supports Syntax highlighting and was a practice project which I made for Fun. SlickPad can do some basic functions like editing, saving and opening files. It has support for <b>Notifications</b>, which alert the user if the file hasn't been safed.
+When Programming was introduced in our high school, we still used notepad on the computers. Not only did notepad make us less productive, but it was very boring and failed to encourage the students. On the recommendation of our teachers, I started to create an editor which would not be too difficult for students to understand, but powerful enough to program in.
 </p>
-[![Slickpad.png](https://s17.postimg.org/z41nbjk7z/Slickpad.png)](https://postimg.org/image/i3ir2v76j/)
+![Image of SlickPad](https://i.imgur.com/z461h2c.png)
+<hr/>
+<h2>Few Featues of SlickPad</h2>
+<ul>
+  <li>Syntax Highliting 
+  <li>Auto Save capabilites
+  <li>Full Customization of bars, buttons, toggles, etc
+  <li>Seperate programming window
+  <li>Basic AutoComplete functionalities
+  <li>AutoRun capabilities
+  <li>Inbuilt command prompt
+</ul>
+And many more. Try to find out!
 <hr/>
 <h2>Download SlickPad</h2>
 <p>
 You can download SlickPad for free <a href="https://www.dropbox.com/s/u4jnudw2lpvw43m/SlickPadv2-9-3.rar?dl=0">here</a> It is a rar, and contains two files. You don't have to install SlickPad. Just double click the SlickPad executable, after extracting, and you are good to go.
 </p>
-<h2>The Thought</h2>
-<p>
-The One and only reason to make SlickPad was to get rid of the old, boring text editor from Windows - <b>Notepad</b>. Though there were many alternatives, I wanted to do things by Myself, that was, to code an editor and to use it for my needs. Though SlickPad may not be the best, it makes me proud to say, that it certainly with this v2.8.0 ,surpassed Notepad in each aspect.
-</p>
-<hr/>
 <h2>External Libraries</h2>
 In SlickPad, I have made use of various libraries, build by many people out there. It's not possible to thank everyone, so I will just name the library and the link to its Website.
 <ul>
@@ -26,7 +33,7 @@ In SlickPad, I have made use of various libraries, build by many people out ther
 </p>
 <hr />
 <h2>The Team</h2>
-SlickPad wasn't built by a team of Coders, but two friends who today are proud to present before you SlickPad. Inspired by Javafx, I,Shashwat, started Building an app which could replace <b>Notepad In Windows</b>. I teamed up with Yash Hirani, and we both made SlickPad what it is today. Apart from the Graphics, Yash has played in important role in the spread of SlickPad. I started this project, and in the end, its much better than I would h've ever imagined. I thank the entire Javafx Community for helping me build this wonderful Project.
+SlickPad wasn't built by a team of Coders, but two friends who today are proud to present before you SlickPad. Inspired by Javafx, I,Shashwat, started Building an app which could replace <b>Notepad In Windows</b>.I teamed up with Yash Hirani, and we both made SlickPad what it is today. Apart from the Graphics, Yash has played in important role in the spread of SlickPad. I started this project, and in the end, its much better than I would h've ever imagined.
 <h2>How To Install SlickPad</h2>
 <p>
 For Your Convenience, TheTrio Has Put all the necessary files in the Jar Of SlickPad. Follow the following steps to Run SlickPad :-
