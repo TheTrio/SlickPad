@@ -26,7 +26,7 @@ In SlickPad, I have made use of various libraries, build by many people out ther
 </p>
 <hr />
 <h2>The Team</h2>
-<h4>SlickPad wasn't built by a team of Coders, but two friends who today are proud to present before you SlickPad. Inspired by Javafx, I,Shashwat, started Building an app which could replace <b>Notepad In Windows</b>. I teamed up with Yash Hirani, and we both made SlickPad what it is today. Apart from the Graphics, Yash has played in important role in the spread of SlickPad. I started this project, and in the end, its much better than I would h've ever imagined. I thank the entire Javafx Community for helping me build this wonderful Project.
+SlickPad wasn't built by a team of Coders, but two friends who today are proud to present before you SlickPad. Inspired by Javafx, I,Shashwat, started Building an app which could replace <b>Notepad In Windows</b>. I teamed up with Yash Hirani, and we both made SlickPad what it is today. Apart from the Graphics, Yash has played in important role in the spread of SlickPad. I started this project, and in the end, its much better than I would h've ever imagined. I thank the entire Javafx Community for helping me build this wonderful Project.
 <h2>How To Install SlickPad</h2>
 <p>
 For Your Convenience, TheTrio Has Put all the necessary files in the Jar Of SlickPad. Follow the following steps to Run SlickPad :-
@@ -42,7 +42,7 @@ For Your Convenience, TheTrio Has Put all the necessary files in the Jar Of Slic
 <hr />
 <h2>The Future</h2>
 <p>
-After the Success of Horizon(It won an award at CMS Lucknow), this project was just a coffee one, made for fun. I never intended to complete it, though I feel that its pretty good now. In its Version 2.8.0, SlickPad might just break away.But I won't shy in giving minor updates to its UI Though.
+After the Success of Horizon(It won an award at CMS Lucknow), this project was made for fun. I never intended to complete it, though I feel that its pretty good now. In its Version 2.8.0, SlickPad might just break away.But I won't shy in giving minor updates to its UI.
 </p>
 <h7>Note: Feel free to download it and contribute to the community.</h7>
 <hr />
