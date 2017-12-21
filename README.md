@@ -1,11 +1,13 @@
 <h1>SlickPad</h1>
+
+![Image of SlickPad](https://i.imgur.com/z461h2c.png)
 <h3>v2.8.0</h3>
 <hr />
 <h2>About SlickPad</h2>
 <p>
 When Programming was introduced in our high school, we still used notepad on the computers. Not only did notepad make us less productive, but it was very boring and failed to encourage the students. On the recommendation of our teachers, I started to create an editor which would not be too difficult for students to understand, but powerful enough to program in.
 </p>
-![Image of SlickPad](https://i.imgur.com/z461h2c.png)
+
 <hr/>
 <h2>Few Featues of SlickPad</h2>
 <ul>
