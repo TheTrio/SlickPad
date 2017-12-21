@@ -52,12 +52,12 @@ public class Editor {
     private static final String COMMENT_PATTERN = "//[^\n]*" + "|" + "/\\*(.|\\R)*?\\*/";
     private static final String NUMBER_PATTERN = "\\d";
     private static final String CONST_PATTERN  = "\\b[A-Z].*?\\b";
-    private static final String CHARACTER_PATTERN = "'.'";
+    private static final String CHARACTER_PATTERN = "\\b([A-Za-z]*)\\(.*\\)";
 
     private static final Pattern PATTERN = Pattern.compile(
             "(?<KEYWORD>" + KEYWORD_PATTERN + ")"
-                    + "|(?<NUMBER>" + NUMBER_PATTERN + ")"
                     + "|(?<CHAR>" + CHARACTER_PATTERN + ")"
+                    + "|(?<NUMBER>" + NUMBER_PATTERN + ")"
                     + "|(?<CONST>" + CONST_PATTERN + ")"
                     + "|(?<PAREN>" + PAREN_PATTERN + ")"
                     + "|(?<BRACE>" + BRACE_PATTERN + ")"
@@ -172,8 +172,7 @@ public class Editor {
                                 e.consume();
                             }
                         }
-                    }
-                    if (codeArea.getParagraphs().get(codeArea.getCurrentParagraph()).getText().contains("[]")) {
+                    }else if (codeArea.getParagraphs().get(codeArea.getCurrentParagraph()).getText().contains("[]")) {
                         if (codeArea.getParagraphs().get(codeArea.getCurrentParagraph()).getText().charAt(pos.getMinor() - 1) == '[') {
                             if(codeArea.getParagraphs().get(codeArea.getCurrentParagraph()).getText().charAt(pos.getMinor()) == ']') {
                                 System.out.println("Trying new");
@@ -181,8 +180,15 @@ public class Editor {
                                 e.consume();
                             }
                         }
-                    }
-                    if (codeArea.getParagraphs().get(codeArea.getCurrentParagraph()).getText().contains("()")) {
+                    }else if (codeArea.getParagraphs().get(codeArea.getCurrentParagraph()).getText().contains("\"\"")) {
+                        if (codeArea.getParagraphs().get(codeArea.getCurrentParagraph()).getText().charAt(pos.getMinor() - 1) == '"') {
+                            if(codeArea.getParagraphs().get(codeArea.getCurrentParagraph()).getText().charAt(pos.getMinor()) == '"') {
+                                System.out.println("Trying new");
+                                codeArea.replaceText(codeArea.getCaretPosition() - 1, codeArea.getCaretPosition()+1, "");
+                                e.consume();
+                            }
+                        }
+                    }else if (codeArea.getParagraphs().get(codeArea.getCurrentParagraph()).getText().contains("()")) {
                         if (codeArea.getParagraphs().get(codeArea.getCurrentParagraph()).getText().charAt(pos.getMinor() - 1) == '(') {
                             if(codeArea.getParagraphs().get(codeArea.getCurrentParagraph()).getText().charAt(pos.getMinor()) == ')') {
                                 System.out.println("Trying new");
@@ -190,13 +196,9 @@ public class Editor {
                                 e.consume();
                             }
                         }
-                    }
-
-                    if(codeArea.getParagraph(codeArea.getCurrentParagraph()).getText().trim().isEmpty()){
+                    }else if(codeArea.getParagraph(codeArea.getCurrentParagraph()).getText().trim().isEmpty()){
                         codeArea.replaceText(codeArea.getCaretPosition()-codeArea.getParagraph(codeArea.getCurrentParagraph()).getText().length(), codeArea.getCaretPosition(), "");
-                    }
-
-                    if(codeArea.getParagraph(codeArea.getCurrentParagraph()).getText().endsWith(" ")){
+                    }else if(codeArea.getParagraph(codeArea.getCurrentParagraph()).getText().endsWith(" ")){
                         String text = codeArea.getParagraph(codeArea.getCurrentParagraph()).getText();
                         int ch = 0;
                         for(int i=text.length()-1;i>=0;i--){
@@ -422,8 +424,8 @@ public class Editor {
         while (matcher.find()) {
             String styleClass =
                     matcher.group("KEYWORD") != null ? "keyword" :
+                            matcher.group("CHAR") !=null ? "charac" :
                             matcher.group("NUMBER") !=null ? "num" :
-                                    matcher.group("CHAR") !=null ? "charac" :
                                     matcher.group("CONST") !=null ? "const" :
                             matcher.group("PAREN") != null ? "paren" :
                                     matcher.group("BRACE") != null ? "brace" :
@@ -431,7 +433,7 @@ public class Editor {
                                                     matcher.group("SEMICOLON") != null ? "semicolon" :
                                                             matcher.group("STRING") != null ? "string" :
                                                                     matcher.group("COMMENT") != null ? "comment" :
-                                                                            null; /* never happens */
+                                                                                null; /* never happens */
             assert styleClass != null;
             spansBuilder.add(Collections.emptyList(), matcher.start() - lastKwEnd);
             spansBuilder.add(Collections.singleton(styleClass), matcher.end() - matcher.start());
