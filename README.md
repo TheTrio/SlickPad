@@ -41,13 +41,14 @@ SlickPad wasn't built by a team of Coders, but two friends who today are proud t
 For Your Convenience, TheTrio Has Put all the necessary files in the Jar Of SlickPad. Follow the following steps to Run SlickPad :-
 <h4>
 <ol>
-<li>Install Java JRE 8u110 or above</li>
+<li>Install Java JRE 8u110e</li>
 <li>Make sure your path is correct. To check, Open Cmd and Type "java" without the quotes. If Some text pops up, You'r probably good to go</li>
 <li>Download the Latest Version of SlickPad from <a href="https://www.dropbox.com/s/u4jnudw2lpvw43m/SlickPadv2-9-3.rar?dl=0">here</a></li>
 <li>Extract the rar File</li>
 <li>Execute the SlickPad Executable</li>
 <li>Have fun</li>
 </ol>
+  Note: SlickPad doesn't run on Java 9 or above. 
 <hr />
 <h2>The Future</h2>
 <p>
