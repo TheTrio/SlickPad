@@ -52,7 +52,7 @@ For Your Convenience, TheTrio Has Put all the necessary files in the Jar Of Slic
 <hr />
 <h2>The Future</h2>
 <p>
-After the Success of Horizon(It won an award at CMS Lucknow), this project was made for fun. I never intended to complete it, though I feel that its pretty good now. In its Version 2.8.0, SlickPad might just break away.But I won't shy in giving minor updates to its UI.
+After the Success of Horizon(It won an award at CMS Lucknow), this project was made for fun. I never intended to complete it, though I feel that its pretty good now. In its Version 2.8.0, SlickPad might just break away. There are several functions which are yet to be added to the editor and its impossible for me to devote enough time to complete this editor. 
 </p>
 <h7>Note: Feel free to download it and contribute to the community.</h7>
 <hr />
