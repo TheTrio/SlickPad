@@ -59,6 +59,3 @@ After the Success of Horizon(It won an award at CMS Lucknow), this project was m
 
 </h4>
 </p>
-<hr/>
-<h1>Regards,</h1>
-<h2>Shashwat</h2>
