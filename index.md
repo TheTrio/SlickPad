@@ -1,5 +1,5 @@
 ### SlickPad - The Origin.
-SlickPad originated on October 19th 2016. With a vision in mind, the creator of SlickPad, Shashwat, imagined what difficulties people have with the old and boring style of notepad in windows. Keeping this in mind, Shashwat invited Yash Hirani as A co-developer for SlickPad, which he readily accepted. This wasn't it, SlickPad was discontinued in between by Shashwat, but decided to complete it anyway to give the users a better option than Notepad.
+SlickPad originated on October 19 2016. I was sick and tired of our school computers using notepad as their default text editor, and while there were several alternatives, they were either too basic, or too complicated for school going students. So I decided to make an editor which perfectly fit the needs of our school. The result of this was SlickPad. 
 
 ### The WalkThrough
 SlickPad is a pretty deep text editor. To Look at all of its function refer to the following video.
