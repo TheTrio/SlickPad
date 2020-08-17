@@ -6,8 +6,7 @@ SlickPad is a pretty deep text editor. To Look at all of its function refer to t
 <iframe width="560" height="315" src="https://www.youtube.com/embed/VMX9v3iGJ88" frameborder="0" allowfullscreen></iframe>
 
 ### The Code
-SlickPad is extensively coded in Java 8, making use of Javafx 8, the latest package of Javafx. At some points, hints of batch scripting is used which makes this an only windows app. SlickPad makes use of several public libraries like JFoenix, 
-ControlsFx and RichTextFx. I would like to thank their creators for their support during this project. This Project is open to anyone, and everyone may contribute in it.
+SlickPad is coded in Java 8, making use of Javafx 8. At some points, hints of batch scripting is used which makes this an only Windows app. SlickPad makes use of several public libraries like JFoenix, ControlsFx and RichTextFx. I would like to thank their creators for developing such awesome libraries. This Project is open to anyone, and everyone may contribute in it.
 
 
 ### Support or Contact
