@@ -1,4 +1,4 @@
-### SlickPad - The Origin.
+### The Origin of SlickPad.
 SlickPad originated on 19 Ocotober 2016. I was sick and tired of our school computers using notepad as their default text editor, and while there were several alternatives, they were either too basic, or too complicated for school going students. So I decided to make an editor which perfectly fit the needs of our school. The result of this was SlickPad. 
 
 ### The Code
