@@ -1,7 +1,5 @@
 <h1>SlickPad</h1>
-
 ![Image of SlickPad](https://i.imgur.com/z461h2c.png)
-<h3>v2.9.3</h3>
 <hr />
 <h2>Highlights</h2>
 <ul>
